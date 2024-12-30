@@ -91,7 +91,6 @@ Emotional Impact:
 - Memorable feelings
  
 
-
 FORMAT REQUIREMENTS:
 - Use clear, concise language
 - Include specific proper nouns and unique identifiers
@@ -117,7 +116,6 @@ Your summary should function effectively for:
 - Memory-based player queries
 - Recommendation systems
 - Context-aware analysis
-
 """
     
     # Create user message
@@ -133,23 +131,65 @@ Your summary should function effectively for:
     # Get API key from environment
     api_key = os.getenv('POE_API_KEY')
     
-    # Call Poe API and collect response
-    summary = ""
-    async for partial in fp.get_bot_response(
-        messages=messages,
-        bot_name="4o-128k-free1",
-        api_key=api_key
-    ):
-        summary += partial.text
-        
-    return summary
+    # Call Poe API with enhanced error handling
+    max_retries = 5
+    retry_delay = 10  # seconds
+    bots_to_try = [
+        "4o-128k-free1"
+    ]
+    
+    # Log API status
+    api_status_file = "api_status.log"
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S")
+    
+    for attempt in range(max_retries):
+        for bot_name in bots_to_try:
+            try:
+                summary = ""
+                async for partial in fp.get_bot_response(
+                    messages=messages,
+                    bot_name=bot_name,
+                    api_key=api_key
+                ):
+                    summary += partial.text
+                
+                # Log successful API call
+                with open(api_status_file, "a") as log:
+                    log.write(f"{current_time} - Success using {bot_name}\n")
+                return summary
+                
+            except fp.BotError as e:
+                error_msg = f"{current_time} - Error in Poe bot {bot_name} (attempt {attempt + 1}): {str(e)}\n"
+                print(error_msg)
+                with open(api_status_file, "a") as log:
+                    log.write(error_msg)
+                    
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay * (attempt + 1))
+                    continue
+                
+                # After final attempt, notify and pause
+                print("\nPoe API is currently unavailable. Pausing summarization process.")
+                print("Will automatically retry in 1 hour. Check api_status.log for details.")
+                time.sleep(3600)  # Wait 1 hour before retrying
+                return None
+                
+            except Exception as e:
+                error_msg = f"{current_time} - Unexpected error with bot {bot_name}: {str(e)}\n"
+                print(error_msg)
+                with open(api_status_file, "a") as log:
+                    log.write(error_msg)
+                    
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay * (attempt + 1))
+                    continue
+                raise
+                
+    return None
 
 def save_summary(summary, output_path):
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(summary)
-
-import os
-import shutil
 
 async def process_all_md_files():
     # Ensure directories exist
