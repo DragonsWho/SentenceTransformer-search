@@ -23,35 +23,36 @@ async def summarize_md_file(file_path):
     time.sleep(2)
     
     # Create system message
-    system_message = """YYou are an expert AI specializing in creating detailed, search-optimized game descriptions. Your task is to analyze games and create structured summaries that will be used by transformer models for semantic search.
+    system_message = """You are an expert AI specializing in creating detailed, search-optimized game descriptions. Your task is to analyze games and create structured summaries that will be used by transformer models for semantic search. Generated content should be both human-readable and optimized for AI processing.
+
+Take into account that the search will be performed using free-form user queries. Try to use search words that most accurately describe the game, its most memorable features. 
+
+Don't write anything but summarize in the message, the response will be handled by the script and put entirely into the database. All the games in the base are CYOA, no need to mention this feature.
+
+you can and should use the RIGHT names for kinks and features, even if they are dirty, lewd words. Accuracy of search is paramount. 
 
 Create a comprehensive description following this exact structure:
 
 1. CORE IDENTIFICATION
 Title: [game name] 
-Author/Studio: [creator] 
+Author: [creator] 
 Genre Tags: [list primary and secondary genres] 
 
 2. GAMEPLAY FRAMEWORK
 Core kinks:
-- List 5-10 main gameplay kinks
-- Describe how they interact
+- List 10-20 main gameplay kinks 
 - Note any unique or innovative features
-
-Player Agency:
-- Type of choices available
-- Impact of decisions
-- Branching structure [linear/branching/open-ended]
-- Replay value factors
+ 
 
 3. NARRATIVE ELEMENTS
 Plot Summary:
-- 3-4 sentences capturing the main story 
-- Include story setup and stakes
+- 4-5 sentences capturing the main story 
+- Include story setup and stakes 
+- most memorable moments
 
 Key Characters:
 - Protagonist description and role
-- Major NPCs and their significance
+- other Key Characters and their significance
 - Antagonist(s) if present
 - Important relationships
 
@@ -76,11 +77,9 @@ Themes and Tone:
 
 5. CONTEXTUAL INFORMATION
 Similar Games:
-- 2-3 comparable titles
-- Reasons for similarity
-- Key differences
+- 10-15 comparable titles without descriptions 
 
-Common Search Patterns:
+Common Search Patterns: (15 examples)
 - How players might remember this game
 - Memorable scenes or moments
 - Frequently referenced elements
@@ -90,8 +89,8 @@ Common Search Patterns:
 Emotional Impact:
 - Key emotional moments 
 - Memorable feelings
-- Challenge level and type 
-- Target audience appeal
+ 
+
 
 FORMAT REQUIREMENTS:
 - Use clear, concise language
@@ -119,7 +118,7 @@ Your summary should function effectively for:
 - Recommendation systems
 - Context-aware analysis
 
-Generated content should be both human-readable and optimized for AI processing."""
+"""
     
     # Create user message
     user_message = f"""Here is the content of the game file. Please create a summary 

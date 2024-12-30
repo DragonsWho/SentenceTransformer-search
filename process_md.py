@@ -1,18 +1,33 @@
 import os
 import json
 import numpy as np
-from sentence_transformers import SentenceTransformer
+import requests
+from dotenv import load_dotenv
 
-# Initialize model
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Load environment variables
+load_dotenv()
+
+# API configuration
+API_URL = "https://api-inference.huggingface.co/models/BAAI/bge-large-en-v1.5"
+headers = {"Authorization": f"Bearer {os.getenv('HF_API_KEY')}"}
+
+def query(payload):
+    response = requests.post(API_URL, headers=headers, json=payload)
+    return response.json()
 
 def generate_embeddings(text):
-    """Generate embeddings for text"""
-    return model.encode(text)
+    """Generate embeddings for text using Hugging Face API"""
+    response = query({
+        "inputs": text,
+        "options": {
+            "wait_for_model": True
+        }
+    })
+    return np.array(response)
 
 def process_md_files():
     """Process all markdown files and create search database"""
-    md_dir = 'markdown'
+    md_dir = 'summaries'
     all_embeddings = []
     all_metadata = []
     
