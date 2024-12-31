@@ -18,8 +18,8 @@ def json_to_md(data):
                         md_content.append(f"### {obj['title']}\n")
                     if 'text' in obj:
                         md_content.append(f"{obj['text']}\n")
-                    if 'image' in obj:
-                        md_content.append(f"![{obj.get('title', '')}]({obj['image']})\n")
+                    # Skip image links
+                    pass
     
     return "\n".join(md_content)
 
@@ -36,6 +36,12 @@ def process_url(url):
         # Generate filename from URL
         project_name = url.split('/')[-2]
         md_filename = f"markdown/{project_name}.md"
+        
+        # Extract game title from URL
+        game_title = url.split('/')[-2].replace('_', ' ')
+        
+        # Add title to the beginning of markdown content
+        md_content = f"title: {game_title}\n\n{md_content}"
         
         # Save Markdown
         with open(md_filename, 'w', encoding='utf-8') as f:
