@@ -1,202 +1,370 @@
-import fastapi_poe as fp
-import json
-import time
 import os
+import time
 import shutil
 from dotenv import load_dotenv
+import requests
+import tiktoken
 
 # Load environment variables
 load_dotenv()
 
-async def summarize_md_file(file_path):
-    # Check file size (max 1100KB)
-    file_size = os.path.getsize(file_path)
-    if file_size > 1100 * 1024:  # 1100KB
-        print(f"File {os.path.basename(file_path)} is too large ({file_size} bytes). Skipping.")
+DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"
+CHUNK_SIZE = 60000  # Approximate token count per chunk
+
+def call_deepseek_chat(system_message: str, user_message: str) -> str:
+    """Calls Deepseek API to get a summary response"""
+    api_key = os.getenv("DEEPSEEK_API_KEY")
+    if not api_key:
+        raise ValueError("DEEPSEEK_API_KEY environment variable is not set")
+    
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    
+    payload = {
+        "model": "deepseek-chat",
+        "messages": [
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_message}
+        ],
+        "stream": False
+    }
+    
+    try:
+        response = requests.post(DEEPSEEK_API_URL, headers=headers, json=payload)
+        response.raise_for_status()
+        return response.json()['choices'][0]['message']['content']
+    except Exception as e:
+        print(f"Deepseek API error: {str(e)}")
         return None
+
+def split_into_chunks(text, chunk_size):
+    """Split text into chunks using precise token counting"""
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    tokens = encoding.encode(text)
+    
+    chunks = []
+    start = 0
+    
+    while start < len(tokens):
+        end = start + chunk_size
+        if end > len(tokens):
+            end = len(tokens)
         
-    # Read the markdown file
+        chunk_text = encoding.decode(tokens[start:end])
+        chunks.append(chunk_text)
+        start = end
+    
+    return chunks
+
+async def summarize_chunk(chunk, system_message):
+    """Summarize a single chunk of text"""
+    time.sleep(2)  # Rate limiting
+    return call_deepseek_chat(system_message, chunk)
+
+async def summarize_md_file(file_path):
+    """Process single Markdown file with chunking"""
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
         
-    # Add delay between API calls
-    time.sleep(2)
+    chunks = split_into_chunks(content, CHUNK_SIZE)
+    if not chunks:
+        return None
+          
     
-    # Create system message
-    system_message = """You are an expert AI specializing in creating detailed, search-optimized game descriptions. Your task is to analyze games and create structured summaries that will be used by transformer models for semantic search. Generated content should be both human-readable and optimized for AI processing.
+    
+    # System messages
+    first_chunk_system_message =  """ANALYZE THIS NSFW CYOA TEXT CHUNK:
+Create a detailed intermediate summary focusing on NEW and UNIQUE elements. Use casual language and include alternative terms. This data will be used for final game summarization and semantic search so include details that players might search for later.
 
-Take into account that the search will be performed using free-form user queries. Try to use search words that most accurately describe the game, its most memorable features. 
+List these elements if present in the chunk:
 
-Don't write anything but summarize in the message, the response will be handled by the script and put entirely into the database. All the games in the base are CYOA, no need to mention this feature.
+0.This is the very first chunk, the beginning of the game. Try to find the name of the game and the author's name and write them especially clearly at the beginning of the report.  Highlight them. 
+1. Title: [exact game title]
+2. Author: [creator name]
 
-you can and should use the RIGHT names for kinks and features, even if they are dirty, lewd words. Accuracy of search is paramount. 
+Story:
+- Plot events 
+- Chapter descriptions
+- Core characters and relationships
+- Setting details
+- Memorable scenes
+- Story branches
 
-Create a comprehensive description following this exact structure:
+Gameplay:
+- New features and mechanics
+- Powers and abilities
+- Character options
+- Progress systems
 
-1. CORE IDENTIFICATION
-Title: [game name] 
-Author: [creator] 
-Genre Tags: [list primary and secondary genres] 
+Adult Content:
+- Kinks and fetishes
+- Sexual systems and mechanics
+- Romance/relationship options
+- Body modifications/transformations
+- Training/corruption elements
+- Unique adult scenes
 
-2. GAMEPLAY FRAMEWORK
-Core kinks:
-- List 10-20 main gameplay kinks 
-- Note any unique or innovative features
+Distinctive Features:
+- Memorable moments and dialogue
+- Unique combinations
+- Special abilities
+- Rare or creative elements
+- Phrases players might search for
+
+Keep descriptions specific but brief - this is intermediate data for further processing."""
+
+
+
  
+    chunk_system_message = """ANALYZE THIS NSFW CYOA TEXT CHUNK:
+Create a detailed intermediate summary focusing on NEW and UNIQUE elements. Use casual language and include alternative terms. This data will be used for final game summarization and semantic search so include details that players might search for later.
 
-3. NARRATIVE ELEMENTS
-Plot Summary:
-- 4-5 sentences capturing the main story 
-- Include story setup and stakes 
-- most memorable moments
+List these elements if present in the chunk:
 
-Key Characters:
-- Protagonist description and role
-- other Key Characters and their significance
-- Antagonist(s) if present
-- Important relationships
+Story:
+- Plot events 
+- Chapter descriptions
+- Core characters and relationships
+- Setting details
+- Memorable scenes
+- Story branches
 
-Setting Details:
-- Time period and world type
-- Major locations
-- World-building elements
-- Atmospheric description
-- what popular settings it feels like
+Gameplay:
+- New features and mechanics
+- Powers and abilities
+- Character options
+- Progress systems
 
-4. DISTINCTIVE FEATURES
-Unique Selling Points:
-- What makes this game special
-- Innovative elements
-- Memorable moments 
+Adult Content:
+- Kinks and fetishes
+- Sexual systems and mechanics
+- Romance/relationship options
+- Body modifications/transformations
+- Training/corruption elements
+- Unique adult scenes
 
-Themes and Tone:
-- Main themes explored
-- Emotional atmosphere
-- Writing style
-- Narrative approach
+Distinctive Features:
+- Memorable moments and dialogue
+- Unique combinations
+- Special abilities
+- Rare or creative elements
+- Phrases players might search for
 
-5. CONTEXTUAL INFORMATION
-Similar Games:
-- 10-15 comparable titles without descriptions 
+Keep descriptions specific but brief - this is intermediate data for further processing."""
 
-Common Search Patterns: (15 examples)
-- How players might remember this game
-- Memorable scenes or moments
-- Frequently referenced elements
-- Common player descriptions
 
-6. EXPERIENCE MARKERS
-Emotional Impact:
-- Key emotional moments 
-- Memorable feelings
+
+
+
+
+
+    combine_system_message = """  
+You are an expert AI specializing in creating detailed, search-optimized game descriptions. Your task is to combine multiple partial summaries into a comprehensive, search-optimized game descriptions for transformer-based semantic searc.
+
+1. Combine information from all partial summaries
+2. Remove any duplicate information
+3. Create a coherent narrative flow
+4. Maintain all important details
+5. Structure the final summary according to the standard format:
  
+All games are CYOA - omit mentioning this. Use accurate terminology for kinks and features, including explicit terms when needed. Keep descriptions concise but informative. Skip formatting and bullet points.
 
-FORMAT REQUIREMENTS:
-- Use clear, concise language
-- Include specific proper nouns and unique identifiers
-- Maintain consistent structure
-- Use standard YAML/Markdown formatting
-- Prioritize searchable elements and keywords
-- Include alternative terms for key concepts
-- Avoid technical jargon unless genre-specific
-- Balance detail with brevity
+Structure:
 
-IMPORTANT CONSIDERATIONS:
-1. Focus on elements players are likely to remember
-2. Include both objective facts and subjective experiences
-3. Maintain searchable terminology while preserving unique elements
-4. Consider how different players might describe or remember the game
-5. Include context that helps distinguish from similar games
-6. Preserve tone and style markers that make the game unique
+Title: [game name] ([10 common misspellings/typing errors in brackets]:
+- Missing letter
+- Double letter
+- Swapped letters
+- No spaces
+- Wrong similar-sounding letter
+- Keyboard adjacent error
+- Autocorrect error
+- Phonetic misspelling
+- Split word)
 
-Your summary should function effectively for:
-- Natural language queries
-- Semantic similarity matching
-- Feature-based searching
-- Memory-based player queries
-- Recommendation systems
-- Context-aware analysis
+Author: [creator]
+Genre Tags: [7-12 primary/secondary genres]
+
+Kinks: [10 main gameplay kinks with synonyms, unique features]
+
+Plot: [7-10 sentences covering setup, stakes, main story]
+
+Setting:
+- Core location/world details
+- Atmosphere
+- Similar popular settings (only if explicitly referenced)
+
+Themes:
+- Main themes
+- Emotional tone
+- Atmosphere
+
+Characters: [brief description of protagonist and key characters that drive the story]
+
+Search Patterns: [7 natural user queries]
+Write as forum posts/searches like:
+"I remember game where [scene]"
+"looking for game with [feature]"
+"there was this scene where [event]"
+"[emotion] story about [theme]"
+
+Focus on:
+- Memorable elements
+- Natural language
+- Alternative terms
+- Common misspellings
+- Both specific details and vague memories
+- Formal and informal terminology
+- Different player perspectives
+
+Prioritize searchable elements while preserving unique game characteristics.
+ 
+    
 """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    full_game_system_message = """You are an expert AI creating detailed, search-optimized game descriptions for transformer-based semantic search. Generate content that is both human-readable and AI-optimized.
+
+All games are CYOA - omit mentioning this. Use accurate terminology for kinks and features, including explicit terms when needed. Keep descriptions concise but informative. Skip formatting and bullet points.
+
+Structure:
+
+Title: [game name] ([10 common misspellings/typing errors in brackets]:
+- Missing letter
+- Double letter
+- Swapped letters
+- No spaces
+- Wrong similar-sounding letter
+- Keyboard adjacent error
+- Autocorrect error
+- Phonetic misspelling
+- Split word)
+
+Author: [creator]
+Genre Tags: [7-12 primary/secondary genres]
+
+Kinks: [10 main gameplay kinks with synonyms, unique features]
+
+Plot: [7-10 sentences covering setup, stakes, main story]
+
+Setting:
+- Core location/world details
+- Atmosphere
+- Similar popular settings (only if explicitly referenced)
+
+Themes:
+- Main themes
+- Emotional tone
+- Atmosphere
+
+Characters: [brief description of protagonist and key characters that drive the story]
+
+Search Patterns: [7 natural user queries]
+Write as forum posts/searches like:
+"I remember game where [scene]"
+"looking for game with [feature]"
+"there was this scene where [event]"
+"[emotion] story about [theme]"
+
+Focus on:
+- Memorable elements
+- Natural language
+- Alternative terms
+- Common misspellings
+- Both specific details and vague memories
+- Formal and informal terminology
+- Different player perspectives
+
+Prioritize searchable elements while preserving unique game characteristics.
+"""
+     
+
+
+
+
+
+
+
+
+    # If single chunk, use full summary prompt
+    if len(chunks) == 1:
+        return await summarize_chunk(chunks[0], full_game_system_message)
+        
+    # Process first chunk separately and save it
+    title_author = await summarize_chunk(chunks[0], first_chunk_system_message)
     
-    # Create user message
-    user_message = f"""Here is the content of the game file. Please create a summary 
-    following the guidelines above:\n\n{content}"""
+    # Save first chunk with metadata
+    os.makedirs("markdown/archive_chanks", exist_ok=True)
+    chunk_path = os.path.join("markdown/archive_chanks", 
+                            f"{os.path.splitext(os.path.basename(file_path))[0]}_chunk0.md")
     
-    # Create messages for Poe API
-    messages = [
-        fp.ProtocolMessage(role="system", content=system_message),
-        fp.ProtocolMessage(role="user", content=user_message)
-    ]
+    with open(chunk_path, 'w', encoding='utf-8') as f:
+        f.write(f"=== ORIGINAL CHUNK ===\n{chunks[0]}\n\n")
+        f.write(f"=== METADATA ===\n{title_author}\n")
+        
+    print(f"Saved first chunk analysis to {chunk_path}")
     
-    # Get API key from environment
-    api_key = os.getenv('POE_API_KEY')
-    
-    # Call Poe API with enhanced error handling
-    max_retries = 5
-    retry_delay = 10  # seconds
-    bots_to_try = [
-        "4o-128k-free1"
-    ]
-    
-    # Log API status
-    api_status_file = "api_status.log"
-    current_time = time.strftime("%Y-%m-%d %H:%M:%S")
-    
-    for attempt in range(max_retries):
-        for bot_name in bots_to_try:
-            try:
-                summary = ""
-                async for partial in fp.get_bot_response(
-                    messages=messages,
-                    bot_name=bot_name,
-                    api_key=api_key
-                ):
-                    summary += partial.text
+    # Process remaining chunks
+    chunk_summaries = []
+    for i, chunk in enumerate(chunks[1:], start=1):
+        print(f"Processing chunk {i+1}/{len(chunks)} of {os.path.basename(file_path)}")
+        summary = await summarize_chunk(chunk, chunk_system_message)
+        if summary:
+            chunk_summaries.append(summary)
+            
+            # Save intermediate chunk summary with detailed logging
+            os.makedirs("markdown/archive_chanks", exist_ok=True)
+            chunk_path = os.path.join("markdown/archive_chanks", 
+                                    f"{os.path.splitext(os.path.basename(file_path))[0]}_chunk{i}.md")
+            
+            # Save both original chunk and summary for debugging
+            with open(chunk_path, 'w', encoding='utf-8') as f:
+                f.write(f"=== ORIGINAL CHUNK ===\n{chunk}\n\n")
+                f.write(f"=== SUMMARY ===\n{summary}\n")
                 
-                # Log successful API call
-                with open(api_status_file, "a") as log:
-                    log.write(f"{current_time} - Success using {bot_name}\n")
-                return summary
-                
-            except fp.BotError as e:
-                error_msg = f"{current_time} - Error in Poe bot {bot_name} (attempt {attempt + 1}): {str(e)}\n"
-                print(error_msg)
-                with open(api_status_file, "a") as log:
-                    log.write(error_msg)
-                    
-                if attempt < max_retries - 1:
-                    time.sleep(retry_delay * (attempt + 1))
-                    continue
-                
-                # After final attempt, notify and pause
-                print("\nPoe API is currently unavailable. Pausing summarization process.")
-                print("Will automatically retry in 1 hour. Check api_status.log for details.")
-                time.sleep(3600)  # Wait 1 hour before retrying
-                return None
-                
-            except Exception as e:
-                error_msg = f"{current_time} - Unexpected error with bot {bot_name}: {str(e)}\n"
-                print(error_msg)
-                with open(api_status_file, "a") as log:
-                    log.write(error_msg)
-                    
-                if attempt < max_retries - 1:
-                    time.sleep(retry_delay * (attempt + 1))
-                    continue
-                raise
-                
+            print(f"Saved chunk {i} analysis to {chunk_path}")
+    
+    # Combine results
+    if title_author and chunk_summaries:
+        combined_summary = f"{title_author}\n\n" + '\n\n'.join(chunk_summaries)
+        # Save combined summary before final processing
+        os.makedirs("markdown/combined_chanks", exist_ok=True)
+        combined_path = os.path.join("markdown/combined_chanks", 
+                                   f"{os.path.splitext(os.path.basename(file_path))[0]}_combined.md")
+        with open(combined_path, 'w', encoding='utf-8') as f:
+            f.write(combined_summary)
+            
+        # Process combined summary
+        final_summary = await summarize_chunk(combined_summary, combine_system_message)
+        return final_summary
+    
     return None
 
 def save_summary(summary, output_path):
+    """Save final summary to file"""
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(summary)
 
 async def process_all_md_files():
-    # Ensure directories exist
+    """Process all Markdown files in the directory"""
     os.makedirs("summaries", exist_ok=True)
     os.makedirs("markdown/archive", exist_ok=True)
+    os.makedirs("markdown/archive_chanks", exist_ok=True)
     
-    # Get all .md files in markdown directory
     md_files = [f for f in os.listdir("markdown") if f.endswith(".md")]
     
     for md_file in md_files:

@@ -1,79 +1,22 @@
-```yaml
-Title: Filthy Whore
-Alternative Search Queries:
-- Filthy Whore game
-- Filthy Whore CYOA
-- Filthy Whore NSFW
-- Filthy Whore interactive
-- Filthy Whore choose your own adventure
-- Filthy Whore adult game
-- Filthy Whore sex game
-- Filthy Whore fetish game
-- Filthy Whore kink game
-- Filthy Whore BDSM game
-- Filthy Whore public humiliation
-- Filthy Whore gangbang
-- Filthy Whore living toilet
-- Filthy Whore glory wall
-- Filthy Whore transformation
-- Filthy Whore corruption
-- Filthy Whore body modification
-- Filthy Whore extreme fetishes
-- Filthy Whore sexual mechanics
-- Filthy Whore unique scenarios
+**Title:** Filthy Whore (FilthyWhore, FilthyWhor, FilthyHore, FilthyWhoer, FilthyWhor, FilthyWhoree, FilthyWhorre, FilthyWhor, FilthyWhor, FilthyWhor)  
+**Author:** Dragon's Whore (Commissioned by u/ColeDeucalion)  
+**Genre Tags:** NSFW, Erotic, Degradation, BDSM, Fantasy, Sci-Fi, Modern, Corruption, Transformation, Public Humiliation  
 
-Author: Commission by u/ColeDeucalion, Made by Dragon's Whore
+**Kinks:** BDSM, public humiliation, gangbangs, bestiality, body modification, training/corruption, non-consensual scenarios, glory holes, living toilet, futa, sissy, hentai physics  
 
-Genre Tags: NSFW, Adult, Fetish, BDSM, Public Humiliation, Gangbang, Transformation, Corruption, Body Modification, Extreme Fetishes, Sexual Mechanics, Interactive Fiction
+**Plot:** The game thrusts players into the role of a submissive prostitute, exploring a world of sexual degradation and servitude. Players can customize their character’s identity, past, and the world they inhabit, ranging from modern settings to fantasy or sci-fi. The story branches based on choices, leading to various jobs like camwhore, brothel worker, or test subject. Players face punishments for poor performance and rewards for excelling, with unique mechanics like the "Glory Wall" and "Portal Panties" adding depth to the sexual encounters. The narrative emphasizes themes of submission, corruption, and extreme sexual exploration, with memorable scenes like being a "living toilet" or participating in a "Pack Rape."  
 
-Core kinks:
-- BDSM
-- Public humiliation
-- Gangbang
-- Living toilet
-- Glory wall
-- Transformation
-- Corruption
-- Body modification
-- Extreme fetishes
-- Sexual mechanics
-- Consensual Non-Consent (CNC)
-- Bestiality
-- Masochism
-- Submissiveness
-- Futanari
+**Setting:** The game takes place in diverse locations, including nightclubs, brothels, public bathrooms, and exotic locales like safaris or foreign cities. The atmosphere is gritty and intense, designed to heighten the sexual tension and degradation. Similar popular settings include hentai-inspired worlds and dystopian futures where sex work is a central theme.  
 
-Plot Summary:
-In "Filthy Whore," players assume the role of a sex worker navigating a dark, seedy underworld filled with extreme fetishes and public humiliation. The game begins with the player choosing their character type, backstory, and the world they inhabit, ranging from Fantasy to Modern to Sci-Fi. As the protagonist, players engage in various sexual scenarios, such as being a cam girl, participating in gangbangs, or serving as a living toilet. The narrative explores themes of submission, masochism, and the loss of autonomy, with the player's choices leading to different paths and outcomes. The game offers a wide range of kinks and unique mechanics, including glory holes, portal panties, and VR sex machines, making it a standout in the NSFW CYOA genre.
+**Themes:** The main themes revolve around submission, degradation, and sexual exploration. The emotional tone is dark and intense, focusing on the protagonist’s journey from reluctant participant to willing sex worker. The atmosphere is immersive, with a focus on pushing boundaries and exploring extreme kinks.  
 
-Key Characters:
-- Protagonist: A submissive sex worker who can take on various roles such as Sissy, Futa, or Chick, each with unique traits and sexual mechanics.
-- Clients: Various individuals who exploit the protagonist in different sexual scenarios.
-- Pimps: Influential figures who control and guide the protagonist's journey, such as a White Collar salesman, a Futa Gang, or a Mistress.
-- Fellow Sex Workers: Other characters in the sex industry who interact with the protagonist, often in a competitive or supportive manner.
+**Characters:** The protagonist is a customizable character who starts as a reluctant participant in the sex industry but becomes increasingly submissive and corrupted. Key characters include the pimp, who controls and profits from the protagonist’s activities, and various clients who push the protagonist to their limits. Relationships are transactional, focusing on sexual service rather than emotional connections.  
 
-Setting Details:
-- Time Period and World Type: The game offers multiple settings, including Fantasy, Modern, and Sci-Fi worlds, each with distinct sexual dynamics and legal systems.
-- Major Locations: Brothels, nightclubs, public toilets, and other seedy venues where sexual activities take place.
-- World-Building Elements: The world is depicted as one where sex work is normalized, often involving extreme or fetishistic scenarios.
-- Atmospheric Description: Dark, seedy, and filled with a sense of degradation and exploitation.
-- Popular Settings: The game does not explicitly reference or parody popular settings but creates its own unique, fetishistic world.
-
-Themes and Tone:
-- Main Themes: Submission, masochism, loss of autonomy, and sexual exploitation.
-- Emotional Atmosphere: Dark, degrading, and intense, with moments of camaraderie overshadowed by exploitation.
-- Writing Style: Explicit, descriptive, and focused on the protagonist's degradation and submission.
-- Narrative Approach: Interactive and choice-driven, with multiple paths and outcomes based on the player's decisions.
-
-Common Search Patterns:
-1. Memory-based queries:
-   - "I remember a game where you could be a living toilet."
-   - "Looking for a game with a glory wall scenario."
-   - "There was this scene where you could choose to be a cam girl."
-   - "Game where you can be a sex worker in different worlds."
-
-2. Emotional/Subjective searches:
-   - "Degrading story about a sex worker."
-   - "Game that made me feel submissive when I was used as a living toilet."
-   - "Extreme fetish game with public humiliation and gangbangs."
-```
+**Search Patterns:**  
+"I remember a game where you could be a living toilet."  
+"Looking for a game with extreme public humiliation and BDSM."  
+"There was this scene where you participate in a Glory Wall challenge."  
+"Dark story about corruption and sexual degradation."  
+"Game where you can choose to be a cam girl or brothel worker."  
+"Looking for a game with futa and sissy transformation options."  
+"Intense story about being trained into a submissive sex worker."

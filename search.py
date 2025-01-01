@@ -114,4 +114,4 @@ def main():
         print(format_results(results))
 
 if __name__ == "__main__":
-    main()
+    main()окей, напиши readme с описанием фаункций файлов.
