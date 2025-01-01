@@ -1,36 +1,33 @@
-# Bullies Toy - Game Summary
+Title: Bullies Toy (Bullys Toy, Bully Toy, BulliesToys, BulliesToi, BulliesTyo, BulliesToyz, BulliesToi, BulliesTyo, BulliesToi, BulliesTyo)  
+Author: DragonsWhore  
+Genre Tags: School Life, Bullying, Corruption, Humiliation, Non-Consensual, Transformation, Psychological, Sexual Content  
 
-## Overview
-**Bullies Toy** is a dark, narrative-driven game where the player takes on the role of a high school student who becomes the target of relentless bullying and sexual exploitation. The game explores themes of power, control, and the psychological impact of abuse, with the player making choices that shape the protagonist's fate.
+Kinks: Non-consensual, humiliation, corruption, forced orgasm, anal play, public exposure, bondage, mind control, body modification, gangbang  
 
-## Key Characters
-- **Protagonist**: A new student at a high school, initially hopeful for a fresh start but quickly becomes the victim of bullying.
-- **Bullies**: A group of classmates who torment the protagonist, ranging from perverts to athletes and delinquents.
-- **Other Characters**: Teachers, parents, and other students who either ignore or participate in the protagonist's suffering.
+Plot: You’re the new girl at school, eager to make friends and start fresh. But things take a dark turn when a group of bullies targets you. What starts as teasing quickly escalates into full-blown sexual exploitation. You’re forced to endure their cruel games, from public humiliation to intense physical abuse. As the days go by, you find yourself sinking deeper into their control, your resistance fading as your body betrays you. Will you escape their grasp, or will you succumb to their twisted desires?  
 
-## Game Mechanics
-- **Choice-Based Narrative**: Players make decisions that affect the protagonist's experiences and the story's outcome.
-- **Character Customization**: Players can choose traits for the protagonist, such as being popular, athletic, or shy, which influence interactions.
-- **Multiple Endings**: The game features various endings based on the player's choices, ranging from escape to complete submission.
+Setting:  
+- Core location/world details: A typical high school, but with a dark underbelly of bullying and sexual exploitation.  
+- Atmosphere: Tense, oppressive, and increasingly degrading as the story progresses.  
+- Similar popular settings: Similar to dark school-themed hentai or visual novels where the protagonist is subjected to relentless bullying and sexual abuse.  
 
-## World-Building
-- **Setting**: The game is set in a high school environment, with locations such as classrooms, bathrooms, and the protagonist's home.
-- **Tone**: The game maintains a dark and oppressive tone, emphasizing the protagonist's vulnerability and the bullies' cruelty.
+Themes:  
+- Main themes: Power dynamics, corruption, loss of innocence, and the psychological toll of abuse.  
+- Emotional tone: Dark, unsettling, and at times despairing, with moments of twisted pleasure.  
+- Atmosphere: A mix of fear, humiliation, and reluctant arousal as the protagonist is broken down.  
 
-## Key Story Elements
-1. **Introduction**: The protagonist starts at a new school, hopeful for a fresh start but quickly becomes the target of bullying.
-2. **Escalation**: The bullying intensifies, with the protagonist being subjected to various forms of humiliation and abuse.
-3. **Breaking Point**: The protagonist's mental and physical state deteriorates as the abuse continues, leading to a critical moment of decision.
-4. **Endings**: Depending on the player's choices, the protagonist may escape, succumb to the abuse, or find a way to fight back.
+Characters:  
+- Protagonist: A shy, naive girl who becomes the target of bullies.  
+- Bullies: A group of sadistic students who take pleasure in tormenting and exploiting the protagonist.  
+- Other students: Some are bystanders, while others may join in or become victims themselves.  
 
-## Themes
-- **Power and Control**: The game explores the dynamics of power and control between the bullies and the protagonist.
-- **Psychological Impact**: The game delves into the psychological effects of prolonged abuse and the protagonist's struggle to maintain their identity.
-- **Morality and Choice**: Players are faced with moral dilemmas and must decide how far the protagonist will go to survive or resist.
+Search Patterns:  
+"I remember a game where you’re bullied at school and forced to do humiliating things."  
+"Looking for a game with non-consensual school bullying and corruption."  
+"There was this scene where the protagonist is tied up and used as a sex toy."  
+"Dark story about a girl being exploited by her classmates."  
+"Game where you start as a normal student but end up as a public whore."  
+"Looking for a CYOA with forced orgasms and public humiliation."  
+"Game where the protagonist is blackmailed into becoming a sex slave."
 
-## Conclusion
-**Bullies Toy** is a harrowing exploration of the effects of bullying and abuse, offering players a deeply emotional and thought-provoking experience. The game's multiple endings and choice-based mechanics encourage replayability and reflection on the consequences of one's actions.
-
----
-
-This summary captures the essence of **Bullies Toy**, providing a concise overview of its story, mechanics, and themes while maintaining the original tone and style.
+Visual: Pastel anime-style visuals with a focus on character designs.  A grid layout with bright, bold colors per character type.  A playful, slightly exaggerated, and potentially suggestive aesthetic.  A sense of lightheartedness and youthful energy.

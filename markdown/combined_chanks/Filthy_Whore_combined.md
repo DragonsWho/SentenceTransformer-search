@@ -1,98 +1,105 @@
-### Intermediate Summary Report
-
 **Title:** Filthy Whore  
 **Author:** Dragon's Whore (Commissioned by u/ColeDeucalion)  
 
 ---
 
 ### **Story:**  
-The game begins with the player being addressed as a "little slut" by a mysterious narrator who teases the player’s desires and sets the tone for a raunchy, NSFW adventure. The player is thrust into a world where they take on the role of a prostitute, with various options for their character’s identity, past, and the world they inhabit. The story branches based on the player’s choices, leading to different jobs, encounters, and endings.  
+The game begins with a sassy, fourth-wall-breaking narrator addressing the player as a "little slut," setting the tone for a raunchy, NSFW adventure. The player takes on the role of a prostitute, choosing their character type (Sissy, Futa, or Chick), their past (e.g., Graduate, Spoiled Girl, Undercover Agent), and the world they inhabit (Fantasy, Modern, Sci-Fi, etc.). The story revolves around the player’s journey as a sex worker, navigating various jobs, clients, and challenges in a world where prostitution is either legal, illegal, or somewhere in between.  
 
 ---
 
 ### **Gameplay:**  
-- **Character Creation:** Players can choose their role (Sissy, Futa, Chick) and their past (e.g., Graduate, Spoiled Girl, Undercover Agent).  
-- **World Building:** The setting can range from Fantasy to Modern, Sci-Fi, or even a Popular Hentai Setting.  
-- **Legality Systems:** The game introduces unique legal systems for sex work, such as "Sex Work Taxation," "Total Freedom," and "Outlaw Harlotry."  
-- **Modifiers:** Players can select modifiers like "Aliens," "VR," "Cults," and "Futanari" to add unique twists to their world.  
-- **Pimp Selection:** Players choose a pimp, each with distinct personalities and styles (e.g., White Collar, Mistress, Sissy Trainer).  
-- **Jobs:** The game offers a variety of jobs, including Camwhore, Nightclub Worker, Whore Alley, Sex Arcade, Porn Studio, Brothel, Bitch on Call, PetLovers.Club, and Test Subject.  
-- **Punishments and Rewards:** Players face punishments for poor performance and can earn rewards for being a "Good Girl."  
+- **Character Creation:** Players choose their role (Sissy, Futa, Chick) and backstory, which influences their starting traits and options.  
+- **World Selection:** The setting (Fantasy, Modern, Sci-Fi, etc.) affects the types of jobs and clients available.  
+- **Legality System:** The legality of prostitution in the chosen world impacts gameplay, from total freedom to underground brothels.  
+- **Modifiers:** Players can select modifiers like "Aliens," "VR," or "Monsters" to add unique twists to their world.  
+- **Pimp Selection:** Players choose a pimp who influences their earnings, punishments, and daily life.  
+- **Job System:** Players take on various jobs (Camwhore, Nightclub, Whore Alley, etc.), each with its own challenges and rewards.  
+- **Punishments and Rewards:** Poor performance or disobedience can lead to punishments, while good behavior earns rewards.  
 
 ---
 
 ### **Adult Content:**  
-- **Kinks and Fetishes:** The game explores a wide range of kinks, including BDSM, public humiliation, gangbangs, and bestiality.  
-- **Sexual Systems:** Unique mechanics like "Glory Wall," "Portal Thinking," and "Prolapse" add depth to the sexual encounters.  
-- **Body Modifications:** Players can undergo transformations, such as hormone treatments, plastic surgery, and even sex changes.  
-- **Training/Corruption:** The game includes elements of training and corruption, where players can be broken down and reshaped into obedient sluts.  
+- **Kinks and Fetishes:** The game explores a wide range of kinks, including BDSM, public humiliation, gangbangs, and more.  
+- **Sexual Mechanics:** Jobs often involve sexual acts, with mechanics like "Glory Hole," "Bukkake Bitch," and "Prolapse" adding variety.  
+- **Romance/Relationships:** While primarily focused on sex work, there are hints of deeper relationships with clients or pimps.  
+- **Body Modifications:** Players can undergo physical changes like lactation, hypersensitive nipples, or even a sex change.  
+- **Training/Corruption:** The game includes elements of training and corruption, where players can be broken or molded into the perfect whore.  
 
 ---
 
 ### **Distinctive Features:**  
-- **Memorable Moments:** Scenes like being a "Living Toilet" or participating in a "Pack Rape" stand out for their creativity and intensity.  
-- **Unique Combinations:** The game combines elements like VR, aliens, and magic to create a truly unique experience.  
-- **Special Abilities:** Players can gain abilities like "Hentai Physics" and "Multitasking" to enhance their sexual prowess.  
-- **Rare Elements:** The inclusion of "Portal Panties" and "Glory Wall" adds rare and creative elements to the gameplay.  
-- **Searchable Phrases:** Players might search for terms like "Futanari Gang," "Whore Alley," "Glory Hole," and "Prolapse."  
+- **Memorable Dialogue:** The narrator’s sassy, fourth-wall-breaking comments add humor and personality to the game.  
+- **Unique Combinations:** The game allows for creative combinations of roles, worlds, and modifiers, leading to unique playthroughs.  
+- **Special Abilities:** Some jobs and modifiers grant special abilities, like "Super Slut" or "Portal Thinking."  
+- **Rare Elements:** The game includes rare and creative elements like "Living Toilet," "Snuff," and "Dog Trainer."  
+- **Searchable Phrases:** Players might search for terms like "Glory Hole," "Bukkake Bitch," "Prolapse," or "Portal Panties."  
 
 ---
 
-This summary highlights the new and unique elements of the game, providing a detailed overview of the story, gameplay, adult content, and distinctive features.
+### **Memorable Moments:**  
+- **Glory Hole Shenanigans:** Sucking off countless cocks through a glory hole, with options for drugged or endless lineups.  
+- **Public Humiliation:** Being paraded around as a sex toy or used as a living toilet in public spaces.  
+- **Extreme Jobs:** Testing sex machines, being a "Milky Cow," or undergoing "Prolapse" for science.  
+- **Punishments:** Enduring spankings, waxing, or being caged for disobedience.  
+
+This CYOA offers a highly customizable, NSFW experience with a mix of humor, creativity, and debauchery.
 
 ### Story:
-- **Plot Events**: The text describes various scenarios where the protagonist engages in sexual activities in different settings such as nightclubs, public toilets, and brothels. Each scenario involves different levels of humiliation, degradation, and sexual servitude.
-- **Core Characters and Relationships**: The protagonist is a submissive individual who is often at the mercy of clients or other characters in the story. Relationships are transactional, focusing on sexual service rather than emotional connections.
-- **Setting Details**: Settings include nightclubs, public bathrooms, brothels, and other public or semi-public spaces where sexual activities take place.
-- **Memorable Scenes**: Scenes like being a "living toilet," participating in a "glory wall," or being paraded around on a leash are particularly vivid and degrading.
-- **Story Branches**: The story branches based on the type of sexual service the protagonist provides, such as being a cam girl, a stripper, or a sex toy in a brothel.
+- **Plot Events**: The text describes various scenarios where the protagonist is involved in sexual activities, often in public or semi-public settings, such as nightclubs, brothels, and arcades. These scenarios include being hired as a camgirl, participating in gangbangs, and being used as a test subject for sexual experiments.
+- **Core Characters and Relationships**: The protagonist is a sex worker who interacts with clients, managers, and other sex workers. Relationships are transactional, focusing on sexual services and financial gain.
+- **Setting Details**: Settings include nightclubs, brothels, public bathrooms, and arcades. These locations are described as places where sexual activities are normalized and often public.
+- **Memorable Scenes**: Scenes include being used as a "glory hole" participant, participating in a "choker challenge," and being involved in a "sex marathon" where the protagonist is continuously fucked by multiple men.
+- **Story Branches**: The text offers various job options for the protagonist, each leading to different sexual scenarios and outcomes.
 
 ### Gameplay:
-- **New Features and Mechanics**: The text introduces various sexual mechanics like remote-controlled vibrators, glory holes, and public humiliation scenarios.
-- **Character Options**: The protagonist can take on different roles such as a cam girl, stripper, or brothel worker, each with its own set of challenges and rewards.
-- **Progress Systems**: Progress is measured by the amount of money earned or the level of humiliation endured, with some scenarios offering bonuses for extreme behavior.
+- **New Features and Mechanics**: The text introduces unique mechanics such as the "choker challenge," where players must tear a choker off the protagonist's neck using their dicks, and the "make her cum" challenge, where players compete to make the protagonist orgasm the fastest.
+- **Powers and Abilities**: The protagonist has the ability to endure and perform in various sexual scenarios, often with little to no control over the situation.
+- **Character Options**: The protagonist can take on different roles, such as a camgirl, stripper, or test subject, each with its own set of challenges and rewards.
+- **Progress Systems**: Progress is measured by the protagonist's ability to complete sexual tasks and earn money or rewards.
 
 ### Adult Content:
-- **Kinks and Fetishes**: The text includes a wide range of kinks and fetishes, including BDSM, public humiliation, and non-consensual scenarios.
-- **Sexual Systems and Mechanics**: Various sexual mechanics are described, such as using vibrators, glory holes, and public sex.
+- **Kinks and Fetishes**: The text includes a wide range of kinks and fetishes, including public sex, BDSM, gangbangs, and humiliation.
+- **Sexual Systems and Mechanics**: The text describes various sexual mechanics, such as using vibrators, participating in glory holes, and being used as a sex toy.
 - **Romance/Relationship Options**: Relationships are purely transactional, with no romantic elements.
-- **Body Modifications/Transformations**: Some scenarios involve body modifications, such as being stretched or used as a "living toilet."
-- **Training/Corruption Elements**: The protagonist is often trained or corrupted into accepting increasingly degrading scenarios.
-- **Unique Adult Scenes**: Scenes like being a "living toilet" or participating in a "glory wall" are unique and extreme.
+- **Body Modifications/Transformations**: The protagonist undergoes various sexual transformations, such as being stretched or used as a "seedbed" for monsters.
+- **Training/Corruption Elements**: The protagonist is often trained or corrupted to perform sexual acts, such as being used as a "bitch on call" or a "test subject."
+- **Unique Adult Scenes**: Unique scenes include being used as a "glory wall" participant, where the protagonist's lower half is at the mercy of clients, and being involved in a "sex marathon" where the protagonist is continuously fucked.
 
 ### Distinctive Features:
-- **Memorable Moments and Dialogue**: The dialogue often emphasizes the protagonist's degradation and submission, with clients or other characters making humiliating comments.
-- **Unique Combinations**: The combination of public humiliation and sexual service in various settings creates unique and memorable scenarios.
-- **Special Abilities**: The protagonist's ability to endure and even enjoy extreme humiliation and degradation is a recurring theme.
-- **Rare or Creative Elements**: Scenarios like being a "living toilet" or participating in a "glory wall" are rare and creatively extreme.
-- **Phrases Players Might Search For**: Phrases like "living toilet," "glory wall," "public humiliation," and "BDSM" are likely to be searched by players interested in these themes.
+- **Memorable Moments and Dialogue**: Memorable moments include the protagonist being used as a "glory hole" participant and participating in a "choker challenge." Dialogue often includes commands and instructions from clients or managers.
+- **Unique Combinations**: The text combines various sexual scenarios with unique mechanics, such as the "choker challenge" and the "make her cum" challenge.
+- **Special Abilities**: The protagonist has the ability to endure and perform in various sexual scenarios, often with little to no control over the situation.
+- **Rare or Creative Elements**: Rare elements include being used as a "seedbed" for monsters and participating in a "sex marathon" where the protagonist is continuously fucked.
+- **Phrases Players Might Search For**: Phrases include "glory hole," "choker challenge," "make her cum," "sex marathon," and "bitch on call."
+
+### Summary:
+The text presents a variety of sexual scenarios and mechanics within a game-like structure, focusing on the protagonist's role as a sex worker. The protagonist takes on different jobs, each with its own set of challenges and rewards, often involving public or semi-public sexual activities. The text includes a wide range of kinks and fetishes, with unique mechanics such as the "choker challenge" and the "make her cum" challenge. The protagonist's progress is measured by their ability to complete sexual tasks and earn money or rewards. The text is rich in adult content, with memorable moments and dialogue, unique combinations of sexual scenarios, and rare or creative elements that players might search for.
 
 ### Story:
-- **Plot Events**: The protagonist is thrust into various sexual scenarios, from being a whore in a brothel to participating in extreme sexual challenges. The narrative explores themes of degradation, submission, and sexual exploration.
-- **Core Characters and Relationships**: The protagonist is the central figure, with relationships primarily revolving around clients, pimps, and other sex workers. The pimp is a recurring figure who controls and profits from the protagonist's sexual activities.
-- **Setting Details**: The story takes place in various locations, including brothels, nightclubs, public bathrooms, and even exotic locales like a safari or a foreign city. Each setting is designed to heighten the sexual tension and degradation.
-- **Memorable Scenes**: Key scenes include being gang-raped in a public bathroom, participating in a "Glory Wall" challenge, and being used as a living toilet. These scenes are designed to be shocking and memorable, emphasizing the protagonist's degradation.
-- **Story Branches**: The story branches into different sexual scenarios based on the protagonist's choices, such as becoming a "Daredevil" or enduring a "Rough Night." Each branch offers a unique experience of sexual degradation and exploration.
+- **Plot Events**: The narrative revolves around various adult-themed contests and scenarios, such as the "Cosplay Party," "Bitch Contest," and "Tester," where characters engage in extreme sexual challenges and competitions.
+- **Core Characters and Relationships**: The main character is a participant in these events, often interacting with clients, organizers, and other participants in a highly sexualized context.
+- **Setting Details**: The settings include a brothel, a cosplay party, a porn studio, and various other adult entertainment venues.
+- **Memorable Scenes**: Scenes like the "Throat Fuck Addicted" and "Protest" stand out for their intense and graphic descriptions of sexual acts and the character's reactions to them.
 
 ### Gameplay:
-- **New Features and Mechanics**: The game introduces various sexual challenges and scenarios, such as the "Glory Wall" and "Choker Challenge," which test the protagonist's endurance and willingness to submit.
-- **Powers and Abilities**: The protagonist gains abilities related to sexual endurance and submission, such as the ability to withstand extreme sexual acts or to please multiple clients simultaneously.
-- **Character Options**: The protagonist can choose different roles, such as a "Barker" or "Mistress," each with unique sexual responsibilities and challenges.
-- **Progress Systems**: Progress is measured by the protagonist's ability to endure and excel in various sexual scenarios, with rewards such as money, status, or new sexual opportunities.
+- **New Features and Mechanics**: The CYOA introduces unique mechanics like the "Choker Challenge" and "Make Her Cum," where players engage in specific sexual tasks or challenges.
+- **Character Options**: Players can choose to participate in different contests or roles, such as being a "Fluffer" in a porn studio or a "Barker" in a brothel.
+- **Progress Systems**: The game progresses through various sexual challenges and contests, with the character's experiences and reactions shaping the narrative.
 
 ### Adult Content:
-- **Kinks and Fetishes**: The game explores a wide range of kinks, including BDSM, public humiliation, gangbangs, bestiality, and extreme sexual acts.
-- **Sexual Systems and Mechanics**: The game features detailed sexual mechanics, including the use of sex toys, aphrodisiacs, and pheromones to enhance sexual experiences.
-- **Romance/Relationship Options**: While the focus is on sexual degradation, there are hints of romantic or emotional connections, such as the protagonist's relationship with their pimp or clients.
-- **Body Modifications/Transformations**: The protagonist undergoes various body modifications, such as being stretched or transformed into a "Milky Cow" for lactation.
-- **Training/Corruption Elements**: The protagonist is trained and corrupted into becoming a more submissive and willing sex worker, with each scenario pushing them further into degradation.
-- **Unique Adult Scenes**: The game features unique scenes, such as being used as a living toilet or participating in a "Glory Wall" challenge, which are designed to be shocking and memorable.
+- **Kinks and Fetishes**: The CYOA explores a wide range of kinks, including BDSM, gangbangs, fisting, and sexual slavery.
+- **Sexual Systems and Mechanics**: The game includes detailed descriptions of sexual acts, with mechanics like the "Reverse" challenge, where players must avoid making the character cum.
+- **Romance/Relationship Options**: While primarily focused on sexual content, there are elements of dominance and submission in relationships.
+- **Body Modifications/Transformations**: Scenarios like "Milky Cow" and "Incubator" involve body modifications for sexual purposes.
+- **Training/Corruption Elements**: The "Tester" role involves testing new sexual ideas, often leading to the character's corruption or transformation.
+- **Unique Adult Scenes**: Scenes like "Special Guest" and "Brain Fuck" offer unique and memorable sexual experiences.
 
 ### Distinctive Features:
-- **Memorable Moments and Dialogue**: Key moments include the protagonist's realization of their degradation, such as being used as a living toilet or enduring a "Glory Wall" challenge.
-- **Unique Combinations**: The game combines various sexual scenarios and kinks in unique ways, such as the "Glory Wall" challenge or the "Choker Challenge."
-- **Special Abilities**: The protagonist gains special abilities related to sexual endurance and submission, such as the ability to withstand extreme sexual acts.
-- **Rare or Creative Elements**: The game features rare and creative elements, such as the use of aphrodisiacs and pheromones to enhance sexual experiences.
-- **Phrases Players Might Search For**: Players might search for phrases like "Glory Wall challenge," "Choker Challenge," "living toilet," or "extreme gangbang" to find specific scenes or challenges.
+- **Memorable Moments and Dialogue**: The "Protest" scene, where the character reacts to feminist protesters, and the "Special Guest" scene, where the character is blindfolded and tied up, are particularly memorable.
+- **Unique Combinations**: The combination of cosplay and sexual acts in the "Cosplay Party" and the integration of bestiality in the "Safari" section are unique.
+- **Special Abilities**: The character gains new kinks and abilities through their experiences, such as becoming addicted to throat fucking in "Throat Fuck Addicted."
+- **Rare or Creative Elements**: The "Anatomy Class" scene, where the character's body is used for an anatomy lesson, is a rare and creative element.
+- **Phrases Players Might Search For**: Phrases like "throat fuck addicted," "cosplay party," "bitch contest," and "gangbang" are likely to be searched by players.
 
-This summary captures the essence of the CYOA, focusing on the new and unique elements that players might find intriguing or shocking.
+This CYOA offers a highly detailed and immersive experience for players interested in adult-themed interactive fiction, with a focus on extreme sexual content and unique scenarios.

@@ -1,22 +1,24 @@
-**Title:** Filthy Whore (FilthyWhore, FilthyWhor, FilthyHore, FilthyWhoer, FilthyWhor, FilthyWhoree, FilthyWhorre, FilthyWhor, FilthyWhor, FilthyWhor)  
+**Title:** Filthy Whore (FilthyWhore, FilthyWhor, FilthyHore, FilthyWhre, FilthyWhoree, FilthyWhor, FilthyWhor, FilthyWhor, FilthyWhor, FilthyWhor)  
 **Author:** Dragon's Whore (Commissioned by u/ColeDeucalion)  
-**Genre Tags:** NSFW, Erotic, Degradation, BDSM, Fantasy, Sci-Fi, Modern, Corruption, Transformation, Public Humiliation  
+**Genre Tags:** NSFW, Adult, Sexual Fantasy, BDSM, Corruption, Humiliation, Public Sex, Sci-Fi, Fantasy, Modern  
 
-**Kinks:** BDSM, public humiliation, gangbangs, bestiality, body modification, training/corruption, non-consensual scenarios, glory holes, living toilet, futa, sissy, hentai physics  
+**Kinks:** BDSM, public humiliation, gangbangs, glory holes, body modification, sexual slavery, fisting, lactation, bestiality, corruption  
 
-**Plot:** The game thrusts players into the role of a submissive prostitute, exploring a world of sexual degradation and servitude. Players can customize their character’s identity, past, and the world they inhabit, ranging from modern settings to fantasy or sci-fi. The story branches based on choices, leading to various jobs like camwhore, brothel worker, or test subject. Players face punishments for poor performance and rewards for excelling, with unique mechanics like the "Glory Wall" and "Portal Panties" adding depth to the sexual encounters. The narrative emphasizes themes of submission, corruption, and extreme sexual exploration, with memorable scenes like being a "living toilet" or participating in a "Pack Rape."  
+**Plot:** You play as a sex worker navigating a world where prostitution is either legal, illegal, or somewhere in between. Starting with character creation, you choose your role (Sissy, Futa, or Chick), backstory (Graduate, Spoiled Girl, Undercover Agent), and setting (Fantasy, Modern, Sci-Fi). Your journey involves taking on various jobs like camwhore, stripper, or test subject, each with unique challenges and rewards. The legality of prostitution in your chosen world impacts your gameplay, from working freely in brothels to operating underground. Along the way, you interact with clients, pimps, and other sex workers, facing punishments for disobedience or rewards for good behavior. The story is filled with extreme sexual scenarios, from public humiliation to gangbangs, as you are molded into the perfect whore.  
 
-**Setting:** The game takes place in diverse locations, including nightclubs, brothels, public bathrooms, and exotic locales like safaris or foreign cities. The atmosphere is gritty and intense, designed to heighten the sexual tension and degradation. Similar popular settings include hentai-inspired worlds and dystopian futures where sex work is a central theme.  
+**Setting:** The game’s setting is highly customizable, ranging from modern brothels and nightclubs to fantastical worlds with monsters and aliens. The atmosphere is gritty and sexualized, with locations like public bathrooms, arcades, and porn studios serving as backdrops for your adventures. The tone is darkly humorous, with a sassy, fourth-wall-breaking narrator guiding your journey.  
 
-**Themes:** The main themes revolve around submission, degradation, and sexual exploration. The emotional tone is dark and intense, focusing on the protagonist’s journey from reluctant participant to willing sex worker. The atmosphere is immersive, with a focus on pushing boundaries and exploring extreme kinks.  
+**Themes:** The game explores themes of corruption, submission, and sexual exploitation. The emotional tone is a mix of dark humor and degradation, with an emphasis on the protagonist’s transformation into a willing participant in their own debasement. The atmosphere is intense and immersive, drawing players into a world where sex is both a commodity and a tool for control.  
 
-**Characters:** The protagonist is a customizable character who starts as a reluctant participant in the sex industry but becomes increasingly submissive and corrupted. Key characters include the pimp, who controls and profits from the protagonist’s activities, and various clients who push the protagonist to their limits. Relationships are transactional, focusing on sexual service rather than emotional connections.  
+**Characters:** The protagonist is a customizable sex worker, with options for gender, backstory, and personality. Key characters include your pimp, who influences your earnings and punishments, and various clients who offer unique sexual challenges. Other characters include fellow sex workers, brothel managers, and scientists conducting sexual experiments.  
 
 **Search Patterns:**  
-"I remember a game where you could be a living toilet."  
-"Looking for a game with extreme public humiliation and BDSM."  
-"There was this scene where you participate in a Glory Wall challenge."  
-"Dark story about corruption and sexual degradation."  
-"Game where you can choose to be a cam girl or brothel worker."  
-"Looking for a game with futa and sissy transformation options."  
-"Intense story about being trained into a submissive sex worker."
+"I remember a game where you could be a glory hole participant with endless clients."  
+"Looking for a game with extreme public humiliation and gangbangs."  
+"There was this scene where you’re used as a living toilet in public."  
+"Darkly humorous story about becoming a perfect whore."  
+"Game where you can choose to be a sissy, futa, or chick in different worlds."  
+"Looking for a CYOA with body modifications like lactation and hypersensitive nipples."  
+"Remember a game with a sassy narrator and extreme BDSM content."
+
+Visual: Cartoonish, anime-style character portraits.  A vibrant, purplish-pink background.  A grid-like interface design.  A feeling of playful, somewhat suggestive content.

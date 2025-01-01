@@ -1,87 +1,35 @@
-```markdown
-# 1. CORE IDENTIFICATION
-**Title:** Princess Quest  
-**Author/Studio:** Dragon's Whore  
-**Genre Tags:** Erotic Fantasy, Interactive Fiction, Dark Fantasy, Choose-Your-Own-Adventure (CYOA)  
-**Duration:** Variable (6–20 hours depending on player choices and exploration)  
+Title: Princess Quest (Princes Quest, Prncess Quest, PrincesQest, PrincessQuest, Princes Quest, PrincesQuest, PrncessQuest, PrncessQest, PrincesQeust)
 
-# 2. GAMEPLAY FRAMEWORK  
-**Core kinks:**  
-- **Choice-Driven Narrative:** Players choose paths that range from revenge, seduction, submission, or dominance as the exiled princess.  
-- **Transformative Challenges:** Players face physical, emotional, and moral changes based on decisions (e.g., transformations into creatures, becoming a ruler, or yielding to dark forces).  
-- **Erotic Encounters:** Explicit sexual scenarios dynamically tied to plotlines.  
-- **Fantasy Worldbuilding:** Includes magic systems, political intrigue, and mythical creatures.  
-- **Character Customization:** Players can develop the princess into a warrior, seductress, witch, or submissive based on choices.  
-- **Branching Outcomes:** Over 40 potential endings influenced by relationships, morality, and alliances.  
-- **Dark Themes and Consequences:** Stories include betrayal, captivity, or manipulation tied into the narrative arcs.  
+Author: Dragon's Whore  
+Genre Tags: Fantasy, Royalty, Adventure, Political Intrigue, Magic, Romance, Dark Themes  
 
-Unique features:  
-- **Extensive Role Customization:** Choose between archetypes like Knight Princess, Witch Princess, or Vixen Princess, each with unique abilities and storylines.  
-- **Dynamic Writing:** The tone and descriptions evolve based on your narrative path, adapting to choices in subtle ways.  
-- **Multiple Narrative Layers:** A mix of political intrigue, magical conspiracies, and personal revenge tailored to the player’s decisions.  
+Kinks: Power dynamics, humiliation, submission, domination, tentacles, mind control, transformation, public exposure, breeding, magical contracts  
 
-**Player Agency:**  
-- **Choices Available:** Players decide how to reclaim the throne (through alliances, combat, seduction, or submission).  
-- **Impact of Decisions:** Determines the princess's fate, relationships, and kingdom's future. Every major decision leads to consequences (positive or tragic).  
-- **Branching Structure:** Highly branching with multiple overlapping arcs; some linear progression per choice route but with open-ended replayability.  
-- **Replay Value Factors:** Different endings, achievements, and hidden paths encourage players to explore all options.  
+Plot: You are a princess who has been betrayed and forced to flee your own palace after a coup orchestrated by your sister, the High Priest, or the Lord Marshal. Stripped of your crown and power, you must navigate a dangerous world to reclaim your throne. Along the way, you face difficult choices: forging alliances, using your body as a bargaining chip, or surrendering to your enemies. The stakes are high, and the path to victory is fraught with peril, humiliation, and unexpected twists. Will you rise as a queen, or will you fall into a life of servitude and degradation?  
 
-# 3. NARRATIVE ELEMENTS  
-**Plot Summary:**  
-You are an exiled princess, betrayed by your cunning sister and dethroned by conspirators. Stripped of allies, power, and dignity, you must navigate a perilous world to reclaim your kingdom. Will you rise as a righteous queen, succumb to the darkness, or evolve into something entirely new? Your choices determine your fate—and that of your realm.  
+Setting:  
+- Core location/world details: The story is set in a medieval fantasy kingdom with marble palaces, ancient temples, and treacherous forests. The world is rich with magic, political intrigue, and dangerous creatures.  
+- Atmosphere: The tone shifts from regal and majestic to dark and desperate as you lose your throne and struggle to survive.  
+- Similar popular settings: The game evokes the grandeur of "Game of Thrones" mixed with the dark fantasy of "The Witcher."  
 
-**Key Characters:**  
-- **The Princess (Protagonist):** The player character, customizable as a warrior, witch, or seductress, with motivations ranging from vengeance to self-discovery.  
-- **The Sister (Antagonist):** A manipulative schemer who orchestrates the coup against you. Her fate depends on your choices.  
-- **The High Priest:** A zealot who manipulates religion for power, spreading lies and sowing chaos.  
-- **The Lord Marshal:** A legendary general who betrays the throne for his ambitions.  
-- **Allies and Enemies:** Includes mercenaries, witches, mythical creatures (Draconids, Amazons, Lamias), and supernatural forces.  
+Themes:  
+- Main themes: Power, betrayal, sacrifice, and the cost of reclaiming one's identity.  
+- Emotional tone: A mix of defiance, despair, and determination, with moments of dark humor and erotic tension.  
+- Atmosphere: The game balances the elegance of royal life with the gritty reality of survival and the darker aspects of power struggles.  
 
-**Setting Details:**  
-- **Time Period and World Type:** A high-fantasy medieval kingdom steeped in magic, intrigue, and danger.  
-- **Major Locations:** The royal palace, ancient temples, cursed forests, Draconid mountains, and bustling cities.  
-- **World-Building Elements:** Religions, dark magic rituals, political alliances, and ancient myths define the setting.  
-- **Atmospheric Description:** A mix of regal decadence, grim allure, and eerie mysticism. Feels akin to dark fairy tales like *Grimm’s Tales* meets *Game of Thrones*.  
+Characters:  
+- Protagonist: A princess who must adapt to her new reality, whether through cunning, strength, or submission.  
+- Sister: A cunning and ambitious sibling who orchestrates the coup.  
+- High Priest: A religious leader who uses divine authority to seize power.  
+- Lord Marshal: A brilliant but ruthless military commander who betrays the crown.  
 
-# 4. DISTINCTIVE FEATURES  
-**Unique Selling Points:**  
-- **Unprecedented Scale of Path Customization:** With over 40 endings, the game introduces nuanced decision paths where players truly control the protagonist's transformation.  
-- **Erotic Immersion:** Detailed and explicit adult content for mature audiences integrated into the story.  
-- **Mythical Alliances:** Develop relationships with mythical creatures, dark gods, or warrior tribes depending on your choices.  
-- **Morality and Corruption System:** Tracks the princess’s descent or ascent based on her decisions.  
+Search Patterns:  
+"I remember a game where you play as a princess trying to reclaim her throne."  
+"Looking for a game with tentacle kink and royal intrigue."  
+"There was this scene where the princess gets turned into a breeding slave for monsters."  
+"Dark fantasy story about a princess losing her kingdom."  
+"Game where you can choose to surrender or fight for your throne."  
+"Looking for a CYOA with political intrigue and magic."  
+"Emotional story about a princess making tough choices to survive."
 
-**Themes and Tone:**  
-- **Main Themes Explored:** Power, betrayal, submission, survival, and identity.  
-- **Emotional Atmosphere:** A blend of dark eroticism, desperate struggle, and fantastical escapades.  
-- **Writing Style:** Poetic yet visceral, often delving into the protagonist’s internal conflicts and desires.  
-- **Narrative Approach:** Story-driven with heavy player agency; focuses on character evolution.  
-
-# 5. CONTEXTUAL INFORMATION  
-**Similar Games:**  
-- *Corruption of Champions (Fenoxo Games):* Shares the erotic fantasy genre with transformative customization.  
-- *Fallen London (Failbetter Games):* Offers intricate storytelling and branching narrative paths.  
-- *Kingdom Come: Deliverance (Warhorse Studios):* Shares the theme of reclaiming a lost legacy through choice-driven gameplay.  
-
-Key differences: *Princess Quest* includes explicit adult content and focuses more on erotic and fantastical elements than its counterparts.  
-
-**Common Search Patterns:**  
-- “Erotic CYOA princess game”  
-- “Dark fantasy game with witches and knights”  
-- “Adult interactive fiction reclaim throne”  
-- “Princess betrayed by sister story game”  
-
-**Frequently Referenced Elements:**  
-- The protagonist’s transformation into various roles (e.g., Amazon Queen, Witch of the Elderwood).  
-- Distinctive endings such as Queen of the Hive or Dictatoress.  
-- Memorable moments like negotiating with mythical beasts or succumbing to dark forces.  
-
-# 6. EXPERIENCE MARKERS  
-**Emotional Impact:**  
-- **Key Emotional Moments:** The betrayal by the sister, forming alliances with mythical creatures, or succumbing to submission evoke strong player reactions.  
-- **Memorable Feelings:** A mix of empowerment, lust, and dark intrigue depending on chosen paths.  
-- **Challenge Level:** Medium-to-high; balancing resource management, narrative choices, and survival.  
-- **Target Audience Appeal:** Mature players who enjoy erotic fantasy, interactive storytelling, and moral dilemmas.  
-
----
-This structured summary is optimized for semantic search and recommendation systems, blending detailed descriptions with key searchable terms for enhanced discoverability.
-```
+Visual: Richly detailed, anime-style visuals.  A palette of warm, pastel colors with splashes of deeper, more saturated hues.  Character designs are expressive, with intricate clothing and accessories.  The interface features large, stylized text boxes and images.  The overall impact evokes a sense of adventure and grand scale.

@@ -1,36 +1,28 @@
-# Summary of "Commission by Kagami"
+Title: Fluffy Tail (Flufy Tail, FlufyTale, FlufyTail, FlufyTale, FlufyTale, FlufyTale, FlufyTale, FlufyTale, FlufyTale, FlufyTale)  
+Author: Dragon's Whore  
+Genre Tags: Fantasy, Transformation, Adventure, Romance, Monster Girls, Magic, Reincarnation, Kitsune  
 
-## **Story Overview**
-The game follows the journey of a protagonist who, after purchasing a mysterious pendant, is transformed into a fox. Over time, they discover they were once human and are now a kitsune—a magical fox spirit. The story explores their reincarnation, adaptation to their new form, and eventual transformation back into a human-like kitsune. The world is filled with magic, strange creatures, and a society where sexuality and power are deeply intertwined.
+Kinks: Transformation, Kitsune, Monster Girls, Magic, Reincarnation, Sexual Energy, Fox Traits, Tail Play, Fox Ears, Fox Form  
 
-## **Key Characters**
-- **Protagonist**: A reincarnated kitsune, once human, now navigating a magical world in both fox and human forms.
-- **Companions**: Various characters like Drowsy (a playful fox), Adri Nerers (a noble boy), Rachel Wanderfoot (a merchant), and others who join the protagonist on their journey.
-- **Kitsune Spirits**: Ancient fox spirits who guide the protagonist and reveal their true nature.
+Plot:  
+You begin as a human who stumbles upon a mysterious crystal pendant during a vacation. Unbeknownst to you, the pendant is an ancient artifact that triggers a magical transformation. After accidentally activating it, you find yourself reincarnated as a fox in a fantastical world filled with magic, strange creatures, and monster girls. Over time, you discover that you are not just any fox but a kitsune, a mythical fox spirit with the potential to regain a human-like form. As you explore this new world, you encounter various races, magical phenomena, and lewd adventures. The story revolves around your journey to adapt to your new life, harness your powers, and decide whether to embrace your fox nature or strive to become human again.  
 
-## **Game Mechanics**
-- **Transformation**: The protagonist can shift between fox and human forms, with different abilities and appearances in each.
-- **Mana Management**: Mana is gained through various means, primarily through sexual encounters, but also through food, moonlight, and other magical sources.
-- **Customization**: Players can choose the protagonist’s appearance, abilities, and personality traits, including body type, tail style, and magical powers.
-- **Companions and Items**: Players can recruit companions and acquire magical items that aid in their journey.
+Setting:  
+The game is set in a vibrant, high-fantasy world teeming with magic and diverse biomes. From lush forests to glowing caves, the world is filled with strange creatures, ancient ruins, and bustling cities inhabited by humans, monster girls, and other sentient beings. The atmosphere is whimsical yet dangerous, with a mix of wonder and peril around every corner.  
 
-## **World-Building**
-- **Magical World**: The game is set in a high-fantasy world with diverse biomes, magical creatures, and ancient ruins. The world is filled with anomalies, rifts, and places of power.
-- **Society**: The world’s society is highly sexualized, with harems, monster girls, and a culture where sex is a common form of interaction and power exchange.
-- **Fox Lore**: Foxes are considered sacred and magical beings, with kitsune being revered as powerful spirits. The protagonist’s journey ties into ancient fox rituals and legends.
+Themes:  
+The main themes include transformation, identity, and the balance between human and animal instincts. The emotional tone is a blend of curiosity, excitement, and occasional vulnerability as you navigate your new life. The atmosphere is playful and adventurous, with a touch of sensuality.  
 
-## **Themes**
-- **Reincarnation and Identity**: The protagonist’s journey explores themes of rebirth, memory, and the struggle to reconcile their human past with their kitsune present.
-- **Magic and Power**: The game delves into the use of magic, the acquisition of power, and the consequences of wielding it.
-- **Sexuality and Freedom**: The world’s culture emphasizes sexual freedom, with the protagonist often engaging in sexual encounters as a means of survival and empowerment.
+Characters:  
+The protagonist is you, a reincarnated kitsune navigating a new world in both fox and human-like forms. Key characters include other kitsune, monster girls, humans, and magical beings who aid or challenge you on your journey.  
 
-## **Tone and Style**
-The game maintains a playful, erotic, and fantastical tone, blending humor, adventure, and sensuality. The narrative is lighthearted but explores deeper themes of identity and power.
+Search Patterns:  
+"I remember a game where you turn into a fox and explore a magical world."  
+"Looking for a game with kitsune transformation and monster girls."  
+"There was this scene where you accidentally activate a magical pendant and become a fox."  
+"Adventurous story about reincarnation and magical foxes."  
+"Game where you can choose between fox and human form with tail and ears."  
+"Looking for a CYOA with kitsune and sexual energy mechanics."  
+"Fantasy game with fox transformation and lewd adventures."
 
-## **Key Features**
-- **Multiple Endings**: The game offers various endings based on the protagonist’s choices, ranging from becoming a legendary hero to living a simple life in the wild.
-- **Customization Options**: Extensive options for tailoring the protagonist’s appearance, abilities, and personality.
-- **Companion System**: Players can recruit and interact with a variety of companions, each with unique traits and stories.
-- **Magical Abilities**: The protagonist can learn and master a range of magical powers, from illusions to healing.
-
-This summary captures the essence of the game’s story, mechanics, and world-building, providing a concise overview for search and analysis.
+Visual: Warm, yellowish-tan background.  Hand-drawn, painterly style with a focus on intricate detail.  A sense of adventure and discovery, with a touch of whimsicality.

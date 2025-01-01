@@ -2,6 +2,7 @@ import google.generativeai as genai
 import PIL.Image
 import sys
 import os
+import datetime
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -15,24 +16,26 @@ if not gemini_api_key:
     
 genai.configure(api_key=gemini_api_key)
 
-# Get image path from command line
-if len(sys.argv) != 2:
-    print("Usage: python vision_query.py <image_path>")
-    sys.exit(1)
+def analyze_visual_style(image_path):
+    # Check if file is too small (likely blank screenshot)
+    file_size = os.path.getsize(image_path)
+    if file_size < 5120:  # 5KB
+        error_msg = f"[{datetime.datetime.now()}] Error: Blank screenshot detected - {image_path}\n"
+        with open("log.txt", "a") as log_file:
+            log_file.write(error_msg)
+        return ""
 
-image_path = sys.argv[1]
+    try:
+        image = PIL.Image.open(image_path)
+    except Exception as e:
+        print(f"Error loading image: {e}")
+        sys.exit(1)
 
-try:
-    image = PIL.Image.open(image_path)
-except Exception as e:
-    print(f"Error loading image: {e}")
-    sys.exit(1)
+    # Initialize model
+    model = genai.GenerativeModel("gemini-1.5-flash-8b")
 
-# Initialize model
-model = genai.GenerativeModel("gemini-1.5-flash-8b")
-
-# Define prompt
-prompt = """
+    # Define prompt
+    prompt = """
 Create a short sentence visual style description. Follow these exact examples:
 
 Examples:
@@ -54,8 +57,16 @@ Rules:
   * Overall impact
 """
 
-# Generate response
-response = model.generate_content([prompt, image])
+    # Generate response
+    response = model.generate_content([prompt, image])
+    return response.text
 
-# Print result
-print(response.text)
+if __name__ == "__main__":
+    # Get image path from command line
+    if len(sys.argv) != 2:
+        print("Usage: python vision_query.py <image_path>")
+        sys.exit(1)
+
+    image_path = sys.argv[1]
+    description = analyze_visual_style(image_path)
+    print(description)

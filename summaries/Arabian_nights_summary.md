@@ -1,30 +1,33 @@
-Title: Arabian Nights (Araban Nights, Arabain Nights, Arabian Nihgts, Arabian Nites, Arabian Nigths, Arabian Nihgts, Arabian Nihgts, Arabian Nihgts, Arabian Nihgts)  
+Title: Arabian Nights (Araban Nights, Arabain Nights, Arabian Nites, ArabianNights, Arabbian Nights, Araban Nites, Arabin Nights, Arabian Nigths, Arabian Nihgts)
+
 Author: Dragon's Whore  
-Genre Tags: Fantasy, Erotic, Adventure, Harem, Sandbox, Mythology, Strategy  
+Genre Tags: Fantasy, Erotic, Adventure, Harem, Sandbox, Roleplay, Mythology  
 
-Kinks: Harem management, BDSM, Bestiality, Public humiliation, Roleplay, Exhibitionism, Transformation, Breeding, Mind control, Futanari  
+Kinks: Harem management, BDSM, Exhibitionism, Bestiality, Transformation, Public humiliation, Breeding, Mind control, Slavery, Futanari  
 
-Plot: You are the Sultan of the Great Ishtair, a legendary kingdom hidden in the vast desert. Known for its wealth, magic, and beauty, your realm is a beacon of power and intrigue. As the ruler, you command not only armies and treasures but also a lavish harem of concubines, each with their own unique skills and desires. From cunning merchants to exotic priestesses, your harem is a reflection of your power. But ruling a kingdom is no easy task. You must navigate political intrigue, defend against enemies, and manage the complex dynamics of your harem. Will you be a benevolent ruler, a ruthless conqueror, or a hedonistic Sultan lost in pleasure? The fate of Great Ishtair—and your harem—rests in your hands.  
+Plot: You are the Sultan of the Great Ishtair, a legendary kingdom hidden in the vast desert. Known for its wealth, magic, and beauty, your realm is a beacon of power and luxury. As the ruler, you command not only the land but also a lavish harem filled with the most exquisite women from across the world. Your choices shape the fate of your kingdom, your harem, and your legacy. Will you be a benevolent ruler, a ruthless tyrant, or a hedonistic master? The desert whispers secrets, and your decisions will echo through the sands of time.  
 
 Setting:  
-- Core location/world details: The Great Ishtair, a desert kingdom filled with golden sands, towering mountains, and lush oases. The capital city is a marvel of architecture, with palaces carved from white marble and bustling markets filled with exotic goods.  
-- Atmosphere: A mix of opulence and danger, where magic and tradition intertwine. The desert is both beautiful and treacherous, home to ancient ruins, mystical creatures, and powerful spirits.  
+- Core location/world details: The Great Ishtair, a kingdom of golden sands, towering mountains, and lush oases. The palace is a marvel of marble and magic, filled with treasures, gardens, and wonders.  
+- Atmosphere: A blend of opulence and mysticism, where the line between reality and fantasy blurs. The desert is both a harsh mistress and a source of endless opportunity.  
 - Similar popular settings: Aladdin, One Thousand and One Nights, Prince of Persia  
 
 Themes:  
-- Main themes: Power, desire, loyalty, and the balance between indulgence and responsibility.  
-- Emotional tone: A blend of sensuality, adventure, and intrigue, with moments of both triumph and vulnerability.  
-- Atmosphere: Luxurious yet perilous, with a sense of mystery and wonder.  
+- Main themes: Power, desire, legacy, and the balance between indulgence and responsibility.  
+- Emotional tone: A mix of sensuality, intrigue, and grandeur, with moments of both tenderness and cruelty.  
+- Atmosphere: Exotic, immersive, and deeply erotic, with a focus on exploration and domination.  
 
 Characters:  
-- Protagonist: The Sultan of Great Ishtair, a powerful and charismatic ruler with a taste for both conquest and pleasure.  
-- Key characters: Zahra, the cunning merchant; Amira, the nurturing concubine; Selene, the strategic advisor; Tarilla, the snake priestess; and many more, each with their own stories and desires.  
+- Protagonist: The Sultan, a powerful and charismatic ruler with a taste for luxury and control.  
+- Key characters: Zahra, the cunning merchant; Amira, the nurturing concubine; Tarilla, the snake priestess; Selene, the chessmaster; and many more, each with unique personalities and desires.  
 
 Search Patterns:  
 "I remember a game where you manage a harem in a desert kingdom."  
-"Looking for a game with snake priestesses and magical transformations."  
+"Looking for a game with snake priestesses and transformation kinks."  
 "There was this scene where you could turn a girl into a lamia."  
-"Emotional story about a cursed princess and her redemption."  
+"Emotional story about power and desire in a fantasy setting."  
 "Game where you can control a harem with BDSM elements."  
-"Looking for a fantasy CYOA with bestiality and breeding."  
+"Looking for a CYOA with bestiality and public humiliation."  
 "Arabian Nights game with a focus on harem management and erotic themes."
+
+Visual: Warm, sandy desert landscape, rich with oriental motifs.  Detailed character designs with rich color palettes.  A grid-like interface design.  A feeling of adventure and mystery.

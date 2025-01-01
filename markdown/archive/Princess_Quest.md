@@ -1,3 +1,5 @@
+title: Princess Quest
+
 ## 
 
 Commission by <b>Grim 12</b>
@@ -35,19 +37,13 @@ But you are a princess. And though you've lost everything now except your pride 
 
 You've always been captivated by the gleam of weapons, the power they grant, the glory! You're definitely not one of those pampered court ladies! Years of rigorous training and life among common soldiers during numerous campaigns have tempered your character, so you're more used to blood on your blade and rough language than balls. People even joked that you'd end up rescuing some prince yourself and claim half a kingdom as dowry... Well, now it seems you'll have to rescue yourself, but you'll manage! You'll definitely succeed and crush all your enemies!
 
-![Knight Princess](images/R4C1.avif)
-
 ### Witch Princess
 
 While your magical gift might not be the strongest, you've been taught by the finest witches since childhood. Alchemy, spells, contracts... Yes, power never comes from nothing, and it always demands payment. The mystical forces and demons are particularly interested in princesses... They've often offered and shown you things that would make court ladies faint... Of course, you haven't made any binding agreements yet! You only showed them a glimpse of yourself once for... never mind. In any case, your power and knowledge remain with you! Along with your delicate, innocent body...
 
-![Witch Princess](images/R4C2.avif)
-
 ### Vixen Princess
 
 Intrigue, rumors, and alluring smiles - these are your weapons! You learned early on that just a few of your words could make young nobles do anything for you!  Just a little wiggle of your perfect ass is enough to turn even a proud prince into your devoted servant.  Huh, of course, you know about the whispered rumors at court! But these whispers only fuel everyone's fascination~ Ah, a princess's body is a commodity after all, isn't it? A very, very beautiful, expensive, and elite commodity - meant to be traded in political marriage someday!  
-
-![Vixen Princess](images/R4C3.avif)
 
 ## 
 
@@ -57,19 +53,13 @@ Intrigue, rumors, and alluring smiles - these are your weapons! You learned earl
 
 Your younger sister was always a cunning and greedy little snake, but even you didn't expect her to orchestrate a real conspiracy! Before you could even comprehend what was happening, all the courtiers - the same ones who used to bow and smile at your approach - had turned their backs on you, and she seized power! And those vile rumors she's spreading to deceive everyone... How... How dare she disgrace the royal family's honor like this?! Your honor! Ah, you hear it on every street corner now, even the filthy beggars discussing these slanderous lies, believing you actually worked in secret at a brothel, that your beloved dog... Oh, how she'll pay for this! That wretched witch!
 
-![Your Sister](images/R5C1.avif)
-
 ### High Priest
 
 Your father, for all his wisdom in matters of state, always believed that religion was a personal choice, that he shouldn't interfere... Even when the Church began building their golden-domed temples that towered over the royal palace, when their incense-filled processions filled the streets, he remained neutral - and see where that led! The High Priest simply read his new "prophecy," and in a single day, the very servants who once bowed to your every whim now spat at your feet, claiming their only master was the prophet! At least your handmaidens didn't dare detain you, and you managed to escape just in time, before the real zealots arrived!
 
-![High Priest](images/R5C2.avif)
-
 ### Lord Marshal
 
 The Hero of Seven Wars, a brilliant commander who brought countless victories to your kingdom - you thought he'd always be loyal to the Crown! After all, it was your father who raised him from common soldier to general, trusting him with the realm's armies! But the soldiers he led into battle after battle grew more loyal to him than to any king! So when during the victory parade, he ordered to seize the palace, his troops executed his command without hesitation! Ah, if the royal guards hadn't delayed them, you might have found yourself in the dungeons... or worse! After all, you'd heard plenty of stories about what his troops did to noblewomen in conquered cities!
-
-![Lord Marshal](images/R5C3.avif)
 
 ## 
 
@@ -79,19 +69,13 @@ The Hero of Seven Wars, a brilliant commander who brought countless victories to
 
 The conspirators have thousands of supporters, so you need allies too! A kingdom is first and foremost its people, and negotiations are a monarch's greatest weapon, aren't they? You must gather loyal followers, forge alliances, find mercenaries! You were raised to rule, taught the delicate art of turning enemies into allies since childhood - and you won't fail now! Even though you have no money or power... you'll figure something out... Ah... Yes, damn it all, you're ready to make deals that would make your ancestors turn in their graves. A political marriage? So be it! After all, what's one night in a powerful lord's bedchamber compared to losing your kingdom forever? You'll do whatever it takes... whatever they want... to reclaim your throne!
 
-![Make an Alliance](images/R6C1.avif)
-
 ### By My Own Hand
 
 Who said one person isn't enough to make a difference? You're a well-trained princess, not some common wench! Let them all think princesses are delicate dolls who only know how to bat their eyelashes and spread their... fans~ They forget that even the prettiest roses have thorns, and royal blood runs red with centuries of conquest! Years of trainings have led to this moment, and now you'll show them what a true heir to the throne can do! You'll reach your goal no matter the cost - whether you must stain your hands with blood, sell your maidenhood to the highest bidder, or tear your enemies apart with your bare teeth. After all, your body is just another weapon in your arsenal, isn't it? The crown is worth any price!
 
-![By My Own Hand](images/R6C2.avif)
-
 ### Surrender
 
 No, you're not afraid for yourself! You could easily find refuge in distant lands, but your subjects... You're their princess, their protector, even if you have lost your crown! And what could be more terrible for a kingdom than a bloody divide and years of civil war? How many innocents would die fighting for your throne, how many children would become orphans... No, you won't allow it - your pride isn't worth their lives! Your enemy thought to humiliate you by promising to spare your life if you bowed naked before them - like a common harlot, stripped of title and dignity. Yet here you stand, chin high even as tears burn behind your eyes... Let the entire court feast their eyes on your shame - as long as your people live in peace!
-
-![Surrender](images/R6C3.avif)
 
 ## 
 
@@ -100,8 +84,6 @@ No, you're not afraid for yourself! You could easily find refuge in distant land
 ### 
 
 System card
-
-![]()
 
 ## Your Fate
 

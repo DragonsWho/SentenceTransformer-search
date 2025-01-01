@@ -4,6 +4,7 @@ import shutil
 from dotenv import load_dotenv
 import requests
 import tiktoken
+from detect_repetition import detect_repetition
 
 # Load environment variables
 load_dotenv()
@@ -34,7 +35,17 @@ def call_deepseek_chat(system_message: str, user_message: str) -> str:
     try:
         response = requests.post(DEEPSEEK_API_URL, headers=headers, json=payload)
         response.raise_for_status()
-        return response.json()['choices'][0]['message']['content']
+        content = response.json()['choices'][0]['message']['content']
+        
+        # Check for repetition in LLM response
+        if detect_repetition(content, sequence_length=3, min_repeats=10):
+            print("Warning: Detected repetition in LLM response. Retrying with modified prompt...")
+            payload['messages'][0]['content'] += "\nAvoid repeating phrases or sentences. Provide concise, varied responses."
+            response = requests.post(DEEPSEEK_API_URL, headers=headers, json=payload)
+            response.raise_for_status()
+            content = response.json()['choices'][0]['message']['content']
+            
+        return content
     except Exception as e:
         print(f"Deepseek API error: {str(e)}")
         return None

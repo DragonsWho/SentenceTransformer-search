@@ -1,94 +1,32 @@
-# **Obelisk: A Mosaic's Journey**
+Title: The Obelisk (TheObelisk, ThObelisk, TheObeliskk, TheObelisk, TheObelisk, TheObelisk, TheObelisk, TheObelisk, TheObelisk, TheObelisk)  
+Author: Dragonace111310, u/dragon_jak, Dragon's Whore  
+Genre Tags: Fantasy, Adventure, Transformation, Monster Taming, RPG, Erotic, Magic, Exploration  
 
-## **Overview**
-"Obelisk: A Mosaic's Journey" is a narrative-driven CYOA (Choose Your Own Adventure) game where players assume the role of a **Mosaic**, a non-human creature that matures by absorbing the souls and traits of other beings. The game is set in a fantastical world centered around the **Obelisk**, a towering structure filled with danger, mystery, and power. Players must climb the Obelisk, defeat enemies, and absorb their abilities to grow stronger, all while navigating complex relationships and challenges.
+Kinks: Body transformation, monster taming, power absorption, sexual encounters, body modification, erotic combat, magical abilities, character customization, pregnancy, futa  
 
----
+Plot: You are a Mosaic, a creature born with an insatiable hunger to absorb the powers and forms of others. Guided by your master, you arrive at the Obelisk, a towering structure filled with dangerous creatures, ancient magic, and untold secrets. As you climb its layers, you must defeat powerful foes, tame monsters, and absorb their abilities to grow stronger. Along the way, you’ll encounter companions, rivals, and strange artifacts that will aid or hinder your journey. The stakes are high as you face increasingly deadly challenges, but the rewards are immense—power, beauty, and the fulfillment of your soul’s deepest desires.  
 
-## **Key Characters**
-- **The Player (Mosaic)**: A creature that matures by absorbing the traits of others. Starts with 80 **blessings** (currency for upgrades).
-- **Master**: The player’s mentor, who teaches them combat and survival skills before departing due to the Obelisk’s corrupting influence.
-- **Companions**: A diverse group of allies with unique abilities, including:
-  - **Ysberin**: A naive herbalist with plant control.
-  - **Logan Mya**: A minotaur chef with super-strength.
-  - **Luperios Yiarnomi**: A sun elf with uncontrollable demigod-level magic.
-  - **Gerdir**: A sarcastic crystal goblin thief.
-  - **Olive Ivo**: A summer fae with heat magic and immortality.
-  - **Mello Sliver**: A party planner for the dead with no combat skills.
-  - **Sun Aero**: A half-dryad tracker with knowledge of the Obelisk.
-  - **Larizz Cul**: A soul surgeon who can remove unwanted absorbed traits.
-  - **Wet Boy**: A friendly, invulnerable slime.
-  - **Forged Triplets**: Three artificial beings with unique skills.
+Setting:  
+- Core location/world details: The Obelisk is a massive, multi-layered tower filled with diverse ecosystems, from lush jungles to volcanic wastelands. Each layer has its own unique atmosphere, creatures, and challenges.  
+- Atmosphere: Mysterious, dangerous, and erotic, with a constant sense of growth and transformation.  
+- Similar popular settings: The Tower of God, Dungeon Crawler Carl, Monster Girl Encyclopedia  
 
----
+Themes:  
+- Main themes: Power, transformation, survival, and self-discovery.  
+- Emotional tone: Intense, adventurous, and sensual.  
+- Atmosphere: A mix of danger and allure, with a focus on personal growth and exploration.  
 
-## **Core Mechanics**
-### **Mosaic Abilities**
-Players can absorb traits from defeated enemies in three ways:
-1. **Drain**: Steal all listed traits, leaving the enemy powerless.
-2. **Fuse**: Copy the enemy’s form and visible abilities.
-3. **Absorb**: Select specific traits at double the cost.
+Characters:  
+- Protagonist: A Mosaic, a creature capable of absorbing the powers and forms of others.  
+- Key characters: Ysberin, a naive herbalist; Logan Mya, a war minotaur chef; Luperios Yiarnomi, a sun elf with uncontrollable magic; Gerdir, a sarcastic crystal goblin; Olive Ivo, a summer fae; Mello Sliver, a party planner for the dead; Sun Aero, a half-dryad; Larizz Cul, a soul surgeon; Wet Boy, a friendly slime; Forged Triplets, a trio of artificial beings.  
 
-### **Attributes**
-Players can spend blessings to enhance six attributes, each tied to a body part:
-- **Strength / Genitals**: Increases physical power and genital size.
-- **Constitution / Breasts**: Boosts durability and breast size.
-- **Dexterity / Legs**: Enhances precision and leg length.
-- **Intelligence / Ass**: Improves memory and tightens the ass.
-- **Wisdom / Hair**: Increases strategic thinking and hair quality.
-- **Luck / Beauty**: Adds luck and beauty (max 6 points).
+Search Patterns:  
+"I remember a game where you absorb monster powers and transform."  
+"Looking for a game with erotic combat and body modification."  
+"There was this scene where you tame a monster and it becomes your companion."  
+"Intense story about climbing a magical tower and gaining powers."  
+"Game where you can fuse with creatures and take their forms."  
+"Looking for a CYOA with pregnancy and futa elements."  
+"Adventure game where you fight bosses and absorb their abilities."
 
-### **Companions**
-Players can recruit companions to aid in their journey, each with unique skills and backstories.
-
----
-
-## **World-Building**
-### **The Obelisk**
-A massive tower filled with layers, each with its own unique environment and challenges. The first layer, **The Groove**, is a lush jungle inhabited by:
-- **Junglers**: Former climbers who now live in tribes.
-- **Monsters**: Physical manifestations of concepts like rage or growth.
-- **Monsterborne**: Humanoid versions of monsters with intelligence.
-
-### **Layer-Specific Powers**
-Each layer grants unique abilities. In **The Groove**, players gain the **Tame** ability, allowing them to subjugate defeated enemies.
-
-### **Quests and Rewards**
-Players can complete quests for rewards, such as:
-- **Treasure Hunt**: Find a Bone Idol Necklace to manipulate pregnancies.
-- **Winds of Everything**: Summon an elemental monsterborne.
-- **A Tribal Path**: Gain shamanic powers to reroll dice.
-
----
-
-## **Items**
-Players can purchase magical items, including:
-- **Hollowed Weapon**: Absorbs and mimics other weapons.
-- **Teleport Crystal**: Teleports the user and nearby allies.
-- **Warding Armor**: Protects against curses but may become hostile.
-
----
-
-## **Rivals**
-Players encounter rivals like:
-- **Daldama**: A horny lunatic who interferes with player actions.
-- **Magnus Hvitserksson**: A thief who steals recently acquired valuables.
-
----
-
-## **Targets**
-Players can defeat and absorb traits from creatures like:
-- **Brushfire**: Fire-resistant with a perfect memory.
-- **Loyalty**: Can store allies in its body, increasing loyalty.
-- **Druid**: Expert in plant-based potions and aphrodisiacs.
-- **Hydra**: Legendary regeneration and voracious appetite.
-
----
-
-## **Tone and Style**
-The game blends dark fantasy with erotic elements, emphasizing growth, exploration, and the moral ambiguity of absorbing others’ traits. The narrative is rich with lore, and the mechanics encourage strategic decision-making.
-
----
-
-## **Conclusion**
-"Obelisk: A Mosaic's Journey" offers a deep, immersive experience where players must balance power, morality, and survival in a world filled with danger and opportunity.
+Visual: Dark, muted gray background with a tall, obelisk-like central element.  Text-heavy interface with a stylized, somewhat gothic feel.  Emphasis on power and transformation, with a slightly otherworldly/mystical impression.
