@@ -1,11 +1,32 @@
 import google.generativeai as genai
 import PIL.Image
+import sys
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure API key
-genai.configure(api_key="AIzaSyDJyDrjC8IvCkEKDotXkzGmVS46cNKc7y8")
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+if not gemini_api_key:
+    print("Error: GEMINI_API_KEY not found in .env file")
+    sys.exit(1)
+    
+genai.configure(api_key=gemini_api_key)
 
-# Load image
-image = PIL.Image.open("screenshoots/Arabian_nights.png")
+# Get image path from command line
+if len(sys.argv) != 2:
+    print("Usage: python vision_query.py <image_path>")
+    sys.exit(1)
+
+image_path = sys.argv[1]
+
+try:
+    image = PIL.Image.open(image_path)
+except Exception as e:
+    print(f"Error loading image: {e}")
+    sys.exit(1)
 
 # Initialize model
 model = genai.GenerativeModel("gemini-1.5-flash-8b")

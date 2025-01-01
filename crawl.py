@@ -52,13 +52,13 @@ def process_url(url):
         return None
 
 def main():
-    # Read URLs from file
-    with open('links.txt', 'r') as f:
-        urls = [line.strip() for line in f if line.strip()]
-    
-    # Process each URL
-    for url in urls:
-        process_url(url)
+    import sys
+    if len(sys.argv) != 2:
+        print("Usage: python crawl.py <url>")
+        sys.exit(1)
+        
+    url = sys.argv[1]
+    process_url(url)
 
 if __name__ == "__main__":
     main()
