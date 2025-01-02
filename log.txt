@@ -38,3 +38,8 @@
   Total URLs processed: 1
   Successfully processed: 1
   Failed to process: 0
+
+[2025-01-02 12:54:17.815177] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0

@@ -4,6 +4,7 @@ import datetime
 import os
 import time
 from traffic_analyzer import TrafficAnalyzer
+from js_json_extractor import extract_js_json
 
 def run_script(script_name, args=None):
     try:
@@ -75,7 +76,15 @@ def main():
         if not run_script("crawl.py", project_json_url):
             print(f"Failed to process project.json, attempting traffic analysis for: {url}")
             
-            # Try traffic analysis as fallback
+            # Try JSON extraction from JS files as fallback
+            print(f"Attempting JSON extraction from JS files for: {url}")
+            result = extract_js_json(url)
+            if result:
+                print(f"Successfully processed URL using JS JSON extraction: {url}")
+                continue
+                
+            # If JS extraction fails, try traffic analysis
+            print(f"JS JSON extraction failed, attempting traffic analysis for: {url}")
             analyzer = TrafficAnalyzer()
             try:
                 result = analyzer.process_url(url)
