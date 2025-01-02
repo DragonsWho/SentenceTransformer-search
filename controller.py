@@ -52,8 +52,9 @@ def run_script(script_name, args=None):
         return False
 
 def main():
-    # Initialize list to track failed URLs
+    # Initialize lists to track failures
     failed_urls = []
+    visual_analysis_failures = []
     
     # Read URLs from links.txt
     try:
@@ -139,20 +140,28 @@ def main():
         # Append visual description to summary file
         summary_path = f"summaries/{project_name}.md"
         try:
-            # Only write to summary if we have valid visual description
-            if stdout.strip() and stdout.strip() != "VPN_REQUIRED_ERROR":
+            # Handle errors first
+            print(f"DEBUG: vision_query output: {stdout.strip()}")
+            
+            if not stdout.strip():
+                print("No visual description available")
+                return
+                
+            # Check for VPN-related error in the raw message
+            if "User location is not supported" in stdout.strip():
+                error_msg = "Error: VPN required for visual analysis. Please enable VPN and try again."
+                print(error_msg)
+                with open("log.txt", 'a') as log_file:
+                    log_file.write(f"\n{datetime.datetime.now().strftime('[%Y-%m-%d %H:%M:%S.%f]')} {error_msg}")
+                visual_analysis_failures.append(base_url)
+                print("DEBUG: Added VPN failure to tracking list")
+                return
+                
+            # Only write valid visual descriptions
+            if not stdout.strip().startswith("Visual analysis error:"):
                 with open(summary_path, 'a') as f:
                     f.write(f"\n\nVisual: {stdout.strip()}")
                 print(f"Visual description added to {summary_path}")
-            
-            # Handle errors
-            if stdout.strip() == "VPN_REQUIRED_ERROR":
-                error_msg = "Error: VPN required for visual analysis. Please enable VPN and try again."
-                print(error_msg)
-                with open("log.txt", "a") as log_file:
-                    log_file.write(f"\n{datetime.datetime.now().strftime('[%Y-%m-%d %H:%M:%S.%f]')} {error_msg}")
-            elif not stdout.strip():
-                print("No visual description available")
         except Exception as e:
             print(f"Failed to update summary file: {e}")
             
@@ -187,14 +196,21 @@ def main():
     print(f"Total URLs processed: {len(urls)}")
     print(f"Successfully processed: {len(urls) - len(failed_urls)}")
     print(f"Failed to process: {len(failed_urls)}")
+    print(f"Visual analysis failures: {len(visual_analysis_failures)}")
     
     if failed_urls:
         print("\nFailed URLs:")
         for i, url in enumerate(failed_urls, 1):
             print(f"{i}. {url}")
-        print("\nThese URLs may need manual verification or correction")
+            
+    if visual_analysis_failures:
+        print("\nVisual analysis failed URLs (VPN required):")
+        for i, url in enumerate(visual_analysis_failures, 1):
+            print(f"{i}. {url}")
     
     print("\nSummarization completed")
+    if visual_analysis_failures:
+        print("Note: Some visual analyses failed due to VPN requirements. Please enable VPN and retry.")
 
 if __name__ == "__main__":
     main()

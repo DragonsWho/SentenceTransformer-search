@@ -64,12 +64,7 @@ Rules:
     except Exception as e:
         error_msg = str(e)
         print(f"Visual analysis error: {error_msg}")
-        
-        # Check for VPN-related error
-        if "User location is not supported" in error_msg:
-            return "VPN_REQUIRED_ERROR"
-            
-        return ""
+        return error_msg
 
 if __name__ == "__main__":
     # Get image path from command line
