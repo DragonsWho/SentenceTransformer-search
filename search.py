@@ -77,6 +77,7 @@ def search(search_text, top_k=5):
         results.append({
             'project': metadata[idx]['project'],
             'file': metadata[idx].get('file', ''),
+            'url': metadata[idx].get('url', ''),
             'score': float(score)
         })
     
@@ -87,11 +88,13 @@ def format_results(results):
     if not results:
         return "Ничего не найдено или произошла ошибка."
     
-    output = "Результаты поиска:\n" + "=" * 50 + "\n"
+    output = "Search results:\n" + "=" * 50 + "\n"
     for i, result in enumerate(results, 1):
         output += f"{i}. {result['project']}\n"
-        output += f"   Файл: {result['file']}\n"
-        output += f"   Сходство: {result['score']:.4f}\n"
+        if result['url']:
+            output += f"   URL: {result['url']}\n"
+        output += f"   File: {result['file']}\n"
+        output += f"   Similarity: {result['score']:.4f}\n"
         output += "-" * 50 + "\n"
     return output
 

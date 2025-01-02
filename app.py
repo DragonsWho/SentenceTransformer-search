@@ -15,9 +15,9 @@ def index():
             try:
                 results = search(query)
                 if not results:
-                    error = "Ничего не найдено по вашему запросу."
+                    error = "No results found for your query."
             except Exception as e:
-                error = f"Ошибка при выполнении поиска: {str(e)}"
+                error = f"Search error: {str(e)}"
                 results = []
     
     return render_template('index.html', 
