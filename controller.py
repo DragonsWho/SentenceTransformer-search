@@ -20,7 +20,7 @@ def run_script(script_name, args=None):
         process = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
+            stderr=subprocess.PIPE,
             text=True
         )
         
@@ -29,6 +29,12 @@ def run_script(script_name, args=None):
         for line in process.stdout:
             print(line, end='')
             output_lines.append(line)
+            
+        # Capture and print stderr
+        stderr_lines = []
+        for line in process.stderr:
+            print(f"ERROR: {line}", end='')
+            stderr_lines.append(line)
             
         process.wait()
         
@@ -130,17 +136,32 @@ def main():
         )
         stdout, stderr = process.communicate()
         
-        if process.returncode != 0:
-            print(f"Failed to analyze visual style for: {webp_path}")
-            print(stderr)
-            continue
-            
         # Append visual description to summary file
-        summary_path = f"summaries/{project_name}_summary.md"
+        summary_path = f"summaries/{project_name}.md"
         try:
-            with open(summary_path, 'a') as f:
-                f.write(f"\n\nVisual: {stdout.strip()}")
-            print(f"Visual description added to {summary_path}")
+            # Only write to summary if we have valid visual description
+            if stdout.strip() and stdout.strip() != "VPN_REQUIRED_ERROR":
+                with open(summary_path, 'a') as f:
+                    f.write(f"\n\nVisual: {stdout.strip()}")
+                print(f"Visual description added to {summary_path}")
+            
+            # Handle errors
+            if stdout.strip() == "VPN_REQUIRED_ERROR":
+                error_msg = "Error: VPN required for visual analysis. Please enable VPN and try again."
+                print(error_msg)
+                with open("log.txt", "a") as log_file:
+                    log_file.write(f"\n{datetime.datetime.now().strftime('[%Y-%m-%d %H:%M:%S.%f]')} {error_msg}")
+            elif not stdout.strip():
+                print("No visual description available")
+        except Exception as e:
+            print(f"Failed to update summary file: {e}")
+            
+            # Process the new summary with process_md.py
+            print(f"\nCalling process_md.py with: --update {summary_path} {base_url}")
+            if not run_script("process_md.py", f"--update {summary_path} {base_url}"):
+                print(f"Failed to process {summary_path} with process_md.py")
+            else:
+                print(f"Successfully processed {summary_path} with process_md.py")
         except Exception as e:
             print(f"Failed to update summary file: {e}")
             continue

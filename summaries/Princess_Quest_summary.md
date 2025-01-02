@@ -1,35 +1,30 @@
-Title: Princess Quest (Princes Quest, Prncess Quest, PrincesQest, PrincessQuest, Princes Quest, PrincesQuest, PrncessQuest, PrncessQest, PrincesQeust)
+Title: Princess Quest (PrincessQuest, PrincesQuest, PrincesQest, PrincessQwest, PrinsessQuest, PrincessQurst, PrincessQeust, PrincessQest, Princess Quest, PrincesQuest)
 
 Author: Dragon's Whore  
-Genre Tags: Fantasy, Royalty, Adventure, Political Intrigue, Magic, Romance, Dark Themes  
+Genre Tags: Fantasy, Adventure, Political Intrigue, Romance, Dark Fantasy, Erotic, Revenge  
 
-Kinks: Power dynamics, humiliation, submission, domination, tentacles, mind control, transformation, public exposure, breeding, magical contracts  
+Kinks: Power dynamics, humiliation, submission, domination, transformation, mind control, public exposure, tentacles, monster encounters, political manipulation  
 
-Plot: You are a princess who has been betrayed and forced to flee your own palace after a coup orchestrated by your sister, the High Priest, or the Lord Marshal. Stripped of your crown and power, you must navigate a dangerous world to reclaim your throne. Along the way, you face difficult choices: forging alliances, using your body as a bargaining chip, or surrendering to your enemies. The stakes are high, and the path to victory is fraught with peril, humiliation, and unexpected twists. Will you rise as a queen, or will you fall into a life of servitude and degradation?  
+Plot:  
+You were once a revered princess, living in luxury within your palace, adored by your subjects. But betrayal strikes—your sister, the High Priest, or the Lord Marshal orchestrates a coup, forcing you to flee. Stripped of your crown and dignity, you must navigate a treacherous path to reclaim your throne. Whether through alliances, magic, or sheer force, your journey is fraught with danger and temptation. Along the way, you’ll face moral dilemmas, make dark bargains, and endure humiliating trials. Will you rise as a queen, or will you succumb to the forces that seek to break you?  
 
 Setting:  
-- Core location/world details: The story is set in a medieval fantasy kingdom with marble palaces, ancient temples, and treacherous forests. The world is rich with magic, political intrigue, and dangerous creatures.  
-- Atmosphere: The tone shifts from regal and majestic to dark and desperate as you lose your throne and struggle to survive.  
-- Similar popular settings: The game evokes the grandeur of "Game of Thrones" mixed with the dark fantasy of "The Witcher."  
+The story unfolds in a medieval fantasy kingdom, with grand palaces, ancient temples, and dark forests. The atmosphere shifts from the opulence of royal courts to the gritty, perilous streets of the capital and the eerie, mystical depths of forbidden lands.  
 
 Themes:  
-- Main themes: Power, betrayal, sacrifice, and the cost of reclaiming one's identity.  
-- Emotional tone: A mix of defiance, despair, and determination, with moments of dark humor and erotic tension.  
-- Atmosphere: The game balances the elegance of royal life with the gritty reality of survival and the darker aspects of power struggles.  
+Themes of power, betrayal, and resilience dominate the narrative. The emotional tone ranges from desperation and humiliation to triumph and empowerment. The atmosphere is a blend of dark fantasy and erotic tension, with moments of intense vulnerability and raw strength.  
 
 Characters:  
-- Protagonist: A princess who must adapt to her new reality, whether through cunning, strength, or submission.  
-- Sister: A cunning and ambitious sibling who orchestrates the coup.  
-- High Priest: A religious leader who uses divine authority to seize power.  
-- Lord Marshal: A brilliant but ruthless military commander who betrays the crown.  
+- **Protagonist**: A princess forced to flee her kingdom, determined to reclaim her throne. Your choices shape her path—will she become a ruthless ruler, a submissive pawn, or something in between?  
+- **Your Sister**: A cunning and ambitious sibling who orchestrates the coup, spreading vile rumors to tarnish your reputation.  
+- **High Priest**: A religious leader who turns the kingdom against you, using divine prophecy to justify his actions.  
+- **Lord Marshal**: A once-loyal commander who betrays the crown, seizing power with his army.  
 
 Search Patterns:  
 "I remember a game where you play as a princess trying to reclaim her throne."  
-"Looking for a game with tentacle kink and royal intrigue."  
-"There was this scene where the princess gets turned into a breeding slave for monsters."  
-"Dark fantasy story about a princess losing her kingdom."  
-"Game where you can choose to surrender or fight for your throne."  
-"Looking for a CYOA with political intrigue and magic."  
-"Emotional story about a princess making tough choices to survive."
-
-Visual: Richly detailed, anime-style visuals.  A palette of warm, pastel colors with splashes of deeper, more saturated hues.  Character designs are expressive, with intricate clothing and accessories.  The interface features large, stylized text boxes and images.  The overall impact evokes a sense of adventure and grand scale.
+"Looking for a game with political intrigue and dark fantasy elements."  
+"There was this scene where the princess gets humiliated in front of a crowd."  
+"Emotional story about betrayal and revenge in a fantasy setting."  
+"Game where you can make deals with demons or monsters."  
+"Looking for a CYOA with transformation and mind control themes."  
+"Princess gets turned into a public whore or slave—what game is that?"

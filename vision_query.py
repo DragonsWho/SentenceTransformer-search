@@ -57,9 +57,19 @@ Rules:
   * Overall impact
 """
 
-    # Generate response
-    response = model.generate_content([prompt, image])
-    return response.text
+    # Generate response with error handling
+    try:
+        response = model.generate_content([prompt, image])
+        return response.text
+    except Exception as e:
+        error_msg = str(e)
+        print(f"Visual analysis error: {error_msg}")
+        
+        # Check for VPN-related error
+        if "User location is not supported" in error_msg:
+            return "VPN_REQUIRED_ERROR"
+            
+        return ""
 
 if __name__ == "__main__":
     # Get image path from command line

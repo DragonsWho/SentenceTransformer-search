@@ -380,7 +380,7 @@ async def process_all_md_files():
     
     for md_file in md_files:
         input_path = os.path.join("markdown", md_file)
-        output_path = os.path.join("summaries", f"{os.path.splitext(md_file)[0]}_summary.md")
+        output_path = os.path.join("summaries", f"{os.path.splitext(md_file)[0]}.md")
         
         print(f"Processing {md_file}...")
         summary = await summarize_md_file(input_path)
