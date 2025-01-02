@@ -3,6 +3,7 @@ import sys
 import datetime
 import os
 import time
+from traffic_analyzer import TrafficAnalyzer
 
 def run_script(script_name, args=None):
     try:
@@ -72,9 +73,21 @@ def main():
         
         # First, crawl the project.json
         if not run_script("crawl.py", project_json_url):
-            print(f"Failed to process URL: {project_json_url}")
-            failed_urls.append(project_json_url)
-            continue
+            print(f"Failed to process project.json, attempting traffic analysis for: {url}")
+            
+            # Try traffic analysis as fallback
+            analyzer = TrafficAnalyzer()
+            try:
+                result = analyzer.process_url(url)
+                if result:
+                    print(f"Successfully processed URL using traffic analysis: {url}")
+                    continue
+                else:
+                    print(f"Traffic analysis failed for: {url}")
+                    failed_urls.append(url)
+                    continue
+            finally:
+                analyzer.close()
     
     # After crawling, run summarize.py
     if not run_script("summarize.py"):
