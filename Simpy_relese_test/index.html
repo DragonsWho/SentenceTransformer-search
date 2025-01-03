@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Search</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #121212;
+            color: #d3d3d3;
+        }
+        .search-form {
+            margin-bottom: 30px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #212121;
+            border: none;
+            border-radius: 8px;
+            color: #d3d3d3;
+            box-shadow: 0 2px 4px #0d0d0d;
+        }
+        .search-input:focus {
+            outline: 2px solid #fc3447;
+        }
+        button[type="submit"] {
+            background-color: #fc3447;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+            box-shadow: 0 2px 4px #0d0d0d;
+        }
+        button[type="submit"]:hover {
+            background-color: #e62e3f;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .result-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #212121;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px #0d0d0d;
+        }
+        .result-title {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #fc3447;
+        }
+        .result-link {
+            color: #fc3447;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .result-link:hover {
+            text-decoration: underline;
+        }
+        .result-score {
+            color: #d3d3d3;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game Search</h1>
+    
+    <form class="search-form" id="searchForm">
+        <input class="search-input" type="text" id="query" placeholder="Enter game description..." required>
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="results" id="results"></div>
+
+    <script>
+        const HF_API_KEY = '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';
+        const API_URL = "https://api-inference.huggingface.co/models/BAAI/bge-large-en-v1.5";
+        let searchData = [];
+
+        // Load search data
+        fetch('search_data.json')
+            .then(response => response.json())
+            .then(data => {
+                searchData = data;
+            })
+            .catch(error => console.error('Error loading search data:', error));
+
+        // Calculate cosine similarity
+        function cosineSimilarity(a, b) {
+            const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
+            const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+            const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+            return dotProduct / (magnitudeA * magnitudeB);
+        }
+
+        // Search function using transformers
+        async function search(query) {
+            try {
+                const results = [];
+                const searchText = `Represent this sentence for searching relevant passages: ${query}`;
+
+                // Get query embedding from Hugging Face API
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${HF_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        inputs: searchText,
+                        options: { wait_for_model: true }
+                    })
+                });
+
+                const queryEmbedding = await response.json();
+                
+                if (queryEmbedding.error) {
+                    throw new Error(queryEmbedding.error);
+                }
+
+                // Calculate similarities
+                if (searchData.embeddings && searchData.metadata) {
+                    const embeddings = searchData.embeddings.data;
+                    const shape = searchData.embeddings.shape;
+                    const embeddingSize = shape[1];
+
+                    // Reshape embeddings array
+                    const reshapedEmbeddings = [];
+                    for (let i = 0; i < embeddings.length; i += embeddingSize) {
+                        reshapedEmbeddings.push(embeddings.slice(i, i + embeddingSize));
+                    }
+
+                    // Calculate scores
+                    reshapedEmbeddings.forEach((embedding, idx) => {
+                        const score = cosineSimilarity(queryEmbedding, embedding);
+                        results.push({
+                            project: searchData.metadata[idx].project,
+                            url: searchData.metadata[idx].url || null,
+                            score: score
+                        });
+                    });
+
+                    // Sort by score descending
+                    results.sort((a, b) => b.score - a.score);
+                }
+
+                // Ensure we always return an array
+                return Array.isArray(results) ? results.slice(0, 5) : [];
+            } catch (error) {
+                console.error('Search error:', error);
+                return [];
+            }
+        }
+
+        // Display results
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            if (!Array.isArray(results) || results.length === 0) {
+                resultsContainer.innerHTML = '<div class="result-item">No results found</div>';
+                return;
+            }
+
+            results.forEach(result => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                
+                const title = document.createElement('div');
+                title.className = 'result-title';
+                title.textContent = result.project;
+                item.appendChild(title);
+
+                const score = document.createElement('div');
+                score.className = 'result-score';
+                score.textContent = `Similarity: ${(result.score * 100).toFixed(2)}%`;
+                item.appendChild(score);
+
+                if (result.url) {
+                    const link = document.createElement('div');
+                    link.className = 'game-link';
+                    const a = document.createElement('a');
+                    a.className = 'result-link';
+                    a.href = result.url;
+                    a.textContent = 'Play Game';
+                    a.target = '_blank';
+                    link.appendChild(a);
+                    item.appendChild(link);
+                }
+
+                resultsContainer.appendChild(item);
+            });
+        }
+
+        // Handle form submission
+        document.getElementById('searchForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const query = document.getElementById('query').value;
+            const results = await search(query);
+            displayResults(results);
+        });
+    </script>
+</body>
+</html>
