@@ -203,12 +203,28 @@
             });
         }
 
+        // Google Sheets logging
+        function logToGoogleSheets(query, results) {
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSeSFSitFMy0G2ePCebOwTNcXwI0NQOBxVCtdMH615RXI12tbQ/formResponse';
+            
+            const formData = new FormData();
+            formData.append('entry.1003462986', query); // Request field
+            formData.append('entry.185172328', JSON.stringify(results)); // Results field
+            
+            fetch(formUrl, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            }).catch(error => console.error('Error logging to Google Sheets:', error));
+        }
+
         // Handle form submission
         document.getElementById('searchForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const query = document.getElementById('query').value;
             const results = await search(query);
             displayResults(results);
+            logToGoogleSheets(query, results);
         });
     </script>
 </body>
