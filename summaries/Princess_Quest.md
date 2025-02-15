@@ -1,34 +1,32 @@
-Title: Princess Quest (PrincesQuest, PrncessQuest, PrincesssQuest, PrincessQest, PrincessQuet, PrincessQurst, PrincessQiest, PrincessQuast, PrincessQuestt, Princess Qest)
+Title: Princess Quest (PrincesQuest, PrncessQuest, PrincesQest, PrincessQuest, PrincessQwest, PrincesQuest, PrincesQuest, PrincesQuest, PrincesQuest, PrincesQuest)
 
 Author: Dragon's Whore  
-Genre Tags: Fantasy, Royalty, Adventure, Political Intrigue, Dark Themes, Transformation, Corruption, Power Struggle  
+Genre Tags: Fantasy, Royalty, Adventure, Political Intrigue, Dark Fantasy, Corruption, Transformation, Revenge  
 
-Kinks: Tentacle play, monster breeding, mind control, public humiliation, forced submission, body modification, political manipulation, power exchange, magical contracts, transformation, corruption, breeding kink  
+Kinks: Tentacle sex, monster breeding, mind control, public humiliation, forced submission, body modification, magical contracts, political manipulation, power dynamics, sexual slavery  
 
 Plot:  
-You are a princess who has been betrayed and forced to flee your own kingdom. Stripped of your crown and power, you must navigate a treacherous world of political intrigue, dark magic, and monstrous alliances to reclaim your throne. The stakes are high as you face off against your scheming sister, a power-hungry High Priest, and a ruthless Marshal. Each path you choose—whether through alliances, magic, or sheer force—will shape your destiny. Will you rise as a queen, fall into corruption, or become a pawn in someone else's game? The choices are yours, but every decision comes with a price.  
+You were once a proud princess, heir to a grand kingdom, until betrayal struck. Whether by your scheming sister, a power-hungry marshal, or a fanatical high priest, you were forced to flee your palace, leaving behind your crown and dignity. Now, you must reclaim your throne, but the path to power is fraught with peril. Will you forge alliances with dark forces, embrace monstrous transformations, or surrender your body to secure victory? The choices you make will shape your destiny, but every victory comes at a cost. Will you rise as a queen, or fall as a broken slave?  
 
 Setting:  
-- Core location/world details: A medieval fantasy kingdom with sprawling palaces, ancient temples, dark forests, and forbidden mountains. The world is rich with magic, mythical creatures, and political factions vying for power.  
-- Atmosphere: A mix of regal elegance and dark, oppressive tension. The kingdom is on the brink of chaos, with betrayal lurking in every shadow.  
-- Similar popular settings: Game of Thrones (political intrigue), The Witcher (dark fantasy), Dungeons & Dragons (monsters and magic).  
+- Core location/world details: A sprawling medieval kingdom with grand palaces, ancient temples, and forbidden forests teeming with monsters.  
+- Atmosphere: A mix of regal elegance and dark, oppressive undertones, where political intrigue and supernatural forces collide.  
+- Similar popular settings: Game of Thrones (political intrigue), Dark Souls (dark fantasy), Witcher (monsters and magic).  
 
 Themes:  
-- Main themes: Power, betrayal, survival, corruption, and transformation.  
-- Emotional tone: A blend of desperation, determination, and dark temptation.  
-- Atmosphere: Tense, with moments of triumph and despair, often laced with erotic undertones.  
+- Main themes: Power, betrayal, sacrifice, and the cost of ambition.  
+- Emotional tone: A blend of desperation, defiance, and dark triumph.  
+- Atmosphere: Tense and immersive, with moments of both despair and twisted satisfaction.  
 
 Characters:  
-- Protagonist: A princess who must navigate a world of betrayal and dark magic to reclaim her throne.  
-- Sister: A cunning and greedy sibling who orchestrated the coup.  
-- High Priest: A manipulative religious leader who seeks to control the kingdom through divine influence.  
-- Lord Marshal: A brilliant but ruthless military commander who betrayed the crown.  
+- Protagonist: A resourceful princess, skilled in magic, combat, or seduction, depending on your choices.  
+- Key characters: Your treacherous sister, the ruthless marshal, the fanatical high priest, and various allies or enemies you encounter on your journey.  
 
 Search Patterns:  
-- "I remember a game where you play as a princess betrayed by her sister and have to reclaim the throne."  
-- "Looking for a game with tentacle monsters and political intrigue."  
-- "There was this scene where the princess gets turned into a breeding slave for monsters."  
-- "Dark fantasy story about a princess losing her kingdom and making dark deals to get it back."  
-- "Game where you can choose to become a queen or a monster's pet."  
-- "Looking for a CYOA with corruption and transformation themes."  
-- "There was a game where the princess gets humiliated in public to reclaim her throne."
+"I remember a game where you play as a princess trying to reclaim her throne after being betrayed."  
+"Looking for a game with tentacle sex and monster breeding as a main feature."  
+"There was this scene where you get turned into a hive queen for tentacle monsters."  
+"Dark fantasy story about a princess making deals with demons to get her kingdom back."  
+"Game where you can choose to become a public whore to avoid civil war."  
+"Looking for a CYOA where you can transform into a lamia or other monster."  
+"Emotional story about a princess who loses everything and has to rebuild her life."

@@ -96,6 +96,9 @@
 
 ## Запуск поисковика
 1. Убедитесь, что все зависимости установлены
+npm install
+pip install -r requirements.txt
+
 2. Сгенерируйте базу данных:
    ```bash
    python process_md.py
