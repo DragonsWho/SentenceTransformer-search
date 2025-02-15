@@ -3,8 +3,8 @@ import sys
 import datetime
 import os
 import time
-from traffic_analyzer import TrafficAnalyzer
-from js_json_extractor import extract_js_json
+from Components.traffic_analyzer import TrafficAnalyzer
+from Components.js_json_extractor import extract_js_json
 
 def run_script(script_name, args=None):
     try:

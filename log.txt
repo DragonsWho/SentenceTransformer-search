@@ -134,3 +134,8 @@
   Total URLs processed: 1
   Successfully processed: 1
   Failed to process: 0
+
+[2025-02-15 19:08:45.707193] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
