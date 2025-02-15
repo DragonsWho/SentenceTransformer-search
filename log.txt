@@ -130,3 +130,7 @@
   Failed to process: 0
 
 [2025-01-02 19:48:51.256159] Error: VPN required for visual analysis. Please enable VPN and try again.
+[2025-02-15 17:34:46.909053] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
