@@ -1,22 +1,21 @@
 import os
 from dotenv import load_dotenv
 import requests
-
-# Загружаем переменные из .env файла
+ 
 load_dotenv()
 
 DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions"
 
 def call_deepseek_chat(system_message: str, user_message: str) -> dict:
     """
-    Вызывает API DeepSeek Chat с заданными сообщениями
+    Calls the DeepSeek Chat API with the given messages
     
     Args:
-        system_message (str): Системное сообщение
-        user_message (str): Пользовательский запрос
+        system_message (str): System message
+        user_message (str): User request
     
     Returns:
-        dict: Ответ API
+        dict: API Response
     """
     api_key = os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
@@ -41,8 +40,7 @@ def call_deepseek_chat(system_message: str, user_message: str) -> dict:
     
     return response.json()
 
-if __name__ == "__main__":
-    # Пример использования
+if __name__ == "__main__": 
     system_msg = "You are a helpful assistant."
     user_msg = "Hello!"
     

@@ -6,12 +6,12 @@ import datetime
 import logging
 from dotenv import load_dotenv
 
-# Создаём директорию для логов если её нет
+# Create a directory for the logs if there isn't one
 log_dir = "logs"
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
-# Setup logging с абсолютным путём и flush
+# Setup logging with absolute path and flush
 log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), log_dir, 'vision_query.log')
 logging.basicConfig(
     level=logging.WARNING,
@@ -22,7 +22,7 @@ logging.basicConfig(
     ]
 )
 
-# Принудительный flush после каждого сообщения
+# Forced flush after each message
 logger = logging.getLogger()
 for handler in logger.handlers:
     handler.flush()

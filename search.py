@@ -4,19 +4,17 @@ import json
 import torch
 from dotenv import load_dotenv
 import os
-
-# Загрузка переменных окружения
+ 
 load_dotenv()
-
-# Конфигурация API
+ 
+# API Configuration
 API_URL = "https://api-inference.huggingface.co/models/BAAI/bge-large-en-v1.5"
 headers = {"Authorization": f"Bearer {os.getenv('HF_API_KEY')}"}
 
 def query(payload):
     response = requests.post(API_URL, headers=headers, json=payload)
     return response.json()
-
-# Загрузка базы данных
+ 
 print("Loading database...")
 with open('search_data.json', 'r') as f:
     data = json.load(f)
@@ -29,7 +27,7 @@ print(f"Number of metadata entries: {len(metadata)}")
 print(f"Sample metadata entry: {metadata[0]}")
 
 def search(search_text, top_k=5):
-    # Добавляем префикс для лучшего качества
+    # Add a prefix for better quality
     search_text = f"Represent this sentence for searching relevant passages: {search_text}"
     
     try:
@@ -47,7 +45,7 @@ def search(search_text, top_k=5):
             raise ValueError(f"API Error: {response['error']}")
             
         if isinstance(response, list) and len(response) == 1024:
-            # Преобразуем в тензор и проверяем размерность
+            # Convert to a tensor and check dimensionality
             query_embedding = torch.tensor(response).float().view(1, -1)
             print(f"Query embedding shape: {query_embedding.shape}")
             print(f"Query embedding norm: {torch.norm(query_embedding)}")
@@ -60,18 +58,18 @@ def search(search_text, top_k=5):
         print(f"Error during API request: {str(e)}")
         return []
     
-    # Преобразование эмбеддингов в тензор
+    # Embedding conversion to a tensor
     embeddings_tensor = torch.tensor(embeddings).float()
     print(f"Embeddings tensor shape: {embeddings_tensor.shape}")
     
-    # Нормализация векторов
+    # Vector normalization
     query_embedding_norm = torch.nn.functional.normalize(query_embedding, p=2, dim=1)
     embeddings_norm = torch.nn.functional.normalize(embeddings_tensor, p=2, dim=1)
     
-    # Вычисление косинусного сходства
+    # Calculating cosine similarity
     scores = torch.mm(query_embedding_norm, embeddings_norm.t()).squeeze()
-    
-    # Формирование результатов
+
+    # Formation of results
     results = []
     for idx, score in enumerate(scores):
         results.append({
@@ -80,13 +78,13 @@ def search(search_text, top_k=5):
             'url': metadata[idx].get('url', ''),
             'score': float(score)
         })
-    
-    # Сортировка и возврат топ-K результатов
+
+    # Sort and return top-K results
     return sorted(results, key=lambda x: x['score'], reverse=True)[:top_k]
 
 def format_results(results):
     if not results:
-        return "Ничего не найдено или произошла ошибка."
+        return "Nothing found or an error occurred."
     
     output = "Search results:\n" + "=" * 50 + "\n"
     for i, result in enumerate(results, 1):
@@ -102,17 +100,17 @@ def main():
     print("Semantic Search System")
     print("=" * 50)
     while True:
-        search_query = input("\nВведите поисковый запрос (или 'exit' для выхода): ").strip()
+        search_query = input("\nEnter the search query (or 'exit' to exit): ").strip()
         
         if search_query.lower() in ['exit', 'quit', 'q']:
-            print("Завершение работы...")
+            print("work completion...")
             break
             
         if not search_query:
-            print("Запрос не может быть пустым!")
+            print("The request cannot be empty!")
             continue
             
-        print("\nПоиск...")
+        print("\nSearch...")
         results = search(search_query)
         print(format_results(results))
 

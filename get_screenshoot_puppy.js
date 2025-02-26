@@ -9,7 +9,7 @@ const sharp = require('sharp');
   });
   const page = await browser.newPage();
   
-  // Устанавливаем viewport 3:4 для карточки каталога
+  // Set viewport 3:4 for the catalog card
   const viewportWidth = 1920;
   const viewportHeight = 2560;
   await page.setViewport({ 
@@ -41,22 +41,19 @@ const sharp = require('sharp');
   let validScreenshot = false;
   let attempt = 0;
 
-  // Извлекаем имя для скриншота из URL
+  // Extract the name for the screenshot from the URL
   const parsedUrl = new URL(page.url());
   const pathParts = parsedUrl.pathname.split('/').filter(Boolean);
   
   let screenshotName;
-  if (pathParts.length > 0) {
-    // Если последняя часть - index.html, берем предпоследнюю часть
+  if (pathParts.length > 0) { 
     if (pathParts[pathParts.length - 1] === 'index.html') {
       screenshotName = pathParts[pathParts.length - 2] || 
                       url.hostname.split('.')[0];
-    } else {
-      // Иначе берем последнюю часть пути
+    } else { 
       screenshotName = pathParts[pathParts.length - 1];
     }
-  } else {
-    // Если путь пустой, используем имя поддомена
+  } else { 
     screenshotName = url.hostname.split('.')[0];
   }
 

@@ -1,119 +1,116 @@
-# Проект: Система семантического поиска текстовых игр
+# Project: Semantic Search System for Text Games
 
-## Описание
-Проект представляет собой систему для автоматического сбора, обработки и поиска информации о текстовых играх. Основные этапы работы:
-1. Сбор JSON файлов по ссылкам
-2. Преобразование JSON в Markdown
-3. Создание структурированных описаний игр
-4. Построение базы данных для семантического поиска
-5. Поиск по базе с использованием трансформеров
+## Description
+The project is a system for automatic collection, processing, and search of information about text games. Main stages of work:
+1. Collecting JSON files from links
+2. Converting JSON to Markdown
+3. Creating structured game descriptions
+4. Building a database for semantic search
+5. Searching the database using transformers
 
-## Функции файлов
+## File Functions
 
-### Основные скрипты
+### Main Scripts
   
-- **app.py** - Веб-интерфейс на Flask для поиска и отображения результатов:
-  - Обрабатывает GET и POST запросы
-  - Использует search.py для выполнения семантического поиска
-  - Отображает результаты через шаблон index.html
+- **app.py** - Flask web interface for search and results display:
+  - Handles GET and POST requests
+  - Uses search.py to perform semantic search
+  - Displays results through index.html template
 
-- **search.py** - Движок семантического поиска:
-  - Использует модель BAAI/bge-large-en-v1.5 через Hugging Face API
-  - Преобразует запросы в 1024-мерные эмбеддинги
-  - Вычисляет косинусное сходство с базой данных
-  - Возвращает топ-K результатов с оценкой сходства
-  - Поддерживает нормализацию векторов для повышения точности
+- **search.py** - Semantic search engine:
+  - Uses BAAI/bge-large-en-v1.5 model via Hugging Face API
+  - Converts queries to 1024-dimensional embeddings
+  - Calculates cosine similarity with the database
+  - Returns top-K results with similarity score
+  - Supports vector normalization for improved accuracy
 
-- **crawl.py** - Обработка ссылок и данных:
-  - Загружает JSON данные по URL
-  - Преобразует JSON в структурированный Markdown:
-    - Извлекает заголовки и текст из объектов
-    - Сохраняет результаты в markdown/ с именем проекта
-    - Добавляет заголовок игры в начало файла
-  - Обрабатывает ошибки и возвращает None при сбоях
+- **crawl.py** - Link and data processing:
+  - Loads JSON data by URL
+  - Converts JSON to structured Markdown:
+    - Extracts headers and text from objects
+    - Saves results to markdown/ with project name
+    - Adds game title at the beginning of the file
+  - Handles errors and returns None on failures
 
-- **controller.py** - Основной управляющий скрипт:
-  - Оркестрирует весь процесс обработки:
-    1. Чтение URL из links.txt
-    2. Обработка через crawl.py
-    3. Использование js_json_extractor.py и traffic_analyzer.py как резервных механизмов добычи текста из игры
-    4. Генерация описаний через summarize.py
-    5. Создание скриншотов через get_screenshoot_puppy.js
-    6. Анализ визуального стиля через vision_query.py
-    7. Логирование результатов в log.txt
-  - Поддерживает нормализацию URL
-  - Обрабатывает ошибки и ведет учет неудачных URL
-  - Добавляет визуальные описания в файлы summary
+- **controller.py** - Main control script:
+  - Orchestrates the entire processing workflow:
+    1. Reading URLs from links.txt
+    2. Processing through crawl.py
+    3. Using js_json_extractor.py and traffic_analyzer.py as backup mechanisms for extracting text from games
+    4. Generating descriptions through summarize.py
+    5. Creating screenshots via get_screenshoot_puppy.js
+    6. Analyzing visual style through vision_query.py
+    7. Logging results in log.txt
+  - Supports URL normalization
+  - Handles errors and tracks failed URLs
+  - Adds visual descriptions to summary files
 
-- **process_md.py** - Создание базы данных:
-  - Генерация эмбеддингов для текстов
-  - Сохранение базы данных в search_data.json
+- **process_md.py** - Database creation:
+  - Generates embeddings for texts
+  - Saves database to search_data.json
   process_md.py supports two modes:
 --init: Creates new database from all summaries
 --update: Adds new entries from controller.py
 
-- **summarize.py** - Создание описаний игр:
-  - Отправка текста в LLM для сжатия
-  - Генерация структурированных описаний
-  - Сохранение результатов в summaries/
+- **summarize.py** - Creating game descriptions:
+  - Sends text to LLM for compression
+  - Generates structured descriptions
+  - Saves results to summaries/
 
-- **detect_repetition.py** - Анализ summaries:
-  - Обнаружение повторяющихся последовательностей слов
-  - Выявление галлюцинаций LLM
+- **detect_repetition.py** - Analysis of summaries:
+  - Detection of repeating word sequences
+  - Identifying LLM hallucinations
 
-- **get_screenshoot_puppy.js** - Автоматизация браузера:
-  - Создание скриншотов веб-страниц
-  - Сохранение в форматах PNG и WebP
-  - Сохранение результатов в screenshoots/
+- **get_screenshoot_puppy.js** - Browser automation:
+  - Creates screenshots of web pages
+  - Saves in PNG and WebP formats
+  - Saves results to screenshoots/
 
-- **vision_query.py** - Анализ изображений:
-  - Генерация описаний визуального стиля игр
-  - Использование Gemini API
-  - Добавление описаний в файлы summary
+- **vision_query.py** - Image analysis:
+  - Generates descriptions of games' visual style
+  - Uses Gemini API
+  - Adds descriptions to summary files
 
-- **traffic_analyzer.py** - Анализ сетевого трафика:
-  - Автоматическое обнаружение файлов данных игры
-  - Анализ трафика при загрузке страницы
-  - Захват и обработка JSON файлов
-  - Резервный механизм для случаев сбоя crawl.py
+- **traffic_analyzer.py** - Network traffic analysis:
+  - Automatic detection of game data files
+  - Analyzes traffic during page loading
+  - Captures and processes JSON files
+  - Backup mechanism for cases when crawl.py fails
 
-### Вспомогательные файлы
-- **links.txt** - Список URL для обработки
-- **search_data.json** - База данных для поиска (эмбеддинги и метаданные)
-- **templates/index.html** - Шаблон веб-интерфейса
-- **api_status.log** - Лог статуса API
+### Supporting Files
+- **links.txt** - List of URLs for processing
+- **search_data.json** - Search database (embeddings and metadata)
+- **templates/index.html** - Web interface template
+- **api_status.log** - API status log
 
-## Состояние проекта
-- crawl.py: корректно обрабатывает ссылки
-- summarize.py: успешно создает описания с помощью LLM
-- process_md.py: корректно создает базу данных
-- search.py: работает корректно, выполняет поиск
-- Веб-интерфейс: полностью функционирует
-  - Поддерживает семантический поиск
-  - Отображает результаты с оценкой сходства
-  - Обрабатывает ошибки поиска
-  - Поддерживает форматирование результатов
+## Project Status
+- crawl.py: correctly processes links
+- summarize.py: successfully creates descriptions using LLM
+- process_md.py: correctly creates the database
+- search.py: works correctly, performs search
+- Web interface: fully functional
+  - Supports semantic search
+  - Displays results with similarity score
+  - Handles search errors
+  - Supports result formatting
 
-## Запуск поисковика
-1. Убедитесь, что все зависимости установлены
+## Running the Search Engine
+1. Make sure all dependencies are installed
 npm install
 pip install -r requirements.txt
 
-2. Сгенерируйте базу данных:
+2. Generate the database:
    ```bash
    python process_md.py
    ```
-3. Запустите веб-сервер:
+3. Run the web server:
    ```bash
    python app.py
    ```
-4. Откройте http://localhost:5000 в браузере
-5. Введите поисковый запрос и просмотрите результаты
+4. Open http://localhost:5000 in your browser
+5. Enter a search query and view results
 
- 
-
-
-## Примечания
-- Не открывать файл search_data.json - он слишком большой
-- Файлы в папках markdown и summaries также не открывать из-за их размера
-- База данных search_data.json содержит эмбеддинги и метаданные для поиска
+## Notes
+- Do not open search_data.json file - it's too large
+- Files in markdown and summaries folders should also not be opened due to their size
+- The search_data.json database contains embeddings and metadata for search
