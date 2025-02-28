@@ -1,5 +1,7 @@
+# components/crawler.py
 import requests
 import json
+import os
 
 def json_to_md(data):
     """Convert JSON data to Markdown format"""
@@ -23,8 +25,15 @@ def json_to_md(data):
     
     return "\n".join(md_content)
 
-def process_url(url):
-    """Process single URL: download JSON and convert to Markdown"""
+def crawl_url(url):
+    """Process single URL: download JSON and convert to Markdown
+    
+    Args:
+        url (str): URL to the project.json file
+        
+    Returns:
+        str: Path to the created markdown file or None if processing failed
+    """
     try:
         # Fetch JSON data
         response = requests.get(url)
@@ -35,6 +44,10 @@ def process_url(url):
         
         # Generate filename from URL
         project_name = url.split('/')[-2]
+        
+        # Make sure markdown directory exists
+        os.makedirs("markdown", exist_ok=True)
+        
         md_filename = f"markdown/{project_name}.md"
         
         # Extract game title from URL
@@ -46,7 +59,15 @@ def process_url(url):
         # Save Markdown
         with open(md_filename, 'w', encoding='utf-8') as f:
             f.write(md_content)
+            
+        return md_filename
         
+    except requests.exceptions.RequestException as e:
+        print(f"Network error processing {url}: {str(e)}")
+        return None
+    except json.JSONDecodeError as e:
+        print(f"JSON parsing error for {url}: {str(e)}")
+        return None
     except Exception as e:
         print(f"Error processing {url}: {str(e)}")
         return None
@@ -54,11 +75,17 @@ def process_url(url):
 def main():
     import sys
     if len(sys.argv) != 2:
-        print("Usage: python crawl.py <url>")
+        print("Usage: python -m components.crawler <url>")
         sys.exit(1)
         
     url = sys.argv[1]
-    process_url(url)
+    result = crawl_url(url)
+    
+    if result:
+        print(f"Successfully processed URL. Output saved to {result}")
+    else:
+        print(f"Failed to process URL: {url}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
