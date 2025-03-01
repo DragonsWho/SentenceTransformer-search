@@ -229,3 +229,15 @@
   Successfully processed: 1
   Failed to process: 0
   Visual analysis failures: 0
+
+[2025-02-28 16:36:35] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-02-28 17:08:43] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0

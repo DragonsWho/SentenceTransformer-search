@@ -1,13 +1,11 @@
-# process_md.py
-
 import os
-import json
 import numpy as np
-import requests
 import argparse
 import logging
 import sys
 from dotenv import load_dotenv
+from openai import OpenAI
+import chromadb
 
 # Настройка логирования
 logging.basicConfig(
@@ -23,86 +21,99 @@ logger = logging.getLogger()
 load_dotenv()
 
 # API configuration
-API_URL = "https://api-inference.huggingface.co/models/BAAI/bge-large-en-v1.5"
-API_KEY = os.getenv('HF_API_KEY')
+API_KEY = os.getenv('DEEPINFRA_API_KEY')
+MODEL_NAME = "BAAI/bge-en-icl"  # Обновлено на новую модель
+CHROMA_DIR = "chroma_db"  # Директория для хранения ChromaDB
 
 if not API_KEY:
-    logger.error("HF_API_KEY not found in environment variables or .env file")
+    logger.error("DEEPINFRA_API_KEY not found in environment variables or .env file")
     logger.error("Please set this value in your .env file or environment")
     sys.exit(1)
 
-headers = {"Authorization": f"Bearer {API_KEY}"}
+# Initialize DeepInfra client
+client = OpenAI(
+    api_key=API_KEY,
+    base_url="https://api.deepinfra.com/v1/openai",
+)
 
-def query(payload):
-    """Make a request to the Hugging Face API with error handling"""
+# Initialize ChromaDB
+chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
+
+# Глобальная переменная для коллекции
+collection = None
+
+def init_collection():
+    """Инициализирует коллекцию с правильными настройками расстояния"""
+    global collection
     try:
-        logger.debug(f"Sending query to API: {API_URL}")
-        response = requests.post(API_URL, headers=headers, json=payload, timeout=30)
-        
-        # Проверка статус-кода
-        if response.status_code == 401:
-            logger.error("API key is invalid or expired. Please check your HF_API_KEY.")
-            return {"error": "Authentication failed"}
-        elif response.status_code == 503:
-            logger.error("API service unavailable. The model might be loading or the service is down.")
-            return {"error": "Service unavailable"}
-        elif response.status_code != 200:
-            logger.error(f"API returned error code {response.status_code}: {response.text}")
-            return {"error": f"API error: {response.status_code}"}
-        
-        # Пытаемся получить JSON
-        try:
-            return response.json()
-        except Exception as e:
-            logger.error(f"Failed to parse API response as JSON: {str(e)}")
-            logger.error(f"Response content: {response.text[:200]}...")
-            return {"error": "Invalid JSON response"}
-            
-    except requests.exceptions.Timeout:
-        logger.error("API request timed out")
-        return {"error": "Request timeout"}
-    except requests.exceptions.ConnectionError:
-        logger.error("Connection error. Please check your internet connection.")
-        return {"error": "Connection error"}
-    except Exception as e:
-        logger.error(f"Unexpected error during API request: {str(e)}")
-        return {"error": str(e)}
+        collection = chroma_client.get_collection(name="cyoa_games")
+        logger.info("Connected to existing ChromaDB collection 'cyoa_games'")
+    except:
+        logger.info("Creating new ChromaDB collection 'cyoa_games'")
+        collection = chroma_client.create_collection(
+            name="cyoa_games",
+            metadata={"hnsw:space": "ip"}  # Используем inner product для лучшего расчета схожести
+        )
+    
+    return collection
 
-def generate_embeddings(text):
-    """Generate embeddings for text using Hugging Face API"""
-    logger.info("Generating embeddings for text")
+def reset_collection():
+    """Сбрасывает коллекцию и создает новую с правильными настройками"""
+    global collection
+    try:
+        # Пробуем получить и удалить старую коллекцию
+        chroma_client.delete_collection("cyoa_games")
+        logger.info("Deleted existing collection")
+    except Exception as e:
+        logger.info(f"No existing collection to delete or error: {str(e)}")
     
-    response = query({
-        "inputs": text,
-        "options": {
-            "wait_for_model": True
-        }
-    })
+    # Создаем новую коллекцию с inner product (dot product)
+    collection = chroma_client.create_collection(
+        name="cyoa_games", 
+        metadata={"hnsw:space": "ip"}  # ip = inner product
+    )
+    logger.info("Created new collection with inner product distance")
+    return collection
+
+def generate_embeddings(text, is_query=False):
+    """Generate embeddings for text using DeepInfra API with normalization"""
+    logger.info(f"Generating embeddings for {'query' if is_query else 'document'}")
     
-    # ВАЖНО: не используем фиктивные вложения, чтобы не засорять базу данных
-    # Проверка на ошибку в ответе
-    if isinstance(response, dict) and "error" in response:
-        logger.error(f"API returned error: {response['error']}")
-        # Вместо запасного встраивания возвращаем None, чтобы прервать процесс
+    try:
+        # Разные инструкции для запросов и документов
+        instruction = ""
+        if is_query:
+            instruction = "Represent this search query for retrieving similar content:"
+        else:
+            instruction = "Represent this document for retrieval:"
+        
+        formatted_text = f"{instruction} {text}"
+        
+        response = client.embeddings.create(
+            model=MODEL_NAME,
+            input=formatted_text,
+            encoding_format="float"
+        )
+        
+        # Extract the embedding from the response
+        embedding = response.data[0].embedding
+        
+        # Нормализуем вектор для косинусного сходства
+        embedding_array = np.array(embedding)
+        norm = np.linalg.norm(embedding_array)
+        if norm > 0:  # Проверка деления на ноль
+            normalized = embedding_array / norm
+        else:
+            normalized = embedding_array
+        
+        logger.info(f"Embedding dimension: {len(embedding)}")
+        logger.info(f"Used {response.usage.prompt_tokens} tokens for embedding")
+        
+        return normalized.tolist()  # Возвращаем нормализованный вектор
+        
+    except Exception as e:
+        logger.error(f"Error generating embeddings: {str(e)}")
         logger.error("ВАЖНО: Не удалось получить вложения от API. Проверьте ваш API-ключ и права доступа.")
-        return None
-    
-    # Преобразуем ответ в numpy массив
-    try:
-        embedding_array = np.array(response)
-        logger.info(f"Embedding shape: {embedding_array.shape}")
-        
-        # Проверяем и исправляем форму массива
-        if len(embedding_array.shape) == 1:
-            logger.warning(f"Reshaping 1D embedding of size {embedding_array.shape[0]} to 2D")
-            embedding_array = embedding_array.reshape(1, -1)
-        
-        return embedding_array
-    except Exception as e:
-        logger.error(f"Error processing embedding: {str(e)}")
-        logger.error(f"API response: {response}")
-        # ВАЖНО: не используем запасное встраивание, возвращаем None
-        logger.error("ВАЖНО: Не удалось обработать ответ API. Запись не будет добавлена в базу данных.")
         return None
 
 def process_single_file(file_path, url=None):
@@ -124,13 +135,14 @@ def process_single_file(file_path, url=None):
             
         logger.info(f"Content length: {len(md_content)} characters")
         
-        embeddings = generate_embeddings(md_content)
+        embeddings = generate_embeddings(md_content, is_query=False)
         
         filename = os.path.basename(file_path)
         metadata = {
             'project': filename[:-3],  # Remove .md extension
             'file': filename,
-            'url': url
+            'url': url if url else "",
+            'content': md_content[:1000]  # Сохраняем начало контента для предпросмотра
         }
         logger.info(f"Successfully processed {file_path}")
         return embeddings, metadata
@@ -139,71 +151,49 @@ def process_single_file(file_path, url=None):
         return None, None
 
 def process_all_files():
-    """Process all markdown files in summaries directory"""
+    """Process all markdown files in summaries directory and add to ChromaDB"""
     md_dir = 'summaries'
-    all_embeddings = []
-    all_metadata = []
+    success_count = 0
     
     logger.info(f"Processing all files in {md_dir}")
     
     if not os.path.exists(md_dir):
         logger.error(f"Directory not found: {md_dir}")
-        return [], []
+        return False
     
     files = [f for f in os.listdir(md_dir) if f.endswith('.md')]
     logger.info(f"Found {len(files)} .md files")
     
+    # Очищаем коллекцию перед инициализацией
+    try:
+        collection.delete(where={})
+        logger.info("Cleared existing collection data")
+    except Exception as e:
+        logger.warning(f"Error clearing collection: {str(e)}")
+    
     for filename in files:
         file_path = os.path.join(md_dir, filename)
         embeddings, metadata = process_single_file(file_path)
+        
         if embeddings is not None:
-            all_embeddings.append(embeddings)
-            all_metadata.append(metadata)
+            try:
+                collection.add(
+                    embeddings=[embeddings],
+                    metadatas=[metadata],
+                    documents=[metadata.get('content', "")],
+                    ids=[f"game_{filename[:-3]}"]  # Используем имя файла как ID
+                )
+                success_count += 1
+                logger.info(f"Added {filename} to ChromaDB")
+            except Exception as e:
+                logger.error(f"Error adding {filename} to ChromaDB: {str(e)}")
     
-    logger.info(f"Successfully processed {len(all_embeddings)} out of {len(files)} files")
-    return all_embeddings, all_metadata
+    logger.info(f"Successfully processed {success_count} out of {len(files)} files")
+    return success_count > 0
 
 def update_database(file_path, url):
     """Update database with a single file"""
     logger.info(f"Updating database with file: {file_path}")
-    
-    # Load existing data
-    try:
-        if os.path.exists('search_data.json'):
-            logger.info(f"Loading existing search_data.json")
-            with open('search_data.json', 'r', encoding='utf-8') as f:
-                existing_data = json.load(f)
-            
-            # Проверяем формат данных
-            if not ('embeddings' in existing_data and 'metadata' in existing_data):
-                logger.error("Invalid search_data.json format")
-                # Инициализируем заново
-                existing_data = {
-                    'embeddings': {
-                        'data': [],
-                        'shape': [0, 0]
-                    },
-                    'metadata': []
-                }
-        else:
-            logger.info("search_data.json not found, initializing new database")
-            existing_data = {
-                'embeddings': {
-                    'data': [],
-                    'shape': [0, 0]
-                },
-                'metadata': []
-            }
-    except Exception as e:
-        logger.error(f"Error loading search_data.json: {str(e)}")
-        logger.info("Initializing new database")
-        existing_data = {
-            'embeddings': {
-                'data': [],
-                'shape': [0, 0]
-            },
-            'metadata': []
-        }
     
     # Process new file
     embeddings, metadata = process_single_file(file_path, url)
@@ -211,63 +201,144 @@ def update_database(file_path, url):
         logger.error("ВАЖНО: Не удалось сгенерировать встраивания для файла. Обновление базы данных прервано.")
         return False
     
-    # Логируем форму встраиваний для отладки
-    logger.info(f"New embeddings shape: {embeddings.shape}")
+    # Получаем имя файла для создания ID
+    filename = os.path.basename(file_path)
+    game_id = f"game_{filename[:-3]}"
     
-    # Убедимся, что embeddings имеет правильную форму (2D)
-    if len(embeddings.shape) == 1:
-        logger.warning("Reshaping 1D embeddings to 2D")
-        embeddings = embeddings.reshape(1, -1)
-    
-    # Update embeddings
-    if existing_data['embeddings']['shape'][0] > 0:
-        # Есть существующие данные
-        existing_shape = existing_data['embeddings']['shape']
-        logger.info(f"Existing embeddings shape: {existing_shape}")
-        
-        try:
-            existing_embeddings = np.array(existing_data['embeddings']['data']).reshape(existing_shape)
-            
-            # Проверка совместимости размерностей
-            if existing_embeddings.shape[1] != embeddings.shape[1]:
-                logger.error(f"Dimension mismatch: existing={existing_embeddings.shape[1]}, new={embeddings.shape[1]}")
-                logger.error("Cannot merge incompatible embeddings. Consider reinitializing the database.")
-                return False
-            
-            logger.info("Merging with existing embeddings")
-            updated_embeddings = np.vstack([existing_embeddings, embeddings])
-        except Exception as e:
-            logger.error(f"Error merging embeddings: {str(e)}")
-            # Пытаемся восстановиться, используя только новые встраивания
-            logger.warning("Using only new embeddings due to merge error")
-            updated_embeddings = embeddings
-    else:
-        # Нет существующих данных
-        logger.info("No existing embeddings, using new embeddings directly")
-        updated_embeddings = embeddings
-    
-    # Update metadata
-    existing_data['metadata'].append(metadata)
-    
-    # Save updated data
     try:
-        updated_data = {
-            'embeddings': {
-                'data': updated_embeddings.flatten().tolist(),
-                'shape': list(updated_embeddings.shape)
-            },
-            'metadata': existing_data['metadata']
-        }
+        # Проверяем, существует ли запись с таким ID
+        try:
+            # Пытаемся получить элемент с таким ID
+            existing = collection.get(ids=[game_id])
+            if len(existing['ids']) > 0:
+                # Если существует, удаляем старую запись
+                logger.info(f"Entry with ID {game_id} already exists, updating...")
+                collection.delete(ids=[game_id])
+        except:
+            logger.info(f"No existing entry with ID {game_id}")
         
-        with open('search_data.json', 'w', encoding='utf-8') as f:
-            json.dump(updated_data, f)
+        # Добавляем новую запись
+        collection.add(
+            embeddings=[embeddings],
+            metadatas=[metadata],
+            documents=[metadata.get('content', "")],
+            ids=[game_id]
+        )
         
-        logger.info(f"Successfully updated database. New shape: {updated_embeddings.shape}")
-        logger.info(f"Total entries in database: {len(updated_data['metadata'])}")
+        logger.info(f"Successfully updated database with {file_path}")
         return True
     except Exception as e:
-        logger.error(f"Error saving updated data: {str(e)}")
+        logger.error(f"Error updating ChromaDB: {str(e)}")
         return False
+
+def search_similar_games(query_text, top_k=5):
+    """Поиск похожих игр по запросу"""
+    logger.info(f"Searching for: '{query_text}'")
+    
+    try:
+        # Генерируем эмбеддинг для запроса
+        query_embedding = generate_embeddings(query_text, is_query=True)
+        
+        if query_embedding is None:
+            logger.error("Failed to generate embedding for query")
+            return []
+        
+        # Выполняем поиск в ChromaDB
+        results = collection.query(
+            query_embeddings=[query_embedding],
+            n_results=top_k,
+            include=["metadatas", "distances"]
+        )
+        
+        # Обрабатываем результаты
+        found_games = []
+        if results and results['metadatas']:
+            for i, (metadata, distance) in enumerate(zip(results['metadatas'][0], results['distances'][0])):
+                found_games.append({
+                    'project': metadata.get('project', 'Unknown'),
+                    'file': metadata.get('file', 'Unknown'),
+                    'url': metadata.get('url', ''),
+                    'content_preview': metadata.get('content', '')[:200] + '...',
+                    'similarity': float(distance)  # С inner product distance это и есть схожесть
+                })
+        
+        logger.info(f"Found {len(found_games)} similar games")
+        return found_games
+    except Exception as e:
+        logger.error(f"Error searching: {str(e)}")
+        return []
+
+def debug_similarity(query, top_k=5):
+    """Отладка расчета схожести между запросом и документами в коллекции"""
+    logger.info(f"Debug similarity for query: '{query}'")
+    
+    try:
+        # Получаем все документы в коллекции
+        all_data = collection.get()
+        
+        if not all_data or 'embeddings' not in all_data or not all_data['embeddings']:
+            logger.error("No documents in collection")
+            return []
+        
+        # Генерируем эмбеддинг для запроса
+        query_emb = generate_embeddings(query, is_query=True)
+        
+        if query_emb is None:
+            logger.error("Failed to generate embedding for query")
+            return []
+        
+        # Вручную вычисляем сходство
+        similarities = []
+        for i, doc_emb in enumerate(all_data["embeddings"]):
+            # Вычисляем скалярное произведение (dot product)
+            sim = np.dot(query_emb, doc_emb)
+            similarities.append((
+                all_data["metadatas"][i].get("project", "Unknown"), 
+                all_data["metadatas"][i].get("file", "Unknown"),
+                all_data["metadatas"][i].get("url", ""),
+                sim
+            ))
+        
+        # Сортируем по схожести
+        similarities.sort(key=lambda x: x[3], reverse=True)
+        
+        # Конвертируем в тот же формат, что и результаты поиска
+        found_games = []
+        for project, file, url, sim in similarities[:top_k]:
+            found_games.append({
+                'project': project,
+                'file': file,
+                'url': url,
+                'content_preview': "...",  # Не загружаем содержимое для отладки
+                'similarity': sim
+            })
+        
+        return found_games
+    except Exception as e:
+        logger.error(f"Error in debug similarity: {str(e)}")
+        return []
+
+def compare_embeddings(text1, text2):
+    """Сравнивает два текста напрямую и выводит их схожесть"""
+    logger.info(f"Comparing texts directly")
+    
+    try:
+        # Генерируем эмбеддинги
+        emb1 = generate_embeddings(text1, is_query=True)
+        emb2 = generate_embeddings(text2, is_query=False)
+        
+        if emb1 is None or emb2 is None:
+            logger.error("Failed to generate embeddings")
+            return None
+        
+        # Вычисляем скалярное произведение
+        similarity = np.dot(emb1, emb2)
+        
+        logger.info(f"Direct similarity: {similarity}")
+        return similarity
+    except Exception as e:
+        logger.error(f"Error comparing embeddings: {str(e)}")
+        return None
 
 def main():
     parser = argparse.ArgumentParser(description='Process markdown files for search database')
@@ -275,54 +346,52 @@ def main():
                        help='Update database with a single file and URL')
     parser.add_argument('--init', action='store_true',
                        help='Initialize database by processing all files in summaries folder')
+    parser.add_argument('--search', type=str,
+                       help='Search for similar games')
+    parser.add_argument('--reset', action='store_true',
+                      help='Reset the collection with proper distance metrics')
+    parser.add_argument('--debug', type=str,
+                      help='Debug similarity calculation with a query')
+    parser.add_argument('--compare', nargs=2, metavar=('TEXT1', 'TEXT2'),
+                      help='Compare similarity between two texts directly')
     
     args = parser.parse_args()
     
+    # Инициализируем коллекцию
+    global collection
+    collection = init_collection()
+    
     # Проверка подключения к API
     logger.info("Checking API connection...")
-    test_response = query({"inputs": "test", "options": {"wait_for_model": True}})
-    if isinstance(test_response, dict) and "error" in test_response:
-        if test_response["error"] == "Authentication failed":
-            logger.error("API KEY IS INVALID! Please check your HF_API_KEY in .env file.")
-            logger.error("Without a valid API key, embeddings cannot be generated correctly.")
-            # Не выходим, так как у нас есть запасной вариант с возвращением фиктивных встраиваний
-        else:
-            logger.warning(f"API test returned an error: {test_response['error']}")
-            logger.warning("Will attempt to continue with fallback embeddings if needed.")
-    else:
+    try:
+        test_response = client.embeddings.create(
+            model=MODEL_NAME,
+            input="test",
+            encoding_format="float"
+        )
         logger.info("API connection successful")
+        logger.info(f"Embedding dimension: {len(test_response.data[0].embedding)}")
+    except Exception as e:
+        logger.error(f"API connection error: {str(e)}")
+        logger.error("Without a valid API key, embeddings cannot be generated correctly.")
+        return
     
-    if args.init:
+    # Обработка аргументов
+    if args.reset:
+        reset_collection()
+        collection = init_collection()  # Обновляем глобальную переменную
+        print("Collection reset successfully. Please re-add your data.")
+    
+    elif args.init:
         # Initialize database mode
         logger.info("Initializing database from all summaries")
-        all_embeddings, all_metadata = process_all_files()
-        
-        if not all_embeddings:
-            logger.error("No valid files found in summaries folder")
-            return
-            
-        # Convert embeddings to numpy array
-        try:
-            embeddings_array = np.vstack(all_embeddings)
-            logger.info(f"Combined embeddings shape: {embeddings_array.shape}")
-            
-            # Save combined data in JSON format
-            combined_data = {
-                'embeddings': {
-                    'data': embeddings_array.flatten().tolist(),
-                    'shape': list(embeddings_array.shape)
-                },
-                'metadata': all_metadata
-            }
-            
-            with open('search_data.json', 'w', encoding='utf-8') as f:
-                json.dump(combined_data, f)
+        if process_all_files():
             logger.info("Database initialized successfully with all summaries")
             print("Database initialized successfully with all summaries")
-        except Exception as e:
-            logger.error(f"Error creating database: {str(e)}")
-            print(f"Failed to initialize database: {str(e)}")
-        
+        else:
+            logger.error("Failed to initialize database")
+            print("Failed to initialize database")
+    
     elif args.update:
         # Update mode
         file_path, url = args.update
@@ -333,8 +402,49 @@ def main():
         else:
             logger.error(f"Failed to update database with {file_path}")
             print(f"Failed to update database with {file_path}")
+    
+    elif args.search:
+        # Search mode
+        query = args.search
+        logger.info(f"Search mode: looking for '{query}'")
+        results = search_similar_games(query, top_k=5)
+        
+        if results:
+            print("\nSearch Results:")
+            for i, result in enumerate(results, 1):
+                print(f"\n{i}. {result['project']} (Similarity: {result['similarity']:.2f})")
+                print(f"   URL: {result['url']}")
+                print(f"   Preview: {result['content_preview']}")
+        else:
+            print("No results found")
+    
+    elif args.debug:
+        # Debug mode
+        query = args.debug
+        logger.info(f"Debug mode: testing similarity for '{query}'")
+        results = debug_similarity(query, top_k=5)
+        
+        if results:
+            print("\nDebug Similarity Results (manual calculation):")
+            for i, result in enumerate(results, 1):
+                print(f"\n{i}. {result['project']} (Similarity: {result['similarity']:.4f})")
+                print(f"   URL: {result['url']}")
+        else:
+            print("No results for debug similarity")
+    
+    elif args.compare:
+        # Compare mode
+        text1, text2 = args.compare
+        logger.info(f"Compare mode: testing similarity between two texts")
+        similarity = compare_embeddings(text1, text2)
+        
+        if similarity is not None:
+            print(f"\nDirect similarity between texts: {similarity:.4f}")
+        else:
+            print("Failed to compare texts")
+    
     else:
-        message = "Please specify a mode: --init to create new database or --update to add new entries"
+        message = "Please specify a mode: --init to create new database, --update to add new entries, --search to find similar games, --reset to recreate the collection, --debug to test similarity, or --compare to compare two texts directly"
         logger.error(message)
         print(message)
 
