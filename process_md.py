@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import chromadb
 
-# Настройка логирования
+# Logging setup
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - process_md.py - %(message)s',
@@ -22,8 +22,8 @@ load_dotenv()
 
 # API configuration
 API_KEY = os.getenv('DEEPINFRA_API_KEY')
-MODEL_NAME = "BAAI/bge-en-icl"  # Обновлено на новую модель
-CHROMA_DIR = "chroma_db"  # Директория для хранения ChromaDB
+MODEL_NAME = "BAAI/bge-en-icl"  # Updated to the new model
+CHROMA_DIR = "chroma_db"  # Directory for storing ChromaDB
 
 if not API_KEY:
     logger.error("DEEPINFRA_API_KEY not found in environment variables or .env file")
@@ -39,11 +39,11 @@ client = OpenAI(
 # Initialize ChromaDB
 chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
 
-# Глобальная переменная для коллекции
+# Global variable for the collection
 collection = None
 
 def init_collection():
-    """Инициализирует коллекцию с правильными настройками расстояния"""
+    """Initializes the collection with the correct distance settings"""
     global collection
     try:
         collection = chroma_client.get_collection(name="cyoa_games")
@@ -52,22 +52,22 @@ def init_collection():
         logger.info("Creating new ChromaDB collection 'cyoa_games'")
         collection = chroma_client.create_collection(
             name="cyoa_games",
-            metadata={"hnsw:space": "ip"}  # Используем inner product для лучшего расчета схожести
+            metadata={"hnsw:space": "ip"}  # Use inner product for better similarity calculation
         )
     
     return collection
 
 def reset_collection():
-    """Сбрасывает коллекцию и создает новую с правильными настройками"""
+    """Resets the collection and creates a new one with the correct settings"""
     global collection
     try:
-        # Пробуем получить и удалить старую коллекцию
+        # Try to get and delete the old collection
         chroma_client.delete_collection("cyoa_games")
         logger.info("Deleted existing collection")
     except Exception as e:
         logger.info(f"No existing collection to delete or error: {str(e)}")
     
-    # Создаем новую коллекцию с inner product (dot product)
+    # Create a new collection with inner product (dot product)
     collection = chroma_client.create_collection(
         name="cyoa_games", 
         metadata={"hnsw:space": "ip"}  # ip = inner product
@@ -80,7 +80,7 @@ def generate_embeddings(text, is_query=False):
     logger.info(f"Generating embeddings for {'query' if is_query else 'document'}")
     
     try:
-        # Разные инструкции для запросов и документов
+        # Different instructions for queries and documents
         instruction = ""
         if is_query:
             instruction = "Represent this search query for retrieving similar content:"
@@ -98,10 +98,10 @@ def generate_embeddings(text, is_query=False):
         # Extract the embedding from the response
         embedding = response.data[0].embedding
         
-        # Нормализуем вектор для косинусного сходства
+        # Normalize the vector for cosine similarity
         embedding_array = np.array(embedding)
         norm = np.linalg.norm(embedding_array)
-        if norm > 0:  # Проверка деления на ноль
+        if norm > 0:  # Check for division by zero
             normalized = embedding_array / norm
         else:
             normalized = embedding_array
@@ -109,11 +109,11 @@ def generate_embeddings(text, is_query=False):
         logger.info(f"Embedding dimension: {len(embedding)}")
         logger.info(f"Used {response.usage.prompt_tokens} tokens for embedding")
         
-        return normalized.tolist()  # Возвращаем нормализованный вектор
+        return normalized.tolist()  # Return the normalized vector
         
     except Exception as e:
         logger.error(f"Error generating embeddings: {str(e)}")
-        logger.error("ВАЖНО: Не удалось получить вложения от API. Проверьте ваш API-ключ и права доступа.")
+        logger.error("IMPORTANT: Failed to get embeddings from the API. Check your API key and access rights.")
         return None
 
 def process_single_file(file_path, url=None):
@@ -121,7 +121,7 @@ def process_single_file(file_path, url=None):
     logger.info(f"Processing file: {file_path}")
     
     try:
-        # Проверяем существование файла
+        # Check if the file exists
         if not os.path.exists(file_path):
             logger.error(f"File not found: {file_path}")
             return None, None
@@ -142,7 +142,7 @@ def process_single_file(file_path, url=None):
             'project': filename[:-3],  # Remove .md extension
             'file': filename,
             'url': url if url else "",
-            'content': md_content[:1000]  # Сохраняем начало контента для предпросмотра
+            'content': md_content[:1000]  # Save the beginning of the content for preview
         }
         logger.info(f"Successfully processed {file_path}")
         return embeddings, metadata
@@ -164,7 +164,7 @@ def process_all_files():
     files = [f for f in os.listdir(md_dir) if f.endswith('.md')]
     logger.info(f"Found {len(files)} .md files")
     
-    # Очищаем коллекцию перед инициализацией
+    # Clear the collection before initialization
     try:
         collection.delete(where={})
         logger.info("Cleared existing collection data")
@@ -181,7 +181,7 @@ def process_all_files():
                     embeddings=[embeddings],
                     metadatas=[metadata],
                     documents=[metadata.get('content', "")],
-                    ids=[f"game_{filename[:-3]}"]  # Используем имя файла как ID
+                    ids=[f"game_{filename[:-3]}"]  # Use the filename as ID
                 )
                 success_count += 1
                 logger.info(f"Added {filename} to ChromaDB")
@@ -198,26 +198,26 @@ def update_database(file_path, url):
     # Process new file
     embeddings, metadata = process_single_file(file_path, url)
     if embeddings is None:
-        logger.error("ВАЖНО: Не удалось сгенерировать встраивания для файла. Обновление базы данных прервано.")
+        logger.error("IMPORTANT: Failed to generate embeddings for the file. Database update aborted.")
         return False
     
-    # Получаем имя файла для создания ID
+    # Get the filename to create an ID
     filename = os.path.basename(file_path)
     game_id = f"game_{filename[:-3]}"
     
     try:
-        # Проверяем, существует ли запись с таким ID
+        # Check if an entry with this ID already exists
         try:
-            # Пытаемся получить элемент с таким ID
+            # Try to get the element with this ID
             existing = collection.get(ids=[game_id])
             if len(existing['ids']) > 0:
-                # Если существует, удаляем старую запись
+                # If it exists, delete the old entry
                 logger.info(f"Entry with ID {game_id} already exists, updating...")
                 collection.delete(ids=[game_id])
         except:
             logger.info(f"No existing entry with ID {game_id}")
         
-        # Добавляем новую запись
+        # Add the new entry
         collection.add(
             embeddings=[embeddings],
             metadatas=[metadata],
@@ -232,25 +232,25 @@ def update_database(file_path, url):
         return False
 
 def search_similar_games(query_text, top_k=5):
-    """Поиск похожих игр по запросу"""
+    """Search for similar games based on a query"""
     logger.info(f"Searching for: '{query_text}'")
     
     try:
-        # Генерируем эмбеддинг для запроса
+        # Generate embedding for the query
         query_embedding = generate_embeddings(query_text, is_query=True)
         
         if query_embedding is None:
             logger.error("Failed to generate embedding for query")
             return []
         
-        # Выполняем поиск в ChromaDB
+        # Perform the search in ChromaDB
         results = collection.query(
             query_embeddings=[query_embedding],
             n_results=top_k,
             include=["metadatas", "distances"]
         )
         
-        # Обрабатываем результаты
+        # Process the results
         found_games = []
         if results and results['metadatas']:
             for i, (metadata, distance) in enumerate(zip(results['metadatas'][0], results['distances'][0])):
@@ -259,7 +259,7 @@ def search_similar_games(query_text, top_k=5):
                     'file': metadata.get('file', 'Unknown'),
                     'url': metadata.get('url', ''),
                     'content_preview': metadata.get('content', '')[:200] + '...',
-                    'similarity': float(distance)  # С inner product distance это и есть схожесть
+                    'similarity': float(distance)  # With inner product distance, this is the similarity
                 })
         
         logger.info(f"Found {len(found_games)} similar games")
@@ -269,28 +269,28 @@ def search_similar_games(query_text, top_k=5):
         return []
 
 def debug_similarity(query, top_k=5):
-    """Отладка расчета схожести между запросом и документами в коллекции"""
+    """Debug the similarity calculation between a query and documents in the collection"""
     logger.info(f"Debug similarity for query: '{query}'")
     
     try:
-        # Получаем все документы в коллекции
+        # Get all documents in the collection
         all_data = collection.get()
         
         if not all_data or 'embeddings' not in all_data or not all_data['embeddings']:
             logger.error("No documents in collection")
             return []
         
-        # Генерируем эмбеддинг для запроса
+        # Generate embedding for the query
         query_emb = generate_embeddings(query, is_query=True)
         
         if query_emb is None:
             logger.error("Failed to generate embedding for query")
             return []
         
-        # Вручную вычисляем сходство
+        # Manually calculate similarity
         similarities = []
         for i, doc_emb in enumerate(all_data["embeddings"]):
-            # Вычисляем скалярное произведение (dot product)
+            # Calculate the dot product
             sim = np.dot(query_emb, doc_emb)
             similarities.append((
                 all_data["metadatas"][i].get("project", "Unknown"), 
@@ -299,17 +299,17 @@ def debug_similarity(query, top_k=5):
                 sim
             ))
         
-        # Сортируем по схожести
+        # Sort by similarity
         similarities.sort(key=lambda x: x[3], reverse=True)
         
-        # Конвертируем в тот же формат, что и результаты поиска
+        # Convert to the same format as search results
         found_games = []
         for project, file, url, sim in similarities[:top_k]:
             found_games.append({
                 'project': project,
                 'file': file,
                 'url': url,
-                'content_preview': "...",  # Не загружаем содержимое для отладки
+                'content_preview': "...",  # Do not load content for debugging
                 'similarity': sim
             })
         
@@ -319,11 +319,11 @@ def debug_similarity(query, top_k=5):
         return []
 
 def compare_embeddings(text1, text2):
-    """Сравнивает два текста напрямую и выводит их схожесть"""
+    """Compare two texts directly and output their similarity"""
     logger.info(f"Comparing texts directly")
     
     try:
-        # Генерируем эмбеддинги
+        # Generate embeddings
         emb1 = generate_embeddings(text1, is_query=True)
         emb2 = generate_embeddings(text2, is_query=False)
         
@@ -331,7 +331,7 @@ def compare_embeddings(text1, text2):
             logger.error("Failed to generate embeddings")
             return None
         
-        # Вычисляем скалярное произведение
+        # Calculate the dot product
         similarity = np.dot(emb1, emb2)
         
         logger.info(f"Direct similarity: {similarity}")
@@ -357,11 +357,11 @@ def main():
     
     args = parser.parse_args()
     
-    # Инициализируем коллекцию
+    # Initialize the collection
     global collection
     collection = init_collection()
     
-    # Проверка подключения к API
+    # Check API connection
     logger.info("Checking API connection...")
     try:
         test_response = client.embeddings.create(
@@ -376,10 +376,10 @@ def main():
         logger.error("Without a valid API key, embeddings cannot be generated correctly.")
         return
     
-    # Обработка аргументов
+    # Process arguments
     if args.reset:
         reset_collection()
-        collection = init_collection()  # Обновляем глобальную переменную
+        collection = init_collection()  # Update the global variable
         print("Collection reset successfully. Please re-add your data.")
     
     elif args.init:
