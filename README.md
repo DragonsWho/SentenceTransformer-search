@@ -45,10 +45,10 @@ The project is a system for automatic collection, processing, and search of info
   - Handles errors and tracks failed URLs
   - Adds visual descriptions to summary files
 
-- **process_md.py** - Database creation:
+- **vector_search.py** - Database creation:
   - Generates embeddings for texts
   - Saves database to search_data.json
-  process_md.py supports two modes:
+  vector_search.py supports two modes:
 --init: Creates new database from all summaries
 --update: Adds new entries from controller.py
 
@@ -86,7 +86,7 @@ The project is a system for automatic collection, processing, and search of info
 ## Project Status
 - crawl.py: correctly processes links
 - summarize.py: successfully creates descriptions using LLM
-- process_md.py: correctly creates the database
+- vector_search.py: correctly creates the database
 - search.py: works correctly, performs search
 - Web interface: fully functional
   - Supports semantic search
@@ -101,7 +101,7 @@ pip install -r requirements.txt
 
 2. Generate the database:
    ```bash
-   python process_md.py
+   python vector_search.py
    ```
 3. Run the web server:
    ```bash
@@ -129,7 +129,9 @@ pip install -r requirements.txt
 
 # Using ChromaDB for CYOA Game Search
 
-## 1. How to Use New Functions in process_md
+to use BAAI/bge-m3 add -M3 flag
+
+## 1. How to Use New Functions in vector_search
 
 ### Basic Setup
 ```bash
@@ -143,22 +145,22 @@ pip install chromadb openai python-dotenv
 ### Initialize Database
 ```bash
 # Process all markdown files in summaries/ directory and create vector database
-python process_md.py --init
+python vector_search.py --init
 ```
 
 ### Update Database with a New Game
 ```bash
 # Add or update a single game file
-python process_md.py --update path/to/game_summary.md https://game-url.com
+python vector_search.py --update path/to/game_summary.md https://game-url.com
 ```
 
 ### Search for Similar Games
 ```bash
 # Search for games matching your description
-python process_md.py --search "cyberpunk game with implants and rebellion"
+python vector_search.py --search "cyberpunk game with implants and rebellion"
 
 # For more complex queries with quotes, use single quotes outside
-python process_md.py --search 'game about "mind control" in a fantasy setting'
+python vector_search.py --search 'game about "mind control" in a fantasy setting'
 ```
 
 ### Example Search Output

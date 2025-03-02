@@ -241,3 +241,75 @@
   Successfully processed: 1
   Failed to process: 0
   Visual analysis failures: 0
+
+[2025-03-02 17:10:15] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-02 17:25:18] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-02 17:27:09] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-02 18:12:28] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-02 18:32:32] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-02 18:35:35] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-02 18:41:54] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 1
+  Visual analysis failed URLs (VPN required):
+    - https://dragonswhore-cyoas.neocities.org/Exorcist/
+
+[2025-03-02 19:06:32] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-02 19:29:46] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-02 19:36:41] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 3
+  Visual analysis failed URLs (VPN required):
+    - https://dragonswhore-cyoas.neocities.org/Fuck_Club/
+    - https://dragonswhore-cyoas.neocities.org/Exorcist/
+    - https://dragonswhore-cyoas.neocities.org/Catalyst_of_CHAOS/
+
+[2025-03-02 19:40:08] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 0
