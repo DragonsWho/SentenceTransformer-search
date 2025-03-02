@@ -389,3 +389,9 @@
   Successfully processed: 3
   Failed to process: 0
   Visual analysis failures: 0
+
+[2025-03-02 20:45:58] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 0
