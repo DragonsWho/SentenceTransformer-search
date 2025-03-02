@@ -22,7 +22,8 @@ load_dotenv()
 
 # API configuration
 API_KEY = os.getenv('DEEPINFRA_API_KEY')
-MODEL_NAME = "BAAI/bge-en-icl"  # Updated to the new model
+MODEL_NAME = "BAAI/bge-en-icl"  # Default model
+USE_M3_MODEL = False  # Flag for switching to M3 model
 CHROMA_DIR = "chroma_db"  # Directory for storing ChromaDB
 
 if not API_KEY:
@@ -45,14 +46,16 @@ collection = None
 def init_collection():
     """Initializes the collection with the correct distance settings"""
     global collection
+    collection_name = "cyoa_games_m3" if USE_M3_MODEL else "cyoa_games"
+    
     try:
-        collection = chroma_client.get_collection(name="cyoa_games")
-        logger.info("Connected to existing ChromaDB collection 'cyoa_games'")
+        collection = chroma_client.get_collection(name=collection_name)
+        logger.info(f"Connected to existing ChromaDB collection '{collection_name}'")
     except:
-        logger.info("Creating new ChromaDB collection 'cyoa_games'")
+        logger.info(f"Creating new ChromaDB collection '{collection_name}'")
         collection = chroma_client.create_collection(
-            name="cyoa_games",
-            metadata={"hnsw:space": "ip"}  # Use inner product for better similarity calculation
+            name=collection_name,
+            metadata={"hnsw:space": "cosine"}  
         )
     
     return collection
@@ -60,37 +63,93 @@ def init_collection():
 def reset_collection():
     """Resets the collection and creates a new one with the correct settings"""
     global collection
+    collection_name = "cyoa_games_m3" if USE_M3_MODEL else "cyoa_games"
+    
     try:
         # Try to get and delete the old collection
-        chroma_client.delete_collection("cyoa_games")
+        chroma_client.delete_collection(collection_name)
         logger.info("Deleted existing collection")
     except Exception as e:
         logger.info(f"No existing collection to delete or error: {str(e)}")
     
     # Create a new collection with inner product (dot product)
     collection = chroma_client.create_collection(
-        name="cyoa_games", 
-        metadata={"hnsw:space": "ip"}  # ip = inner product
+        name=collection_name, 
+        metadata={"hnsw:space": "cosine"}   
     )
-    logger.info("Created new collection with inner product distance")
+    logger.info(f"Created new collection '{collection_name}' with inner product distance")
     return collection
 
 def generate_embeddings(text, is_query=False):
     """Generate embeddings for text using DeepInfra API with normalization"""
-    logger.info(f"Generating embeddings for {'query' if is_query else 'document'}")
+    logger.info(f"Generating embeddings for {'query' if is_query else 'document'} using {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}")
     
     try:
-        # Different instructions for queries and documents
-        instruction = ""
-        if is_query:
-            instruction = "Represent this search query for retrieving similar content:"
+        # Different handling for ICL vs M3 models
+        if USE_M3_MODEL:
+            # For M3 model, we don't use ICL examples
+            if is_query:
+                formatted_text = f"Represent this query for retrieving relevant CYOA games: {text}"
+            else:
+                formatted_text = f"Represent this CYOA game document for retrieval: {text}"
         else:
-            instruction = "Represent this document for retrieval:"
+            # For ICL model, we use examples for queries
+            if is_query:
+                # Extensive and diverse examples in English for ICL
+                icl_examples = """
+Example 1:
+Query: "CYOA with character development"
+Relevant game: "An interactive story where the hero gains new abilities and develops skills after each choice, with branching storylines based on character growth"
+
+Example 2:
+Query: "horror elements CYOA"
+Relevant game: "A dark adventure with frightening elements where choices affect character survival and mental stability in a supernatural setting"
+
+Example 3:
+Query: "post-apocalyptic mutants"
+Relevant game: "CYOA story about survival in a radioactive world where the protagonist can mutate and gain new abilities depending on player choices"
+
+Example 4:
+Query: "fantasy multiple endings"
+Relevant game: "A magical adventure with a branched narrative where player actions lead to one of 12 possible finales depending on key decisions"
+
+Example 5:
+Query: "dystopian cyberpunk"
+Relevant game: "Neo-noir CYOA in a dark future with corporate control, where the hero makes choices between personal gain and resisting the system"
+
+Example 6:
+Query: "love triangle adventure"
+Relevant game: "A story developing relationships between three characters amid a dangerous journey, where romantic choices impact the ending"
+
+Example 7:
+Query: "detective investigation"
+Relevant game: "CYOA in noir genre with murder investigation where player collects clues and interrogates suspects through dialogue choices"
+
+Example 8:
+Query: "space exploration scifi"
+Relevant game: "An interstellar adventure where the player makes critical decisions about alien encounters and ship management in the unknown regions of space"
+
+Example 9:
+Query: "medieval kingdom politics"
+Relevant game: "A throne succession CYOA where court intrigue and political alliances determine your rise or fall as potential ruler"
+
+Example 10:
+Query: "time travel paradox"
+Relevant game: "A complex narrative where players navigate temporal anomalies, with choices in one timeline affecting events in others"
+
+Find for: "{}"
+""".format(text)
+                
+                formatted_text = icl_examples
+            else:
+                # For documents in ICL model
+                formatted_text = f"Represent this CYOA game for retrieval: {text}"
         
-        formatted_text = f"{instruction} {text}"
+        # Get the current model name based on the flag
+        current_model = "BAAI/bge-m3" if USE_M3_MODEL else MODEL_NAME
         
         response = client.embeddings.create(
-            model=MODEL_NAME,
+            model=current_model,
             input=formatted_text,
             encoding_format="float"
         )
@@ -233,7 +292,7 @@ def update_database(file_path, url):
 
 def search_similar_games(query_text, top_k=5):
     """Search for similar games based on a query"""
-    logger.info(f"Searching for: '{query_text}'")
+    logger.info(f"Searching for: '{query_text}' using {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}")
     
     try:
         # Generate embedding for the query
@@ -270,7 +329,7 @@ def search_similar_games(query_text, top_k=5):
 
 def debug_similarity(query, top_k=5):
     """Debug the similarity calculation between a query and documents in the collection"""
-    logger.info(f"Debug similarity for query: '{query}'")
+    logger.info(f"Debug similarity for query: '{query}' using {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}")
     
     try:
         # Get all documents in the collection
@@ -320,7 +379,7 @@ def debug_similarity(query, top_k=5):
 
 def compare_embeddings(text1, text2):
     """Compare two texts directly and output their similarity"""
-    logger.info(f"Comparing texts directly")
+    logger.info(f"Comparing texts directly using {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}")
     
     try:
         # Generate embeddings
@@ -354,8 +413,16 @@ def main():
                       help='Debug similarity calculation with a query')
     parser.add_argument('--compare', nargs=2, metavar=('TEXT1', 'TEXT2'),
                       help='Compare similarity between two texts directly')
+    parser.add_argument('-M3', action='store_true',
+                      help='Use BAAI/bge-m3 model instead of BGE-ICL')
     
     args = parser.parse_args()
+    
+    # Set the global model flag if M3 is requested
+    global USE_M3_MODEL
+    if args.M3:
+        USE_M3_MODEL = True
+        logger.info("Using BAAI/bge-m3 model")
     
     # Initialize the collection
     global collection
@@ -364,8 +431,11 @@ def main():
     # Check API connection
     logger.info("Checking API connection...")
     try:
+        # Get the current model name based on the flag
+        current_model = "BAAI/bge-m3" if USE_M3_MODEL else MODEL_NAME
+        
         test_response = client.embeddings.create(
-            model=MODEL_NAME,
+            model=current_model,
             input="test",
             encoding_format="float"
         )
@@ -380,14 +450,14 @@ def main():
     if args.reset:
         reset_collection()
         collection = init_collection()  # Update the global variable
-        print("Collection reset successfully. Please re-add your data.")
+        print(f"Collection reset successfully for {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}. Please re-add your data.")
     
     elif args.init:
         # Initialize database mode
-        logger.info("Initializing database from all summaries")
+        logger.info(f"Initializing database from all summaries using {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}")
         if process_all_files():
             logger.info("Database initialized successfully with all summaries")
-            print("Database initialized successfully with all summaries")
+            print(f"Database initialized successfully with all summaries for {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}")
         else:
             logger.error("Failed to initialize database")
             print("Failed to initialize database")
@@ -410,7 +480,7 @@ def main():
         results = search_similar_games(query, top_k=5)
         
         if results:
-            print("\nSearch Results:")
+            print(f"\nSearch Results (using {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}):")
             for i, result in enumerate(results, 1):
                 print(f"\n{i}. {result['project']} (Similarity: {result['similarity']:.2f})")
                 print(f"   URL: {result['url']}")
@@ -425,7 +495,7 @@ def main():
         results = debug_similarity(query, top_k=5)
         
         if results:
-            print("\nDebug Similarity Results (manual calculation):")
+            print(f"\nDebug Similarity Results (manual calculation using {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}):")
             for i, result in enumerate(results, 1):
                 print(f"\n{i}. {result['project']} (Similarity: {result['similarity']:.4f})")
                 print(f"   URL: {result['url']}")
@@ -439,12 +509,12 @@ def main():
         similarity = compare_embeddings(text1, text2)
         
         if similarity is not None:
-            print(f"\nDirect similarity between texts: {similarity:.4f}")
+            print(f"\nDirect similarity between texts (using {'BGE-M3' if USE_M3_MODEL else 'BGE-ICL'}): {similarity:.4f}")
         else:
             print("Failed to compare texts")
     
     else:
-        message = "Please specify a mode: --init to create new database, --update to add new entries, --search to find similar games, --reset to recreate the collection, --debug to test similarity, or --compare to compare two texts directly"
+        message = "Please specify a mode: --init to create new database, --update to add new entries, --search to find similar games, --reset to recreate the collection, --debug to test similarity, or --compare to compare two texts directly. Use -M3 flag to switch to BAAI/bge-m3 model."
         logger.error(message)
         print(message)
 

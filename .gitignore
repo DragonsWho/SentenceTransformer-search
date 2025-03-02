@@ -12,3 +12,6 @@
 /logs
 /screenshoots
 /summaries
+
+/chroma_db
+/chroma_db_bge_icl
