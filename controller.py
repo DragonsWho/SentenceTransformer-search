@@ -41,7 +41,92 @@ def setup_logging():
     
     return logging.getLogger()
 
-
+def run_script(script_name, args=None):
+    """
+    Запускает внешний скрипт с расширенным логированием и проверками
+    
+    Args:
+        script_name: Имя скрипта для запуска
+        args: Строка аргументов для скрипта
+        
+    Returns:
+        tuple: (success, output, error)
+    """
+    logger.info(f"Running script: {script_name} with args: {args}")
+    
+    # Проверка существования файла
+    if not os.path.exists(script_name):
+        logger.error(f"Script file not found: {script_name}")
+        return False, "", f"File not found: {script_name}"
+    
+    try:
+        # Use node for .js files, python for .py files
+        if script_name.endswith('.js'):
+            command = ['node', script_name]
+        else:
+            command = [sys.executable, script_name]
+            
+        if args:
+            command.extend(args.split())
+            
+        # Логируем полную команду
+        logger.debug(f"Command: {' '.join(command)}")
+        
+        # Запускаем процесс с таймаутом
+        start_time = time.time()
+        
+        process = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        
+        # Захватываем вывод в реальном времени с таймаутом 
+        output_lines = []
+        error_lines = []
+        
+        # Функция для логирования и сохранения вывода
+        def process_output(stream, prefix, output_list):
+            for line in stream:
+                line = line.strip()
+                if line:
+                    logger.debug(f"{prefix}: {line}")
+                    print(f"{prefix}: {line}")
+                    output_list.append(line)
+        
+        # Обработка stdout
+        process_output(process.stdout, "OUTPUT", output_lines)
+        
+        # Обработка stderr
+        process_output(process.stderr, "ERROR", error_lines)
+        
+        # Ожидаем завершения процесса
+        process.wait()
+        
+        execution_time = time.time() - start_time
+        logger.info(f"Script execution time: {execution_time:.2f} seconds")
+        
+        # Анализ результата
+        output = "\n".join(output_lines)
+        error = "\n".join(error_lines)
+        
+        if process.returncode != 0:
+            logger.error(f"Script returned non-zero exit code: {process.returncode}")
+            logger.error(f"Error output: {error}")
+            return False, output, error
+            
+        logger.info(f"Script completed successfully: {script_name}")
+        return True, output, error
+    
+    except subprocess.TimeoutExpired:
+        logger.error(f"Script timed out: {script_name}")
+        return False, "", "Timeout expired"
+    except Exception as e:
+        logger.error(f"Error running script: {script_name}")
+        logger.error(f"Exception: {str(e)}")
+        logger.error(traceback.format_exc())
+        return False, "", str(e)
 
 # Асинхронная версия запуска скрипта с повторными попытками
 async def run_script_async(script_name, args=None, max_retries=3, retry_delay=5):

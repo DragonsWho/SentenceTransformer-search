@@ -313,3 +313,79 @@
   Successfully processed: 3
   Failed to process: 0
   Visual analysis failures: 0
+
+[2025-03-02 19:54:08] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 3
+  Visual analysis failed URLs (VPN required):
+    - https://dragonswhore-cyoas.neocities.org/Fuck_Club/
+    - https://dragonswhore-cyoas.neocities.org/Exorcist/
+    - https://dragonswhore-cyoas.neocities.org/Catalyst_of_CHAOS/
+
+[2025-03-02 19:58:15] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 3
+  Visual analysis failed URLs (VPN required):
+    - https://dragonswhore-cyoas.neocities.org/Fuck_Club/
+    - https://dragonswhore-cyoas.neocities.org/Exorcist/
+    - https://dragonswhore-cyoas.neocities.org/Catalyst_of_CHAOS/
+
+[2025-03-02 19:59:03] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 3
+  Visual analysis failed URLs (VPN required):
+    - https://dragonswhore-cyoas.neocities.org/Fuck_Club/
+    - https://dragonswhore-cyoas.neocities.org/Exorcist/
+    - https://dragonswhore-cyoas.neocities.org/Catalyst_of_CHAOS/
+
+[2025-03-02 20:17:18] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 3
+  Visual analysis failed URLs (VPN required):
+    - https://dragonswhore-cyoas.neocities.org/Fuck_Club/
+    - https://dragonswhore-cyoas.neocities.org/Exorcist/
+    - https://dragonswhore-cyoas.neocities.org/Catalyst_of_CHAOS/
+
+[2025-03-02 20:27:23] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 3
+  Visual analysis failed URLs (VPN required):
+    - https://dragonswhore-cyoas.neocities.org/Fuck_Club/
+    - https://dragonswhore-cyoas.neocities.org/Exorcist/
+    - https://dragonswhore-cyoas.neocities.org/Catalyst_of_CHAOS/
+
+[2025-03-02 20:27:39] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 3
+  Visual analysis failed URLs (VPN required):
+    - https://dragonswhore-cyoas.neocities.org/Fuck_Club/
+    - https://dragonswhore-cyoas.neocities.org/Exorcist/
+    - https://dragonswhore-cyoas.neocities.org/Catalyst_of_CHAOS/
+
+[2025-03-02 20:28:50] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 3
+  Visual analysis failed URLs (VPN required):
+    - https://dragonswhore-cyoas.neocities.org/Fuck_Club/
+    - https://dragonswhore-cyoas.neocities.org/Exorcist/
+    - https://dragonswhore-cyoas.neocities.org/Catalyst_of_CHAOS/
+
+[2025-03-02 20:36:20] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Failed to process: 0
+  Visual analysis failures: 0
