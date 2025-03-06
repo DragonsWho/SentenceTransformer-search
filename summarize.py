@@ -81,7 +81,8 @@ async def main():
         sys.exit(1)
 
     md_file = sys.argv[1]
-    grok_api = GrokAPI(reuse_window=True)  # Повторное использование окна для скорости
+    # Используем reuse_window=True и anonymous_chat=True
+    grok_api = GrokAPI(reuse_window=True, anonymous_chat=True)
     
     print(f"Processing {md_file}...")
     success = await summarize_md_file(md_file, grok_api)

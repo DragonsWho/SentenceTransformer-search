@@ -173,7 +173,7 @@ def normalize_url(url):
         url = url[:-len('/index.html')]
     return f"{url}/project.json"
 
-async def main_async():
+async def main_async(force_screenshots=False):
     MAX_CONCURRENT_SCREENSHOTS = 5
     MAX_RETRIES = 3
     
@@ -197,21 +197,39 @@ async def main_async():
     
     screenshot_semaphore = asyncio.Semaphore(MAX_CONCURRENT_SCREENSHOTS)
     
-    async def create_screenshot(base_url):
+    async def create_screenshot(base_url, project_name):
         async with screenshot_semaphore:
-            return await run_script_async("get_screenshoot_puppy.js", base_url, max_retries=MAX_RETRIES)
+            webp_path = f"screenshoots/{project_name}.webp"
+            
+            # Проверяем наличие скриншота и флаг принудительного обновления
+            if not force_screenshots and os.path.exists(webp_path):
+                file_size = os.path.getsize(webp_path)
+                if file_size > 0:
+                    logger.info(f"Using existing screenshot: {webp_path}")
+                    return True, "Existing screenshot used", ""
+                else:
+                    logger.warning(f"Found empty screenshot file: {webp_path}, regenerating")
+            
+            # Генерируем новый скриншот
+            logger.info(f"Generating new screenshot for {base_url}")
+            success, output, error = await run_script_async("get_screenshoot_puppy.js", base_url, max_retries=MAX_RETRIES)
+            if success and os.path.exists(webp_path):
+                logger.info(f"Screenshot successfully created: {webp_path}")
+            else:
+                logger.error(f"Screenshot generation failed: {error}")
+            return success, output, error
     
     for index, url in enumerate(urls, 1):
         logger.info(f"Processing URL {index}/{len(urls)}: {url}")
         
         try:
             project_json_url = normalize_url(url)
-            project_name = url.split('/')[-2]  # Предполагаемое имя проекта
+            project_name = url.split('/')[-2]
             md_file = f"{project_name}.md"
             md_path = f"markdown/{md_file}"
             
             # Пробуем разные методы обработки
-            if crawl_url(project_json_url):  # crawl_url уже создает файл
+            if crawl_url(project_json_url):
                 logger.info(f"Text extracted via crawl_url for {url}")
             else:
                 text_content = None
@@ -241,11 +259,14 @@ async def main_async():
             processed_urls.append(url)
             base_url = normalize_url(url).replace('/project.json', '/')
             
-            # Делаем скриншот
-            success, _, error = await create_screenshot(base_url)
+            # Делаем или используем скриншот
+            success, output, error = await create_screenshot(base_url, project_name)
             webp_path = f"screenshoots/{project_name}.webp"
-            if not success or not os.path.exists(webp_path):
-                logger.error(f"Screenshot failed for {base_url}: {error}")
+            if not success:
+                logger.error(f"Screenshot processing failed for {base_url}: {error}")
+                visual_analysis_failures.append(base_url)
+            elif not os.path.exists(webp_path):
+                logger.error(f"Screenshot file not found after processing: {webp_path}")
                 visual_analysis_failures.append(base_url)
             
             # Запускаем summarize.py
@@ -294,7 +315,8 @@ async def main_async():
     logger.info("Process completed")
 
 def main():
-    asyncio.run(main_async())
+    force_screenshots = '--force-screenshots' in sys.argv
+    asyncio.run(main_async(force_screenshots))
 
 if __name__ == "__main__":
     logger = setup_logging()
