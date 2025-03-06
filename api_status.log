@@ -1,5 +1,0 @@
-2024-12-30 14:17:39 - Error in Poe bot 4o-128k-free1 (attempt 1): {"allow_retry": true, "text": "Internal server error (error_id: ca6cf2be-958b-4ed0-8449-ee6cc6e5dc9a)"}
-2024-12-30 14:17:39 - Error in Poe bot claude-3-opus-200k (attempt 1): {"allow_retry": true, "text": "Internal server error (error_id: f447dc63-c6c6-4b8a-8e1d-5dec2149afea)"}
-2024-12-30 14:19:18 - Error in Poe bot 4o-128k-free1 (attempt 1): {"allow_retry": true, "text": "Internal server error (error_id: a8910414-d8a8-420b-9494-f5a73ef8cb5d)"}
-2024-12-30 14:26:25 - Error in Poe bot 4o-128k-free1 (attempt 1): {"allow_retry": true, "text": "Internal server error (error_id: e251ad66-f59e-4b82-a4dd-e834181540f7)"}
-2024-12-30 14:26:25 - Error in Poe bot 4o-128k-free1 (attempt 2): {"allow_retry": true, "text": "Internal server error (error_id: beec6ea0-b772-49e2-91c7-2709990a5598)"}

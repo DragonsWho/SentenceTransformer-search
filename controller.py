@@ -1,3 +1,4 @@
+#controller.py
 import subprocess
 import sys
 import datetime
@@ -269,11 +270,31 @@ async def main_async(force_screenshots=False):
                 logger.error(f"Screenshot file not found after processing: {webp_path}")
                 visual_analysis_failures.append(base_url)
             
-            # Запускаем summarize.py
-            logger.info(f"Running summarization for {md_file}")
-            success, output, error = await run_script_async("summarize.py", md_file, max_retries=MAX_RETRIES)
+            # Запускаем summarize.py с нужным режимом
+            logger.info(f"Running summarization for {md_file} in sent_search mode")
+            success, output, error = await run_script_async(
+                "summarize.py", 
+                f"{md_file} --mode sent_search", 
+                max_retries=MAX_RETRIES
+            )
             if not success:
                 logger.error(f"Summarization failed for {url}: {error}")
+
+            # Добавляем паузу в 1 минуту (60 секунд)
+            logger.info("Pausing for 1 minute before next summarization...")
+            await asyncio.sleep(60)  # Пауза в 60 секунд
+            
+            # Добавляем вызов для catalog режима
+            logger.info(f"Running summarization for {md_file} in catalog mode")
+            success, output, error = await run_script_async(
+                "summarize.py", 
+                f"{md_file} --mode catalog", 
+                max_retries=MAX_RETRIES
+            )
+            if not success:
+                logger.error(f"Catalog summarization failed for {url}: {error}")
+
+            
         
         except Exception as e:
             logger.error(f"Unhandled exception processing URL {url}: {str(e)}")

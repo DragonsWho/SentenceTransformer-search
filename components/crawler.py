@@ -1,4 +1,3 @@
-# components/crawler.py
 import requests
 import json
 import os
@@ -53,8 +52,8 @@ def crawl_url(url):
         # Extract game title from URL
         game_title = url.split('/')[-2].replace('_', ' ')
         
-        # Add title to the beginning of markdown content
-        md_content = f"title: {game_title}\n\n{md_content}"
+        # Add URL and title (marked as possible) to the beginning of markdown content
+        md_content = f"Game URL: {url}\n\nPossible title: {game_title}\n\n{md_content}"
         
         # Save Markdown
         with open(md_filename, 'w', encoding='utf-8') as f:

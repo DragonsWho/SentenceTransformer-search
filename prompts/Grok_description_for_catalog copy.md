@@ -10,9 +10,9 @@ Deliver your response in the following JSON structure:
     "title": "Game Title",
     "description": "<p>Your game description here...</p>",
     "author": "Author Name",
-    "tags": [ "Tag1", 
-              "Tag2",  
-              "Tag3", 
+    "tags": [ "Tag1",   // Category 1
+              "Tag2",   // Category 1
+              "Tag3",   // Category 2
               ...],
     "img_or_link": "link",  (Always use "Link")
     "iframe_url": "https://example.com/"
@@ -36,6 +36,7 @@ Tag selection requirements (mandatory adherence to these counts):
 • Kinks: Select 0-7 tags
 • Custom: Select 5-15 tags (Use existing tags wherever possible)
 
+For each tag in the tags array, add a short comment in the format // <explanation> explaining which category the tag belongs to and explaining why this tag was chosen based on the game content.
 
 If the game has specific themes, aesthetics, mechanics, or content not covered by standard tags, please add appropriate custom tags to highlight these features. Do not create new tags to describe unique items, characters, or areas. Be sure to create a tag if the game represents some popular fandom and it is a major part of the story, i.e. the game is a fanfic.
 
