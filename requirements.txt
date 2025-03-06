@@ -43,3 +43,10 @@ urllib3==2.3.0
 webdriver-manager==4.0.2
 websocket-client==1.8.0
 wsproto==1.2.0
+pyperclip
+opencv-python
+numpy
+mss
+fastapi
+uvicorn
+pydantic

@@ -1,5 +1,3 @@
-#controller.py
-
 import subprocess
 import sys
 import datetime
@@ -175,60 +173,6 @@ def normalize_url(url):
         url = url[:-len('/index.html')]
     return f"{url}/project.json"
 
-async def process_vision_and_update(webp_path, summary_path, base_url, max_retries=3):
-    """
-    Performs visual analysis and updates summary file
-    
-    Args:
-        webp_path: Path to screenshot
-        summary_path: Path to summary file
-        base_url: Base URL
-        max_retries: Maximum number of attempts
-        
-    Returns:
-        bool: Successful operation
-    """
-    try:
-        if not os.path.exists(summary_path):
-            project_name = os.path.basename(summary_path).replace('.md', '')
-            
-            md_file = f"markdown/{project_name}.md"
-            if os.path.exists(md_file):
-                success, output, error = await run_script_async("summarize.py", f"{project_name}.md", max_retries=max_retries)
-                if not success:
-                    return False
-                
-                if not os.path.exists(summary_path):
-                    return False
-            else:
-                return False
-        
-        success, vision_output, vision_error = await run_script_async("vision_query.py", webp_path, max_retries=max_retries)
-        
-        if not success:
-            return False
-        
-        if vision_output and not vision_output.startswith("Visual analysis error:"):
-            try:
-                with open(summary_path, 'a') as f:
-                    f.write(f"\n\nVisual: {vision_output.strip()}")
-            except Exception:
-                return False
-            
-            success, process_output, process_error = await run_script_async(
-                "components/vector_search.py", 
-                f"--update {summary_path} {base_url}",
-                max_retries=max_retries
-            )
-            if not success:
-                return False
-            
-            return True
-        
-        return False
-    except Exception:
-        return False
-
 async def main_async():
     MAX_CONCURRENT_SCREENSHOTS = 5
     MAX_RETRIES = 3
@@ -242,9 +186,6 @@ async def main_async():
     failed_urls = []
     visual_analysis_failures = []
     processed_urls = []
-    screenshot_tasks = []
-    
-    screenshot_semaphore = asyncio.Semaphore(MAX_CONCURRENT_SCREENSHOTS)
     
     try:
         with open('links.txt', 'r') as f:
@@ -253,6 +194,8 @@ async def main_async():
     except Exception as e:
         logger.error(f"Error reading links.txt: {str(e)}")
         return
+    
+    screenshot_semaphore = asyncio.Semaphore(MAX_CONCURRENT_SCREENSHOTS)
     
     async def create_screenshot(base_url):
         async with screenshot_semaphore:
@@ -263,117 +206,59 @@ async def main_async():
         
         try:
             project_json_url = normalize_url(url)
+            project_name = url.split('/')[-2]  # Предполагаемое имя проекта
+            md_file = f"{project_name}.md"
+            md_path = f"markdown/{md_file}"
             
-            result = crawl_url(project_json_url)
-            
-            if result:
-                processed_urls.append(url)
-                
-                base_url = normalize_url(url).replace('/project.json', '/')
-                screenshot_task = asyncio.create_task(create_screenshot(base_url))
-                screenshot_tasks.append((base_url, screenshot_task))
-                
-                continue
-            
-            result = extract_js_json(url)
-            if result:
-                processed_urls.append(url)
-                
-                base_url = normalize_url(url).replace('/project.json', '/')
-                screenshot_task = asyncio.create_task(create_screenshot(base_url))
-                screenshot_tasks.append((base_url, screenshot_task))
-                
-                continue
-                
-            analyzer = TrafficAnalyzer()
-            try:
-                result = analyzer.process_url(url)
+            # Пробуем разные методы обработки
+            if crawl_url(project_json_url):  # crawl_url уже создает файл
+                logger.info(f"Text extracted via crawl_url for {url}")
+            else:
+                text_content = None
+                result = extract_js_json(url)
                 if result:
-                    processed_urls.append(url)
-                    
-                    base_url = normalize_url(url).replace('/project.json', '/')
-                    screenshot_task = asyncio.create_task(create_screenshot(base_url))
-                    screenshot_tasks.append((base_url, screenshot_task))
-                    
-                    continue
+                    text_content = result
+                    logger.info(f"Text extracted via extract_js_json for {url}")
+                else:
+                    analyzer = TrafficAnalyzer()
+                    try:
+                        result = analyzer.process_url(url)
+                        if result:
+                            text_content = result
+                            logger.info(f"Text extracted via TrafficAnalyzer for {url}")
+                    finally:
+                        analyzer.close()
+                
+                if text_content:
+                    os.makedirs("markdown", exist_ok=True)
+                    with open(md_path, 'w', encoding='utf-8') as f:
+                        f.write(text_content)
                 else:
                     logger.error(f"All processing methods failed for URL: {url}")
                     failed_urls.append(url)
-            finally:
-                analyzer.close()
+                    continue
+            
+            processed_urls.append(url)
+            base_url = normalize_url(url).replace('/project.json', '/')
+            
+            # Делаем скриншот
+            success, _, error = await create_screenshot(base_url)
+            webp_path = f"screenshoots/{project_name}.webp"
+            if not success or not os.path.exists(webp_path):
+                logger.error(f"Screenshot failed for {base_url}: {error}")
+                visual_analysis_failures.append(base_url)
+            
+            # Запускаем summarize.py
+            logger.info(f"Running summarization for {md_file}")
+            success, output, error = await run_script_async("summarize.py", md_file, max_retries=MAX_RETRIES)
+            if not success:
+                logger.error(f"Summarization failed for {url}: {error}")
+        
         except Exception as e:
             logger.error(f"Unhandled exception processing URL {url}: {str(e)}")
             failed_urls.append(url)
     
-    logger.info("Running summarization process")
-    summarize_task = asyncio.create_task(run_script_async("summarize.py", max_retries=MAX_RETRIES))
-    
-    success, output, error = await summarize_task
-    
-    if not success:
-        logger.error(f"Summarization failed: {error}")
-    
-    summary_failures = []
-    if output:
-        for line in output.split('\n'):
-            if "Failed to process" in line and ".md" in line:
-                try:
-                    failed_project = line.split("Failed to process ")[1].split(".md")[0]
-                    summary_failures.append(failed_project)
-                except:
-                    pass
-    
-    vision_tasks = []
-    retry_vision_tasks = []
-    
-    for base_url, screenshot_task in screenshot_tasks:
-        try:
-            project_name = base_url.split('/')[-2]
-            summary_path = f"summaries/{project_name}.md"
-            webp_path = f"screenshoots/{project_name}.webp"
-            
-            success, output, error = await screenshot_task
-            
-            if not success:
-                visual_analysis_failures.append(base_url)
-                continue
-                
-            if not os.path.exists(webp_path):
-                visual_analysis_failures.append(base_url)
-                continue
-            
-            if project_name in summary_failures:
-                retry_vision_tasks.append((base_url, webp_path, summary_path))
-                continue
-                
-            if not os.path.exists(summary_path):
-                retry_vision_tasks.append((base_url, webp_path, summary_path))
-                continue
-            
-            vision_task = asyncio.create_task(process_vision_and_update(webp_path, summary_path, base_url, max_retries=MAX_RETRIES))
-            vision_tasks.append((base_url, vision_task))
-            
-        except Exception:
-            visual_analysis_failures.append(base_url)
-    
-    if retry_vision_tasks:
-        for base_url, webp_path, summary_path in retry_vision_tasks:
-            await asyncio.sleep(random.uniform(1, 3))
-            
-            try:
-                vision_task = asyncio.create_task(process_vision_and_update(webp_path, summary_path, base_url, max_retries=MAX_RETRIES))
-                vision_tasks.append((base_url, vision_task))
-            except Exception:
-                visual_analysis_failures.append(base_url)
-    
-    for base_url, vision_task in vision_tasks:
-        try:
-            success = await vision_task
-            if not success:
-                visual_analysis_failures.append(base_url)
-        except Exception:
-            visual_analysis_failures.append(base_url)
-    
+    # Генерация отчёта
     logger.info("Generating final report")
     timestamp = datetime.datetime.now().strftime('[%Y-%m-%d %H:%M:%S]')
     

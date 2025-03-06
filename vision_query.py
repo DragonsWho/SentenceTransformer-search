@@ -1,3 +1,5 @@
+#vision_query.py
+
 import google.generativeai as genai
 import PIL.Image
 import sys
@@ -84,26 +86,14 @@ def analyze_visual_style(image_path):
 
     # Define prompt
     prompt = """
-Create a short sentence visual style description. Follow these exact examples:
-
-Examples:
-"Neon-lit anime aesthetics with blue-pink palette. Dark atmospheric backgrounds with vibrant glow effects. "
-"Scaly scarlet background, as if made of dragon scales. Card embellishment with gold ornamentation in antique style. Gold text. The feeling of the overwhelming power of the dragons. "
-
-"Yellow sandy background reminiscent of the desert. Oriental motifs."
-"Bright cute style, lush greens and sunny tones in the background. Luxury."
-"Dark red, burgundy background. Light colored cards with text, anime style images. "
-
-Rules: 
-- NO specific characters or scenes
-- NO story elements
-- Completely ignore the content of the text. 
-- Focus ONLY on:
-  * Color scheme
-  * Art style
-  * Interface design
-  * Overall impact
-"""
+    You are an expert in visual analysis. Analyze the provided screenshot of a CYOA game and describe it in detail. Focus on the following:
+    - Visual style (e.g., cartoonish, realistic, pixel art, etc.)
+    - Color palette (dominant colors, background colors, text colors)
+    - Objects, characters, or symbols present (describe their appearance, clothing, poses, etc.)
+    - Layout and composition (e.g., text placement, image positioning)
+    - Any notable details (e.g., specific themes like demons, fantasy, sci-fi, etc.)
+    Provide a comprehensive description as if you’re explaining it to someone who cannot see the image. Avoid summarizing; include all relevant visual elements.
+    """
     log_with_flush(logging.DEBUG, "Prompt prepared")
 
     # Generate response with error handling
