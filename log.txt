@@ -629,3 +629,12 @@
   Successfully processed: 1
   Failed to process: 0
   Visual analysis failures: 0
+
+[2025-03-07 20:53:11] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Skipped (already in catalog): 1
+  Failed to process: 0
+  Visual analysis failures: 0
+  Skipped URLs (already in catalog):
+    - https://dragonswhore-cyoas.neocities.org/Succubus_Cafe/

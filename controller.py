@@ -1,4 +1,3 @@
-#controller.py
 import subprocess
 import sys
 import datetime
@@ -12,7 +11,7 @@ import random
 from components.traffic_analyzer import TrafficAnalyzer
 from components.js_json_extractor import extract_js_json
 from components.crawler import crawl_url
-
+from components.game_checker import GameChecker  # Импорт GameChecker
 
 def setup_logging():
     os.makedirs("logs", exist_ok=True)
@@ -37,7 +36,7 @@ def run_script(script_name, args=None):
     
     Args:
         script_name: The name of the script to run
-        Args: Argument string for the script
+        args: Argument string for the script
         
     Returns:
         tuple: (success, output, error)
@@ -183,11 +182,19 @@ async def main_async(force_screenshots=False):
         logger.error("Prerequisites check failed. Please fix the issues above.")
         return
     
+    # Инициализация GameChecker
+    game_checker = GameChecker()
+    if not game_checker.login():
+        logger.error("Failed to authenticate with GameChecker. Aborting.")
+        return
+    game_checker.load_existing_games()
+    
     logger.info("Starting main processing loop")
     
     failed_urls = []
     visual_analysis_failures = []
     processed_urls = []
+    skipped_urls = []  # Для учета пропущенных URL
     
     try:
         with open('links.txt', 'r') as f:
@@ -203,7 +210,6 @@ async def main_async(force_screenshots=False):
         async with screenshot_semaphore:
             webp_path = f"screenshots/{project_name}.webp"
             
-            # Проверяем наличие скриншота и флаг принудительного обновления
             if not force_screenshots and os.path.exists(webp_path):
                 file_size = os.path.getsize(webp_path)
                 if file_size > 0:
@@ -212,7 +218,6 @@ async def main_async(force_screenshots=False):
                 else:
                     logger.warning(f"Found empty screenshot file: {webp_path}, regenerating")
             
-            # Генерируем новый скриншот
             logger.info(f"Generating new screenshot for {base_url}")
             success, output, error = await run_script_async("get_screenshoot_puppy.js", base_url, max_retries=MAX_RETRIES)
             if success and os.path.exists(webp_path):
@@ -223,6 +228,13 @@ async def main_async(force_screenshots=False):
     
     for index, url in enumerate(urls, 1):
         logger.info(f"Processing URL {index}/{len(urls)}: {url}")
+        
+        # Проверяем, существует ли игра в базе
+        if game_checker.game_exists(url):
+            logger.info(f"Skipping URL {url} as it already exists in the catalog")
+            skipped_urls.append(url)
+            processed_urls.append(url)  # Считаем обработанным, чтобы статистика была корректной
+            continue
         
         try:
             project_json_url = normalize_url(url)
@@ -282,9 +294,8 @@ async def main_async(force_screenshots=False):
                 logger.error(f"Summarization failed for {url}: {error}")
              
             logger.info("Pausing for 5s before next summarization...")
-            await asyncio.sleep(5)  # Пауза в 5 секунд
+            await asyncio.sleep(5)
 
-            # Добавляем вызов для catalog режима
             logger.info(f"Running summarization for {md_file} in catalog mode")
             success, output, error = await run_script_async(
                 "summarize.py", 
@@ -320,6 +331,7 @@ async def main_async(force_screenshots=False):
         f"\n{timestamp} Processing summary:",
         f"  Total URLs processed: {len(urls)}",
         f"  Successfully processed: {len(processed_urls)}",
+        f"  Skipped (already in catalog): {len(skipped_urls)}",
         f"  Failed to process: {len(failed_urls)}",
         f"  Visual analysis failures: {len(visual_analysis_failures)}"
     ]
@@ -332,6 +344,11 @@ async def main_async(force_screenshots=False):
     if visual_analysis_failures:
         report.append("  Visual analysis failed URLs (VPN required):")
         for url in visual_analysis_failures:
+            report.append(f"    - {url}")
+    
+    if skipped_urls:
+        report.append("  Skipped URLs (already in catalog):")
+        for url in skipped_urls:
             report.append(f"    - {url}")
     
     for line in report:
