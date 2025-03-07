@@ -1,5 +1,3 @@
-# prepare_and_upload.py
-
 import os
 import shutil
 import subprocess
@@ -12,7 +10,7 @@ from pathlib import Path
 CATALOG_JSON_DIR = "catalog_json"
 SCREENSHOTS_DIR = "screenshots"
 NEW_GAMES_DIR = "New_Games"
-PROCESSED_GAMES_DIR = "Processed_Games"  # Новая папка для обработанных файлов
+PROCESSED_GAMES_DIR = "Processed_Games"
 GAME_UPLOADER_SCRIPT = "GameUploader.py"
 
 def remove_json_comments(json_text):
@@ -51,10 +49,8 @@ def validate_and_clean_json(json_path):
         with open(json_path, 'r', encoding='utf-8') as f:
             original_content = f.read()
         
-        # Удаляем комментарии
         cleaned_content = remove_json_comments(original_content)
         
-        # Для диагностики: выводим очищенный контент, если есть ошибка
         try:
             json.loads(cleaned_content)
         except json.JSONDecodeError as e:
@@ -77,7 +73,6 @@ def prepare_game_files(test_mode=False):
         return False
 
     os.makedirs(NEW_GAMES_DIR, exist_ok=True)
-
     json_files = [f for f in os.listdir(CATALOG_JSON_DIR) if f.endswith(".json")]
     if not json_files:
         print(f"No JSON files found in {CATALOG_JSON_DIR}")
@@ -93,23 +88,19 @@ def prepare_game_files(test_mode=False):
             json_with_comments_dest = os.path.join(NEW_GAMES_DIR, f"{project_name}_with_comments.json")
             screenshot_dest = os.path.join(NEW_GAMES_DIR, f"{project_name}.webp")
 
-            # Очищаем и проверяем JSON
             original_json, cleaned_json = validate_and_clean_json(json_src)
             if cleaned_json is None:
                 success = False
                 continue
 
-            # Сохраняем очищенный JSON
             with open(json_dest, 'w', encoding='utf-8') as f:
                 f.write(cleaned_json)
             print(f"Copied cleaned JSON: {json_file} to {NEW_GAMES_DIR}")
 
-            # Сохраняем копию с комментариями
             with open(json_with_comments_dest, 'w', encoding='utf-8') as f:
                 f.write(original_json)
             print(f"Copied JSON with comments: {project_name}_with_comments.json to {NEW_GAMES_DIR}")
 
-            # Копируем скриншот, если он существует
             if os.path.exists(screenshot_src):
                 shutil.copy2(screenshot_src, screenshot_dest)
                 print(f"Copied screenshot: {project_name}.webp to {NEW_GAMES_DIR}")
@@ -149,6 +140,18 @@ def run_game_uploader():
         print(f"Unexpected error running {GAME_UPLOADER_SCRIPT}: {e}")
         return False
 
+def cleanup_catalog_json():
+    """Удаляет все файлы из catalog_json после успешной обработки."""
+    if os.path.exists(CATALOG_JSON_DIR):
+        for file in os.listdir(CATALOG_JSON_DIR):
+            file_path = os.path.join(CATALOG_JSON_DIR, file)
+            try:
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                    print(f"Removed {file} from {CATALOG_JSON_DIR}")
+            except Exception as e:
+                print(f"Error removing {file_path}: {e}")
+
 def move_comments_files_to_processed():
     """Переносит файлы с комментариями в Processed_Games."""
     os.makedirs(PROCESSED_GAMES_DIR, exist_ok=True)
@@ -163,12 +166,10 @@ def main():
     test_mode = "--test" in sys.argv
     print(f"Running in {'test' if test_mode else 'live'} mode")
 
-    # Подготавливаем файлы
     if not prepare_game_files(test_mode):
         print("Failed to prepare game files. Aborting.")
         sys.exit(1)
 
-    # Если не тестовый режим, запускаем GameUploader и переносим файлы
     if not test_mode:
         print("Starting GameUploader...")
         if not run_game_uploader():
@@ -176,10 +177,10 @@ def main():
             sys.exit(1)
         print("Game uploading completed successfully!")
         
-        # Переносим файлы с комментариями в Processed_Games
         move_comments_files_to_processed()
+        cleanup_catalog_json()  # Очищаем catalog_json после успешной загрузки
     else:
-        print("Test mode: Skipping GameUploader execution and file moving.")
+        print("Test mode: Skipping GameUploader execution, file moving, and cleanup.")
 
 if __name__ == "__main__":
     main()
