@@ -7,6 +7,7 @@ import pandas as pd
 from fuzzywuzzy import fuzz
 from urllib.parse import urlsplit
 from components.grok3_api import GrokAPI
+from urllib.parse import unquote
 
 # Константы
 SENT_SEARCH_PROMPT_PATH = "prompts/Grok_for_sent_search.md"
@@ -68,64 +69,88 @@ async def run_vision_query(webp_path, max_retries=3):
     return None
 
 def get_csv_hint(project_name):
-    """Ищет похожие строки в CSV по Title, Static и Interactive, возвращает подсказку с Title и Author."""
+    """Ищет похожие строки в CSV по Title, Static и Interactive, возвращает подсказку с Title, Author и Type."""
+    CSV_PATH = "games.csv"
+    print(f"Checking CSV file at: {os.path.abspath(CSV_PATH)}")
+    
     if not os.path.exists(CSV_PATH):
-        print(f"CSV file not found: {CSV_PATH}")
-        return ""
+        print(f"CSV file not found at: {CSV_PATH}")
+        return "\n\n=== CSV Hint ===\nCSV file not found."
 
     try:
-        # Загружаем CSV
-        df = pd.read_csv(CSV_PATH)
-        required_columns = ['Title', 'Author', 'Static', 'Interactive']
+        df = pd.read_csv(CSV_PATH, encoding='utf-8')
+        print(f"CSV loaded successfully. Rows: {len(df)}")
+        required_columns = ['Title', 'Author', 'Type', 'Static', 'Interactive']
+        
         if not all(col in df.columns for col in required_columns):
             missing = [col for col in required_columns if col not in df.columns]
             print(f"CSV is missing required columns: {missing}")
-            return ""
+            return "\n\n=== CSV Hint ===\nCSV is missing required columns."
 
-        # Нормализуем project_name
-        project_name_normalized = project_name.lower().replace(" ", "")
+        project_name_normalized = unquote(project_name.lower()).replace(" ", "")
+        print(f"Normalized project name: '{project_name_normalized}'")
         matches = []
 
         for index, row in df.iterrows():
             csv_title = str(row['Title']) if pd.notna(row['Title']) else ""
             csv_url = str(row['Static']) if pd.notna(row['Static']) else ""
             csv_interactive = str(row['Interactive']) if pd.notna(row['Interactive']) else ""
+
             csv_title_normalized = csv_title.lower().replace(" ", "")
-
-            # Схожесть по Title
-            title_similarity = fuzz.ratio(project_name_normalized, csv_title_normalized)
-
-            # Схожесть по Static (последний сегмент URL)
             url_similarity = 0
+            url_normalized = ""
             if csv_url and csv_url != "nan":
-                url_path = urlsplit(csv_url).path.rstrip('/').split('/')[-1]
-                url_path_normalized = url_path.lower().replace(" ", "")
-                url_similarity = fuzz.ratio(project_name_normalized, url_path_normalized)
+                url_normalized = unquote(csv_url.lower()).replace(" ", "")
+                url_path = urlsplit(csv_url).path.rstrip('/').split('/')[-1].lower()
+                url_path_normalized = unquote(url_path).replace(" ", "")
+                url_similarity = max(
+                    fuzz.ratio(project_name_normalized, url_normalized),
+                    fuzz.ratio(project_name_normalized, url_path_normalized)
+                )
 
-            # Схожесть по Interactive (если есть)
             interactive_similarity = 0
             if csv_interactive and csv_interactive != "nan":
-                interactive_normalized = csv_interactive.lower().replace(" ", "")
+                interactive_normalized = unquote(csv_interactive.lower()).replace(" ", "")
                 interactive_similarity = fuzz.ratio(project_name_normalized, interactive_normalized)
 
-            # Максимальная схожесть из всех полей
+            title_similarity = fuzz.ratio(project_name_normalized, csv_title_normalized)
             max_similarity = max(title_similarity, url_similarity, interactive_similarity)
-            if max_similarity >= 80:  # Порог схожести
+
+            print(f"Row {index}: Title='{csv_title_normalized}' ({title_similarity}%), "
+                  f"URL='{url_normalized}' ({url_similarity}%), "
+                  f"Interactive='{csv_interactive}' ({interactive_similarity}%)")
+
+            if max_similarity >= 70:
                 matches.append((row, max_similarity))
 
         if not matches:
             return "\n\n=== CSV Hint ===\nNo matching entries found in CSV for this project name."
 
-        # Сортируем по убыванию схожести и берём до 3 лучших совпадений
         matches.sort(key=lambda x: x[1], reverse=True)
         hint = "\n\n=== CSV Hint ===\nPossible matches from CSV based on project name:\n"
         for match, similarity in matches[:3]:
-            hint += f"- Title: {match.get('Title', 'N/A')}, Author: {match.get('Author', 'N/A')} (Similarity: {similarity}%)\n"
+            hint += (
+                f"- Title: {match.get('Title', 'N/A')}, "
+                f"Author: {match.get('Author', 'N/A')}, "
+                f"Type: {match.get('Type', 'N/A')} (Similarity: {similarity}%)\n"
+            )
+        # Добавляем пояснение
+        hint += (
+            "\nNote: When specifying the author, use the exact name as listed above (this is their nickname). "
+            "The 'Type' (SFW or NSFW) is based on visual assessment. SFW strongly indicates the absence of nudity, "
+            "while NSFW suggests mature content. Rely on this classification for consistency.\n"
+        )
         return hint
 
+    except pd.errors.EmptyDataError:
+        print("CSV file is empty.")
+        return "\n\n=== CSV Hint ===\nCSV file is empty."
+    except pd.errors.ParserError as e:
+        print(f"CSV parsing error: {str(e)}")
+        return "\n\n=== CSV Hint ===\nCSV parsing error."
     except Exception as e:
-        print(f"Error processing CSV: {str(e)}")
-        return "\n\n=== CSV Hint ===\nError processing CSV."
+        print(f"Unexpected error processing CSV: {str(e)}")
+        return "\n\n=== CSV Hint ===\nUnexpected error processing CSV."
 
 async def summarize_md_file(md_file, grok_api, mode="sent_search"):
     """Обрабатывает один Markdown файл через Grok 3 с учетом режима."""

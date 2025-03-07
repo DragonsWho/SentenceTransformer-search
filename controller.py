@@ -271,8 +271,8 @@ async def main_async(force_screenshots=False):
             if not success:
                 logger.error(f"Summarization failed for {url}: {error}")
              
-            logger.info("Pausing for 5s before next summarization...")
-            await asyncio.sleep(5)
+            logger.info("Pausing for 0.5s before next summarization...")
+            await asyncio.sleep(0.5)
 
             logger.info(f"Running summarization for {md_file} in catalog mode")
             success, output, error = await run_script_async(
