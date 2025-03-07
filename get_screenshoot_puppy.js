@@ -1,135 +1,204 @@
+// get_screenshoot_puppy.js
+
+// to run use  "   node get_screenshoot_puppy.js https://example.neocities.org/game/ --pause   " 
+
 const puppeteer = require('puppeteer');
 const sharp = require('sharp');
+const fs = require('fs');
 
 (async () => {
-  const browser = await puppeteer.launch({
-    args: ['--no-sandbox'],
-    headless: false,
-    protocolTimeout: 300000 // 5 minutes
-  });
-  const page = await browser.newPage();
-  
-  // Set viewport 3:4 for the catalog card
-  const viewportWidth = 1920;
-  const viewportHeight = 2560;
-  await page.setViewport({ 
-    width: viewportWidth,
-    height: viewportHeight,
-    deviceScaleFactor: 2
-  });
-  
-  // Get URL from command line arguments
-  const url = process.argv[2];
+  // Parse command line arguments
+  const args = process.argv.slice(2);
+  const url = args[0];
+  const startPaused = args.includes('--pause');
+  const windowSizeArg = args.find(arg => arg.startsWith('--window-size='));
+  let windowWidth = 2420; // Default value
+  let windowHeight = 1420; // Default value
+
+  if (windowSizeArg) {
+    const [width, height] = windowSizeArg.split('=')[1].split(',').map(Number);
+    windowWidth = width || windowWidth;
+    windowHeight = height || windowHeight;
+  }
+
   if (!url) {
     console.error('URL argument is required');
     process.exit(1);
   }
-  
-  // Navigate to URL with basic wait
+
+  // Launch the browser with the specified window size
+  const browser = await puppeteer.launch({
+    args: [
+      '--no-sandbox',
+      `--window-size=${windowWidth},${windowHeight}`
+    ],
+    headless: false,
+    protocolTimeout: 300000
+  });
+  const page = await browser.newPage();
+
+  const viewportWidth = 1920;
+  const screenshotHeight = 2560;
+  await page.setViewport({ 
+    width: viewportWidth,
+    height: 1080, // Initial height for interaction
+    deviceScaleFactor: 2
+  });
+
   console.log('Navigating to:', url);
   await page.goto(url, {
-    waitUntil: 'networkidle0', // Ждём завершения сетевых запросов
-    timeout: 300000 // 5 minutes
+    waitUntil: 'networkidle0',
+    timeout: 300000
   });
 
-  // Wait for body element
-  await page.waitForSelector('body', {
-    timeout: 300000 // 5 minutes
-  });
+  await page.waitForSelector('body', { timeout: 300000 });
   console.log('Page URL after navigation:', page.url());
 
-  // Screenshot schedule: first after 15s, second after 30s, then every minute for 10 minutes
-  const maxAttempts = 12; // 15s, 30s, then 10 minutes
-  let validScreenshot = false;
-  let attempt = 0;
+  // Force enable scrolling
+  await page.evaluate(() => {
+    document.body.style.overflow = 'auto';
+    document.documentElement.style.overflow = 'auto';
+    document.body.style.height = 'auto';
+  });
 
-  // Extract the name for the screenshot from the URL
-  const parsedUrl = new URL(page.url());
+  // Add virtual menu
+  await addControlMenu(page);
+
+  // Wait for "STOP" and "CONTINUE" presses
+  let isPaused = startPaused;
+  if (startPaused) {
+    console.log('Started in paused mode. Adjust the page manually, then press "CONTINUE".');
+  }
+
+  page.on('console', msg => {
+    if (msg.text() === 'STOP_PRESSED') {
+      isPaused = true;
+      console.log('Paused. Adjust the page manually, then press "CONTINUE".');
+    } else if (msg.text() === 'CONTINUE_PRESSED') {
+      isPaused = false;
+      console.log('Continuing screenshot process...');
+    }
+  });
+
+  // Wait until the user presses "STOP" and "CONTINUE"
+  let attempts = 0;
+  const maxAttempts = 300;
+  while (attempts < maxAttempts) {
+    if (isPaused) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      continue;
+    }
+
+    if (!isPaused && (attempts > 0 || startPaused)) {
+      break;
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    attempts++;
+  }
+
+  if (attempts >= maxAttempts) {
+    throw new Error('Timeout waiting for user interaction');
+  }
+
+  // Remove the menu before taking the screenshot
+  await page.evaluate(() => {
+    const menu = document.getElementById('control-menu');
+    if (menu) menu.remove();
+  });
+
+  // Set full size for the screenshot
+  await page.setViewport({
+    width: viewportWidth,
+    height: screenshotHeight,
+    deviceScaleFactor: 2
+  });
+
+  // Take the screenshot
+  const screenshotName = generateScreenshotName(page.url());
+  const screenshotPath = `screenshots/${screenshotName}.png`;
+  const webpPath = `screenshots/${screenshotName}.webp`;
+
+  await page.screenshot({ 
+    path: screenshotPath,
+    clip: { x: 0, y: 0, width: viewportWidth, height: screenshotHeight }
+  });
+
+  // Convert to WebP
+  await sharp(screenshotPath)
+    .resize({
+      width: Math.round(viewportWidth * 0.5),
+      height: Math.round(screenshotHeight * 0.5),
+      fit: 'inside',
+      withoutEnlargement: true
+    })
+    .webp({ quality: 80 })
+    .toFile(webpPath);
+
+  console.log(`Screenshot saved: ${webpPath}`);
+
+  // Clean up temporary file
+  fs.unlinkSync(screenshotPath);
+  await browser.close();
+})();
+
+// Function to add virtual menu
+async function addControlMenu(page) {
+  await page.evaluate(() => {
+    const menu = document.createElement('div');
+    menu.id = 'control-menu';
+    menu.style.position = 'absolute';
+    menu.style.top = '10px';
+    menu.style.left = '10px';
+    menu.style.zIndex = '9999';
+    menu.style.background = 'rgba(0, 0, 0, 0.8)';
+    menu.style.padding = '20px';
+    menu.style.borderRadius = '10px';
+    menu.style.display = 'flex';
+    menu.style.gap = '20px';
+
+    const stopButton = document.createElement('button');
+    stopButton.innerText = 'STOP'; // Translated from "СТОП"
+    stopButton.style.padding = '15px 30px';
+    stopButton.style.fontSize = '24px';
+    stopButton.style.background = '#ff4444';
+    stopButton.style.color = 'white';
+    stopButton.style.border = 'none';
+    stopButton.style.cursor = 'pointer';
+    stopButton.style.borderRadius = '8px';
+    stopButton.onclick = () => console.log('STOP_PRESSED');
+
+    const continueButton = document.createElement('button');
+    continueButton.innerText = 'CONTINUE'; // Translated from "ПРОДОЛЖИТЬ"
+    continueButton.style.padding = '15px 30px';
+    continueButton.style.fontSize = '24px';
+    continueButton.style.background = '#44ff44';
+    continueButton.style.color = 'white';
+    continueButton.style.border = 'none';
+    continueButton.style.cursor = 'pointer';
+    continueButton.style.borderRadius = '8px';
+    continueButton.onclick = () => console.log('CONTINUE_PRESSED');
+
+    menu.appendChild(stopButton);
+    menu.appendChild(continueButton);
+    document.body.appendChild(menu);
+  });
+}
+
+// Generate filename from URL
+function generateScreenshotName(url) {
+  const parsedUrl = new URL(url);
   const pathParts = parsedUrl.pathname.split('/').filter(Boolean);
-  
   let screenshotName;
-  if (pathParts.length > 0) { 
+
+  if (pathParts.length > 0) {
     if (pathParts[pathParts.length - 1] === 'index.html') {
       screenshotName = pathParts[pathParts.length - 2] || parsedUrl.hostname.split('.')[0];
-    } else { 
+    } else {
       screenshotName = pathParts[pathParts.length - 1];
     }
-  } else { 
-    // Если путь пустой (корневой домен), используем полное имя домена
+  } else {
     screenshotName = parsedUrl.hostname;
   }
-  console.log('Generated screenshotName:', screenshotName);
-
-  while (attempt < maxAttempts && !validScreenshot) {
-    // Calculate delay based on attempt number
-    const delay = attempt === 0 ? 15000 : // 15s for first attempt
-                  attempt === 1 ? 30000 : // 30s for second attempt
-                  60000; // 1 minute for subsequent attempts
-    
-    await new Promise(resolve => setTimeout(resolve, delay));
-    
-    // Perform full scroll cycle
-    for (let i = 0; i < 2; i++) {
-      await page.evaluate(() => window.scrollBy(0, window.innerHeight));
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Pause for content loading
-    }
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await new Promise(resolve => setTimeout(resolve, 3000)); // Final rendering delay
-    
-    // Create and convert screenshot
-    const screenshotPath = `screenshots/${screenshotName}.png`;
-    const webpPath = `screenshots/${screenshotName}.webp`;
-    
-    await page.screenshot({ 
-      path: screenshotPath,
-      clip: {
-        x: 0,
-        y: 0,
-        width: viewportWidth,
-        height: viewportHeight
-      }
-    });
-    
-    // Convert to WebP and check size
-    try {
-      await sharp(screenshotPath)
-        .resize({
-          width: Math.round(viewportWidth * 0.5),
-          height: Math.round(viewportHeight * 0.5),
-          fit: 'inside',
-          withoutEnlargement: true
-        })
-        .webp({ quality: 80 })
-        .toFile(webpPath);
-
-      const fs = require('fs');
-      const stats = fs.statSync(webpPath);
-      const fileSizeInKB = stats.size / 1024;
-
-      if (fileSizeInKB > 10) { // 10KB threshold
-        validScreenshot = true;
-        console.log(`Valid screenshot captured: ${webpPath} (${fileSizeInKB.toFixed(2)} KB)`);
-      } else {
-        console.log(`Screenshot too small (${fileSizeInKB.toFixed(2)} KB), retrying...`);
-      }
-    } catch (err) {
-      console.error('Error checking screenshot size:', err);
-    }
-
-    attempt++;
-  }
-
-  if (!validScreenshot) {
-    throw new Error('Failed to capture valid screenshot after maximum attempts');
-  }
-
-  try {
-    // Clean up temporary PNG file
-    const fs = require('fs');
-    fs.unlinkSync(`screenshots/${screenshotName}.png`);
-  } catch (err) {
-    console.error('Error cleaning up temporary file:', err);
-  } finally {
-    await browser.close();
-  }
-})();
+  return screenshotName;
+}
