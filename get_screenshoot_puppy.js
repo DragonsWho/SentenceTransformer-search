@@ -26,8 +26,9 @@ const sharp = require('sharp');
   }
   
   // Navigate to URL with basic wait
+  console.log('Navigating to:', url);
   await page.goto(url, {
-    waitUntil: 'domcontentloaded',
+    waitUntil: 'networkidle0', // Ждём завершения сетевых запросов
     timeout: 300000 // 5 minutes
   });
 
@@ -35,6 +36,7 @@ const sharp = require('sharp');
   await page.waitForSelector('body', {
     timeout: 300000 // 5 minutes
   });
+  console.log('Page URL after navigation:', page.url());
 
   // Screenshot schedule: first after 15s, second after 30s, then every minute for 10 minutes
   const maxAttempts = 12; // 15s, 30s, then 10 minutes
@@ -48,14 +50,15 @@ const sharp = require('sharp');
   let screenshotName;
   if (pathParts.length > 0) { 
     if (pathParts[pathParts.length - 1] === 'index.html') {
-      screenshotName = pathParts[pathParts.length - 2] || 
-                      url.hostname.split('.')[0];
+      screenshotName = pathParts[pathParts.length - 2] || parsedUrl.hostname.split('.')[0];
     } else { 
       screenshotName = pathParts[pathParts.length - 1];
     }
   } else { 
-    screenshotName = url.hostname.split('.')[0];
+    // Если путь пустой (корневой домен), используем полное имя домена
+    screenshotName = parsedUrl.hostname;
   }
+  console.log('Generated screenshotName:', screenshotName);
 
   while (attempt < maxAttempts && !validScreenshot) {
     // Calculate delay based on attempt number
@@ -72,6 +75,7 @@ const sharp = require('sharp');
     }
     await page.evaluate(() => window.scrollTo(0, 0));
     await new Promise(resolve => setTimeout(resolve, 3000)); // Final rendering delay
+    
     // Create and convert screenshot
     const screenshotPath = `screenshots/${screenshotName}.png`;
     const webpPath = `screenshots/${screenshotName}.webp`;

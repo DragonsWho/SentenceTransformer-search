@@ -13,6 +13,7 @@ from components.traffic_analyzer import TrafficAnalyzer
 from components.js_json_extractor import extract_js_json
 from components.crawler import crawl_url
 
+
 def setup_logging():
     os.makedirs("logs", exist_ok=True)
     date_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")

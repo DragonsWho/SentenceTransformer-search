@@ -587,3 +587,45 @@
   Successfully processed: 1
   Failed to process: 0
   Visual analysis failures: 0
+
+[2025-03-07 18:58:35] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-07 19:43:47] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+  Skipped (already in database): 0
+
+[2025-03-07 19:47:40] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0
+
+[2025-03-07 19:50:32] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 1
+  Skipped (already in database): 0
+  Visual analysis failed URLs (VPN required):
+    - https://externalpressure.neocities.org/
+
+[2025-03-07 19:53:20] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 1
+  Visual analysis failed URLs (VPN required):
+    - https://externalpressure.neocities.org/
+
+[2025-03-07 20:03:41] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Visual analysis failures: 0

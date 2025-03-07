@@ -76,6 +76,4 @@ Harem is a tag for games where there is an explicit choice of at least a dozen g
 
 
 
-Prefer to use the correct spellings of the authors' names from the list below. If there are multiple authors or translators, specify them as separate json entries. If the author is not listed in the game, write "Anonymous"
-
-
+Note: If the game has multiple authors or includes translators, list them in the "author" field as an array of separate names (e.g., "author": ["Lekah", "Dragon's Whore"]), similar to the tags format. Use the correct spellings from the provided author list; if an author isn’t listed in the game, include "Anonymous" in the array.

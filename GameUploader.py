@@ -190,6 +190,7 @@ class TagManager:
             print(f'Downloaded {len(all_tags)} existing tags')
             
             # Создаем словарь для быстрого поиска тегов по имени
+            self.existing_tags = {}  # Сбрасываем словарь перед повторным заполнением
             for tag in all_tags:
                 # Приводим все имена к нижнему регистру для нечувствительного к регистру поиска
                 tag_name_lower = tag['name'].lower()
@@ -290,6 +291,7 @@ class TagManager:
         
         # Проверяем, существует ли тег
         if tag_name_lower in self.existing_tags:
+            print(f"Found existing tag: {tag_name} -> {self.existing_tags[tag_name_lower]['id']}")
             return self.existing_tags[tag_name_lower]['id']
         
         # Если тег не существует, создаем новый
@@ -325,6 +327,7 @@ class GameUploader:
             
             # Загружаем все существующие теги
             self.tag_manager.get_all_tags()
+            print(f"Loaded {len(self.tag_manager.existing_tags)} tags into cache")
             
             # Инициализируем менеджер авторов
             self.author_manager = AuthorManager(self.base_url, self.token)
