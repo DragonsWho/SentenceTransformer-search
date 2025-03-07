@@ -2,6 +2,7 @@ import os
 import asyncio
 import sys
 import json
+import subprocess
 from components.grok3_api import GrokAPI
 
 # Константы
@@ -24,6 +25,34 @@ def load_game_text(md_path):
         raise FileNotFoundError(f"Game text file not found: {md_path}")
     with open(md_path, 'r', encoding='utf-8') as f:
         return f.read()
+
+def get_authors_list():
+    """Получает список авторов из api_authors.py."""
+    try:
+        result = subprocess.run(
+            ["python", "components/api_authors.py"], 
+            capture_output=True, 
+            text=True, 
+            check=True
+        )
+        return result.stdout.strip()
+    except Exception as e:
+        print(f"Error getting authors list: {str(e)}")
+        return ""
+
+def get_tag_categories():
+    """Получает категории тегов из api_tags.py."""
+    try:
+        result = subprocess.run(
+            ["python", "components/api_tags.py"], 
+            capture_output=True, 
+            text=True, 
+            check=True
+        )
+        return result.stdout.strip()
+    except Exception as e:
+        print(f"Error getting tag categories: {str(e)}")
+        return ""
 
 async def run_vision_query(webp_path, max_retries=3):
     """Запускает vision_query.py для анализа скриншота."""
@@ -69,7 +98,20 @@ async def summarize_md_file(md_file, grok_api, mode="sent_search"):
                 "which can be used to enhance the game's description."
             )
 
-    full_prompt = f"{prompt}\n\n=== Game Text ===\n{game_text}{vision_description}"
+    # Добавляем данные об авторах и тегах только для режима catalog
+    additional_data = ""
+    if mode == "catalog":
+        print("Fetching authors and tag categories for catalog mode...")
+        authors_list = get_authors_list()
+        tag_categories = get_tag_categories()
+        
+        if authors_list:
+            additional_data += f"\n\n=== Available Authors ===\n{authors_list}\n"
+        
+        if tag_categories:
+            additional_data += f"\n\n=== Available Tag Categories ===\n{tag_categories}\n"
+
+    full_prompt = f"{prompt}{additional_data}\n\n=== Game Text ===\n{game_text}{vision_description}"
     print(f"Sending prompt to Grok API for {md_file} in {mode} mode...")
 
     response = grok_api.ask(full_prompt, timeout=120)

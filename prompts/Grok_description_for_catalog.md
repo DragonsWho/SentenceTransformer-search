@@ -72,90 +72,10 @@ Overall, all tags should reflect key concepts in the game, not one-off mentions,
 Tag “succubus” only if the games themselves have succubi in them! 
 Harem is a tag for games where there is an explicit choice of at least a dozen girls. Just having promiscuous sex doesn't count.
 
-
-[
-    {
-      "category_name": "Gameplay",
-      "tags": [ "Character Creation", "Power Fantasy", "World Building", "Waifu Picker", "Companion Builder", "Missions", "Drawback Focus", "Story Builder", "Poor Quality", "Meta", "Jumpchain", "RYOA", "Co-op", "Complex", "Minigames"
-      ]
-    },
-    {
-      "category_name": "Rating",
-      "tags": [ "SFW", "Ecchi", "NSFW", "Extreme"
-      ]
-    },
-    {
-      "category_name": "Playtime",
-      "tags": [ "1min", "5min", "15min", "30min", "60+min"
-      ]
-    },
-    {
-      "category_name": "Interactivity",
-      "tags": [ "Static", "Interactive", "Interactive Port", "Interactive Other"
-      ]
-    },
-    {
-      "category_name": "Status",
-      "tags": [ "Full", "Upd", "Demo", "DLC"
-      ]
-    },
-    {
-      "category_name": "POV",
-      "tags": [ "MalePov", "FemPov", "FutaPov", "Monster Pov", "Custom Pov"
-      ]
-    },
-    {
-      "category_name": "Player Sexual Role",
-      "tags": [ "Masochist", "Sub", "Switch", "Dominant", "Sadistic", "Equal"
-      ]
-    },
-    {
-      "category_name": "Tone",
-      "tags": [ "Playful", "Serious", "Romantic", "Comfy", "Slutty", "Funny", "Dark"
-      ]
-    },
-    {
-      "category_name": "Power Level",
-      "tags": [ "Mundane", "Superhuman", "Godlike"
-      ]
-    },
-    {
-      "category_name": "Visual Style",
-      "tags": [ "Anime", "Comics", "AI Generated", "3D", "Real", "Text-Only"
-      ]
-    },
-    {
-      "category_name": "Narrative Structure",
-      "tags": [ "Linear", "Branching", "Bunch of Endings", "Open-Ended", "Sandbox"
-      ]
-    },
-    {
-      "category_name": "Language",
-      "tags": [ "English", "Korean", "Chinese", "Spanish", "Hindi", "Arabic", "Portuguese", "Russian", "Japanese", "French", "German"
-      ]
-    },
-    {
-      "category_name": "Setting",
-      "tags": [ "Modern", "Alternate Reality", "Superheroes", "Fantasy", "Post-Apocalyptic", "Sci-Fi", "Historical", "Mythology", "Dystopia", "Urban Fantasy"
-      ]
-    },
-    {
-      "category_name": "Kinks",
-      "tags": [ "Seduction", "Sensual", "Happy Sex", "Consensual", "Vanilla", "Aftercare", "Exhibitionism", "BDSM", "Bondage", "Sex Toys", "Sex Machines", "Orgasm Denial", "Forced Orgasms", "Chastity", "Pegging", "Femdom", "Maledom", "Gentle Dom", "Role Reversal", "Crossdressing", "Gender Bender", "Sissy", "Futanari", "Yaoi", "Hard Gay", "Queer", "Lesbian", "Yuri", "Harem", "Milf", "Cuckold", "Cheating", "Incest", "Interracial", "Gangbang", "Free Use", "Happy Whoring", "Pregnancy", "Transformation", "Feminization", "Corruption", "Mind Control", "Monster Girls", "Pet Play", "Humiliation", "Monsters", "Tentacles", "Bullying", "Forced", "Hardcore", "Rape", "Slavery", "Blackmail", "Bestiality", "Dragons", "Ryona", "Torture", "Amputee", "Agony", "Guro", "Scat", "Furry"
-      ]
-    },
-    {
-      "category_name": "Custom",
-      "tags": [ "Banned on Reddit", "Base Builder", "Item Builder", "Threat Builder", "Kingdom Builder", "Resource Management", "Puzzle", "Roguelike", "FapRoulette", "Jerk Off Instruction", "Crossover", "Exploration", "Too Many Point Systems", "Single Choice", "Dungeon", "God", "Goddess", "Supernatural", "Eldritch", "Reincarnation", "Cultivation", "Curses", "Witch/Wizard", "Eromancy", "Fantasy Races", "Royalty", "Maid", "Aliens", "Android", "Machine", "AI", "Spaceship", "Time Travel", "Robotic", "Psionic", "Body Mods", "Robots", "Multiverse Travel", "Milking", "Vore", "Oviposition", "Watersport", "Extreme Sizes", "Inflation", "Clothing", "Foodplay", "Autofellatio", "Foot Fetish", "Forniphilia", "Pussy Focus", "Anal Focus", "Oral Focus", "Dick Focus", "Breeding", "Seedbed", "Parasite", "Magical Sex", "Time Stop", "Reverse Harem", "Age Regression", "Hyper", "Step-mom", "Step-sis", "Bimbofication", "Dollification", "Objectification", "Big Breasts", "Big Penis", "Hypnosis", "Nymphomania", "Swingers", "Pick-your-owner", "Living Suit", "Petrification", "Size Difference", "Sensory Deprivation", "Uniform", "Femboy", "Evil", "Kidnapping", "Betrayal", "Revenge", "Isolation", "NTR", "Prostitution", "Drugs", "Manipulation", "Obsession", "Demon", "Angel", "Anthro", "Kemonomimi", "Shapeshifter", "Zombies", "Yokai", "Demihuman", "Giant", "Elf", "Succubus", "Kitsune", "Foxgirl", "Cowgirl", "Genie", "Amazon", "Warrior", "Vampire", "Werewolf", "Ghost", "Victorian Era", "Wild West", "World War", "Steampunk", "Prison", "Hospital", "War", "Pirate", "Sports", "Cosplay", "Worship", "Escape", "Shortstack", "Halloween", "Luxury", "Slapstick", "Christmas", "Holidays", "Nerd", "Rivals to Lovers", "Beautiful", "Music", "Video", "Dark Humor", "Melancholic", "Waifu", "Husbando", "Combat", "Weapons", "Lewdification", "Monster Tamer", "Gift of Faves", "Heartwarming", "Taboo", "Strong Story", "Experimental", "Censored", "Weird", "Digital Art", "Realistic", "Schoolgirl", "Magic School", "LitRPG", "Space", "Lingerie", "Latex", "Shibari", "Blacked", "Bleached", "Public Use", "Body Swap", "Possession", "Mind Break", "Be a Monster", "Extreme Humiliation", "Master", "Slave Trainer", "Insect", "Punishments", "Translated"
-      ]
-    },
-    {
-      "category_name": "Genre",
-      "tags": [ "Power Slut", "Action", "Survival", "Slice of Life", "Lewd Adventure", "Adventure", "Mystery", "Horror", "Comedy", "Grimdark", "VillainPOV"
-      ]
-    }
-  ]
+ 
 
 
+
+Prefer to use the correct spellings of the authors' names from the list below. If there are multiple authors or translators, specify them as separate json entries. If the author is not listed in the game, write "Anonymous"
 
 
