@@ -279,11 +279,11 @@ async def main_async(force_screenshots=False):
             )
             if not success:
                 logger.error(f"Summarization failed for {url}: {error}")
-
-            # Добавляем паузу в 1 минуту (60 секунд)
-            logger.info("Pausing for 1 minute before next summarization...")
-            await asyncio.sleep(60)  # Пауза в 60 секунд
             
+            # Добавляем паузу в 1 минуту (60 секунд)
+            logger.info("Pausing for 1 min before next summarization...")
+            await asyncio.sleep(60)  # Пауза в 60 секунд
+
             # Добавляем вызов для catalog режима
             logger.info(f"Running summarization for {md_file} in catalog mode")
             success, output, error = await run_script_async(
@@ -293,13 +293,25 @@ async def main_async(force_screenshots=False):
             )
             if not success:
                 logger.error(f"Catalog summarization failed for {url}: {error}")
-
-            
         
         except Exception as e:
             logger.error(f"Unhandled exception processing URL {url}: {str(e)}")
             failed_urls.append(url)
     
+    # Запуск prepare_and_upload.py
+    test_mode = '--test' in sys.argv
+    logger.info(f"Running prepare_and_upload.py in {'test' if test_mode else 'live'} mode")
+    upload_args = " --test" if test_mode else ""
+    success, output, error = await run_script_async(
+        "prepare_and_upload.py",
+        upload_args,
+        max_retries=MAX_RETRIES
+    )
+    if not success:
+        logger.error(f"prepare_and_upload.py failed: {error}")
+    else:
+        logger.info("prepare_and_upload.py completed successfully")
+
     # Генерация отчёта
     logger.info("Generating final report")
     timestamp = datetime.datetime.now().strftime('[%Y-%m-%d %H:%M:%S]')

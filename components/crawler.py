@@ -52,8 +52,11 @@ def crawl_url(url):
         # Extract game title from URL
         game_title = url.split('/')[-2].replace('_', ' ')
         
-        # Add URL and title (marked as possible) to the beginning of markdown content
-        md_content = f"Game URL: {url}\n\nPossible title: {game_title}\n\n{md_content}"
+        # Get game URL without 'project.json'
+        game_url = '/'.join(url.split('/')[:-1]) + '/'  # Отсекаем последний сегмент и добавляем слеш
+        
+        # Add game URL and title (marked as possible) to the beginning of markdown content
+        md_content = f"Game URL: {game_url}\n\nPossible title: {game_title}\n\n{md_content}"
         
         # Save Markdown
         with open(md_filename, 'w', encoding='utf-8') as f:
