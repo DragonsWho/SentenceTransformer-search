@@ -4,13 +4,71 @@ import os
 import shutil
 import subprocess
 import sys
+import json
+import re
 from pathlib import Path
 
 # Константы
 CATALOG_JSON_DIR = "catalog_json"
 SCREENSHOTS_DIR = "screenshots"
 NEW_GAMES_DIR = "New_Games"
+PROCESSED_GAMES_DIR = "Processed_Games"  # Новая папка для обработанных файлов
 GAME_UPLOADER_SCRIPT = "GameUploader.py"
+
+def remove_json_comments(json_text):
+    """Удаляет однострочные комментарии вида // из JSON, сохраняя // в строках."""
+    lines = json_text.splitlines()
+    cleaned_lines = []
+    in_string = False
+    i = 0
+
+    while i < len(lines):
+        line = lines[i]
+        cleaned_line = ""
+        j = 0
+
+        while j < len(line):
+            if line[j] == '"' and (j == 0 or line[j-1] != '\\'):
+                in_string = not in_string
+                cleaned_line += line[j]
+                j += 1
+            elif not in_string and j + 1 < len(line) and line[j:j+2] == '//':
+                break
+            else:
+                cleaned_line += line[j]
+                j += 1
+
+        cleaned_line = cleaned_line.rstrip()
+        if cleaned_line:
+            cleaned_lines.append(cleaned_line)
+        i += 1
+
+    return '\n'.join(cleaned_lines)
+
+def validate_and_clean_json(json_path):
+    """Проверяет и очищает JSON от комментариев, возвращает оригинал и очищенный текст."""
+    try:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            original_content = f.read()
+        
+        # Удаляем комментарии
+        cleaned_content = remove_json_comments(original_content)
+        
+        # Для диагностики: выводим очищенный контент, если есть ошибка
+        try:
+            json.loads(cleaned_content)
+        except json.JSONDecodeError as e:
+            print(f"Invalid JSON in {json_path}: {e}")
+            print("Cleaned content:")
+            lines = cleaned_content.splitlines()
+            for i, line in enumerate(lines, 1):
+                print(f"{i:3d}: {line}")
+            return None, None
+        
+        return original_content, cleaned_content
+    except Exception as e:
+        print(f"Error processing JSON {json_path}: {e}")
+        return None, None
 
 def prepare_game_files(test_mode=False):
     """Копирует JSON и скриншот в New_Games для каждой игры."""
@@ -32,11 +90,24 @@ def prepare_game_files(test_mode=False):
             json_src = os.path.join(CATALOG_JSON_DIR, json_file)
             screenshot_src = os.path.join(SCREENSHOTS_DIR, f"{project_name}.webp")
             json_dest = os.path.join(NEW_GAMES_DIR, json_file)
+            json_with_comments_dest = os.path.join(NEW_GAMES_DIR, f"{project_name}_with_comments.json")
             screenshot_dest = os.path.join(NEW_GAMES_DIR, f"{project_name}.webp")
 
-            # Копируем JSON
-            shutil.copy2(json_src, json_dest)
-            print(f"Copied JSON: {json_file} to {NEW_GAMES_DIR}")
+            # Очищаем и проверяем JSON
+            original_json, cleaned_json = validate_and_clean_json(json_src)
+            if cleaned_json is None:
+                success = False
+                continue
+
+            # Сохраняем очищенный JSON
+            with open(json_dest, 'w', encoding='utf-8') as f:
+                f.write(cleaned_json)
+            print(f"Copied cleaned JSON: {json_file} to {NEW_GAMES_DIR}")
+
+            # Сохраняем копию с комментариями
+            with open(json_with_comments_dest, 'w', encoding='utf-8') as f:
+                f.write(original_json)
+            print(f"Copied JSON with comments: {project_name}_with_comments.json to {NEW_GAMES_DIR}")
 
             # Копируем скриншот, если он существует
             if os.path.exists(screenshot_src):
@@ -78,6 +149,16 @@ def run_game_uploader():
         print(f"Unexpected error running {GAME_UPLOADER_SCRIPT}: {e}")
         return False
 
+def move_comments_files_to_processed():
+    """Переносит файлы с комментариями в Processed_Games."""
+    os.makedirs(PROCESSED_GAMES_DIR, exist_ok=True)
+    for file in os.listdir(NEW_GAMES_DIR):
+        if file.endswith("_with_comments.json"):
+            src = os.path.join(NEW_GAMES_DIR, file)
+            dest = os.path.join(PROCESSED_GAMES_DIR, file)
+            shutil.move(src, dest)
+            print(f"Moved {file} to {PROCESSED_GAMES_DIR}")
+
 def main():
     test_mode = "--test" in sys.argv
     print(f"Running in {'test' if test_mode else 'live'} mode")
@@ -87,15 +168,18 @@ def main():
         print("Failed to prepare game files. Aborting.")
         sys.exit(1)
 
-    # Если не тестовый режим, запускаем GameUploader
+    # Если не тестовый режим, запускаем GameUploader и переносим файлы
     if not test_mode:
         print("Starting GameUploader...")
         if not run_game_uploader():
             print("GameUploader failed!")
             sys.exit(1)
         print("Game uploading completed successfully!")
+        
+        # Переносим файлы с комментариями в Processed_Games
+        move_comments_files_to_processed()
     else:
-        print("Test mode: Skipping GameUploader execution.")
+        print("Test mode: Skipping GameUploader execution and file moving.")
 
 if __name__ == "__main__":
     main()

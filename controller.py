@@ -279,10 +279,9 @@ async def main_async(force_screenshots=False):
             )
             if not success:
                 logger.error(f"Summarization failed for {url}: {error}")
-            
-            # Добавляем паузу в 1 минуту (60 секунд)
-            logger.info("Pausing for 1 min before next summarization...")
-            await asyncio.sleep(60)  # Пауза в 60 секунд
+             
+            logger.info("Pausing for 5s before next summarization...")
+            await asyncio.sleep(5)  # Пауза в 5 секунд
 
             # Добавляем вызов для catalog режима
             logger.info(f"Running summarization for {md_file} in catalog mode")

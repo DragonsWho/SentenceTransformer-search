@@ -10,9 +10,9 @@ Deliver your response in the following JSON structure:
     "title": "Game Title",
     "description": "<p>Your game description here...</p>",
     "author": "Author Name",
-    "tags": [ "Tag1", 
-              "Tag2",  
-              "Tag3", 
+    "tags": [ "Tag1",   // Category 1
+              "Tag2",   // Category 1
+              "Tag3",   // Category 2
               ...],
     "img_or_link": "link",  (Always use "Link")
     "iframe_url": "https://example.com/"
@@ -36,12 +36,33 @@ Tag selection requirements (mandatory adherence to these counts):
 • Kinks: Select 0-7 tags
 • Custom: Select 5-15 tags (Use existing tags wherever possible)
 
+Each tag should be on a separate line
+For each tag in the tags array, add a short comment in the format // <explanation> explaining which category the tag belongs to and explaining why this tag was chosen based on the game content.
+Ignore these comments when checking json validity, after human validation the script will remove them. 
 
 If the game has specific themes, aesthetics, mechanics, or content not covered by standard tags, please add appropriate custom tags to highlight these features. Do not create new tags to describe unique items, characters, or areas. Be sure to create a tag if the game represents some popular fandom and it is a major part of the story, i.e. the game is a fanfic.
 
 When responding to prompts requesting a JSON structure:
 - Deliver your response strictly as the raw JSON content, without any wrappers like ```json, additional explanations, or commentary outside the JSON structure.
 - Ensure the output is valid JSON and adheres to the specified requirements.
+
+
+Clarifications on which tags to use:
+
+"Minigames" - Use this tag only in the most standout cases when the game features small interactive mini-games. This is incredibly rare, so apply this tag sparingly.
+
+"Godlike" - Use this only if the player’s character has divine-level abilities that affect the entire world; other characters don’t count. Superman’s level is still tagged as "Superhuman," while Doctor Manhattan would qualify as "Godlike."
+
+"Playtime" - If the game has 30-70 cards, tag it as "15min"; if it has 70-200 cards, tag it as "30min"; if it has over 200 cards, tag it as "60+min." Small games will be rare.
+
+"Dystopia" and similar strong, negative tags should be used sparingly. Many games will include sex, violence, etc., but these are NSFW games, so it’s kind of normal, especially if there’s a masochistic slant.
+
+"Elf," "Giant," "Vampire," etc. - Include these only if they are one of the game’s main themes. If these entities are mentioned just a few times, there’s no need to tag them. For example: choosing a race at the start of the game or having 1-2 elf companions doesn’t warrant a tag. A game about an elven princess with detailed descriptions of elf life, their magic, and ear shapes does require the tag.
+
+Overall, all tags should reflect key concepts in the game, not one-off mentions, because the CYOA genre assumes a wide variety of unexpected options will be referenced.
+
+
+
 
 [
     {
@@ -125,3 +146,7 @@ When responding to prompts requesting a JSON structure:
       ]
     }
   ]
+
+
+
+

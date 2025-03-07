@@ -511,19 +511,31 @@ def move_processed_files(game_data, processed_folder):
     """Перемещает обработанные файлы в указанную папку"""
     try:
         # Создаем папку для обработанных файлов, если она не существует
-        if not os.path.exists(processed_folder):
-            os.makedirs(processed_folder)
-            print(f"Created folder for processed files: {processed_folder}")
-        
-        # Получаем базовое имя JSON файла
-        json_path = None
-        for file in os.listdir("New_Games"):
-            if file.endswith(".json"):
-                with open(os.path.join("New_Games", file), 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                    if data.get('title') == game_data['title']:
-                        json_path = os.path.join("New_Games", file)
-                        break
+        os.makedirs(processed_folder, exist_ok=True)
+        print(f"Ensured folder exists: {processed_folder}")
+
+        # Используем путь к JSON из game_data, если он есть
+        json_path = game_data.get('json_path')
+        if not json_path or not os.path.exists(json_path):
+            # Если путь не указан или файл не существует, ищем вручную
+            json_path = None
+            for file in os.listdir("New_Games"):
+                if file.endswith(".json"):
+                    candidate_path = os.path.join("New_Games", file)
+                    if os.path.getsize(candidate_path) == 0:
+                        print(f"Warning: Found empty file {file}")
+                        continue
+                    try:
+                        with open(candidate_path, 'r', encoding='utf-8') as f:
+                            data = json.load(f)
+                            if data.get('title') == game_data['title']:
+                                json_path = candidate_path
+                                break
+                    except json.JSONDecodeError as e:
+                        print(f"Error decoding JSON in {candidate_path}: {e}")
+                        with open(candidate_path, 'r', encoding='utf-8') as f:
+                            print(f"Content of problematic file:\n{f.read()}")
+                        continue
         
         if not json_path:
             print(f"Warning: Could not find JSON file for game {game_data['title']}")
@@ -547,18 +559,14 @@ def move_processed_files(game_data, processed_folder):
         if game_data['img_or_link'] == 'img' and game_data.get('cyoa_pages'):
             pages_folder = os.path.join("New_Games", base_name)
             if os.path.isdir(pages_folder):
-                # Создаем такую же папку в processed_folder
                 processed_pages_folder = os.path.join(processed_folder, base_name)
-                if not os.path.exists(processed_pages_folder):
-                    os.makedirs(processed_pages_folder)
+                os.makedirs(processed_pages_folder, exist_ok=True)
                 
-                # Перемещаем все файлы из папки страниц
                 for page_file in os.listdir(pages_folder):
                     page_path = os.path.join(pages_folder, page_file)
                     if os.path.isfile(page_path):
                         shutil.move(page_path, os.path.join(processed_pages_folder, page_file))
                 
-                # Удаляем пустую исходную папку
                 if len(os.listdir(pages_folder)) == 0:
                     os.rmdir(pages_folder)
                 
@@ -572,20 +580,14 @@ def move_processed_files(game_data, processed_folder):
 def load_games_from_folder(folder_path):
     """Загружает все JSON-файлы из указанной папки и их соответствующие изображения"""
     games = []
-    
-    # Получаем список всех JSON-файлов
     json_files = glob.glob(os.path.join(folder_path, "*.json"))
     
     for json_file in json_files:
         try:
-            # Загружаем данные из JSON-файла
             with open(json_file, 'r', encoding='utf-8') as f:
                 game_data = json.load(f)
             
-            # Получаем имя файла без расширения
             base_name = os.path.splitext(os.path.basename(json_file))[0]
-            
-            # Ищем соответствующее изображение для обложки (проверяем различные форматы)
             image_path = None
             
             for ext in EXTENSION_TO_MIME.keys():
@@ -598,53 +600,40 @@ def load_games_from_folder(folder_path):
                 print(f"Warning: Cover image not found for {json_file}")
                 continue
             
-            # Добавляем путь к изображению в game_data
             game_data['image'] = image_path
+            game_data['json_path'] = json_file  # Добавляем путь к JSON
             
-            # Добавляем необходимые поля, если их нет
             if 'img_or_link' not in game_data:
-                # По умолчанию считаем, что это игра с изображениями
                 game_data['img_or_link'] = "img"
             
-            # Если это "link"-игра, проверяем наличие iframe_url
             if game_data['img_or_link'] == 'link' and 'iframe_url' not in game_data:
                 print(f"Warning: iframe_url is missing for link-type game in {json_file}")
                 continue
             
-            # Если это "img"-игра, ищем CYOA страницы
             if game_data['img_or_link'] == 'img':
-                # Проверяем, есть ли уже указанные страницы в JSON
                 if 'cyoa_pages' not in game_data or not game_data['cyoa_pages']:
-                    # Ищем страницы в папке с тем же именем, что и JSON файл
                     pages_folder = os.path.join(folder_path, base_name)
                     if os.path.isdir(pages_folder):
-                        # Получаем список всех изображений в папке
                         page_files = []
                         for ext in EXTENSION_TO_MIME.keys():
                             page_files.extend(glob.glob(os.path.join(pages_folder, f"*{ext}")))
-                        
-                        # Сортируем файлы по имени
                         page_files.sort()
-                        
                         if page_files:
                             game_data['cyoa_pages'] = page_files
                         else:
-                            print(f"Warning: No CYOA pages found in folder {pages_folder} for {json_file}")
+                            print(f"Warning: No CYOA pages found in folder {pages_folder}")
                     else:
-                        print(f"Warning: CYOA pages folder {pages_folder} not found for {json_file}")
+                        print(f"Warning: CYOA pages folder {pages_folder} not found")
                 
-                # Если до сих пор нет страниц, пропускаем игру
                 if 'cyoa_pages' not in game_data or not game_data['cyoa_pages']:
                     print(f"Warning: No CYOA pages specified for img-type game in {json_file}")
                     continue
             
-            # Проверяем наличие поля uploader
             if 'uploader' not in game_data:
-                game_data['uploader'] = "mar1q123caruaaw"  # значение по умолчанию из примера
+                game_data['uploader'] = "mar1q123caruaaw"
             
             games.append(game_data)
             print(f"Loaded game: {game_data['title']} ({game_data['img_or_link']})")
-            
         except Exception as e:
             print(f"Error loading {json_file}: {e}")
     

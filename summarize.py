@@ -27,7 +27,7 @@ def load_game_text(md_path):
 
 async def run_vision_query(webp_path, max_retries=3):
     """Запускает vision_query.py для анализа скриншота."""
-    from controller import run_script_async  # Импортируем из controller для переиспользования
+    from controller import run_script_async
     success, output, error = await run_script_async("vision_query.py", webp_path, max_retries=max_retries)
     if success and output and not output.startswith("Visual analysis error:"):
         return output.strip()
@@ -40,7 +40,6 @@ async def summarize_md_file(md_file, grok_api, mode="sent_search"):
     md_path = os.path.join(MARKDOWN_DIR, md_file)
     webp_path = f"screenshots/{project_name}.webp"
     
-    # Выбираем путь сохранения и промпт в зависимости от режима
     if mode == "sent_search":
         prompt_path = SENT_SEARCH_PROMPT_PATH
         output_dir = SUMMARIES_DIR
@@ -52,7 +51,6 @@ async def summarize_md_file(md_file, grok_api, mode="sent_search"):
     else:
         raise ValueError(f"Unknown mode: {mode}")
 
-    # Загружаем промпт и текст игры
     try:
         prompt = load_prompt(prompt_path)
         game_text = load_game_text(md_path)
@@ -60,7 +58,6 @@ async def summarize_md_file(md_file, grok_api, mode="sent_search"):
         print(f"Error loading files for {md_file}: {str(e)}")
         return False
 
-    # Анализируем скриншот, если он есть (только для передачи в API)
     vision_description = ""
     if os.path.exists(webp_path):
         vision_output = await run_vision_query(webp_path)
@@ -72,43 +69,42 @@ async def summarize_md_file(md_file, grok_api, mode="sent_search"):
                 "which can be used to enhance the game's description."
             )
 
-    # Формируем полный запрос с текстом игры
     full_prompt = f"{prompt}\n\n=== Game Text ===\n{game_text}{vision_description}"
+    print(f"Sending prompt to Grok API for {md_file} in {mode} mode...")
 
-    # Отправляем запрос через GrokAPI
-    response = grok_api.ask(full_prompt, timeout=120)  # Увеличенный таймаут для большого текста
+    response = grok_api.ask(full_prompt, timeout=120)
     if response.startswith("Error:"):
         print(f"Grok 3 API failed for {md_file}: {response}")
         return False
 
-    # Сохраняем результат
+    print(f"API response for {md_file}: {response[:100]}...")
+
     os.makedirs(output_dir, exist_ok=True)
     if mode == "sent_search":
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(response)
         print(f"Summary saved to {output_path}")
     elif mode == "catalog":
-        # Сохраняем чистый JSON-ответ от API без изменений
+        # Сохраняем ответ как есть, с комментариями, без проверки валидности
         try:
-            # Проверяем, что ответ является валидным JSON
-            json.loads(response)
             with open(output_path, 'w', encoding='utf-8') as f:
-                f.write(response)  # Сохраняем как есть, без форматирования
-            print(f"Catalog JSON saved to {output_path}")
-        except json.JSONDecodeError:
-            print(f"Error: API response for {md_file} is not valid JSON: {response}")
+                f.write(response)
+            print(f"Catalog JSON (with comments) saved to {output_path}")
+            if not os.path.exists(output_path):
+                print(f"Warning: File {output_path} was not created!")
+        except Exception as e:
+            print(f"Error saving JSON for {md_file}: {e}")
             return False
 
     return True
 
 async def main():
-    """Обрабатывает один файл с учетом аргументов командной строки."""
     if len(sys.argv) < 2:
         print("Usage: python summarize.py <markdown_file> [--mode sent_search|catalog]")
         sys.exit(1)
 
     md_file = sys.argv[1]
-    mode = "sent_search"  # Режим по умолчанию
+    mode = "sent_search"
     if len(sys.argv) > 2 and sys.argv[2] == "--mode":
         if len(sys.argv) > 3:
             mode = sys.argv[3]
@@ -119,9 +115,7 @@ async def main():
             print("Error: --mode requires a value (sent_search or catalog)")
             sys.exit(1)
 
-    # Используем reuse_window=True и anonymous_chat=True
     grok_api = GrokAPI(reuse_window=True, anonymous_chat=True)
-    
     print(f"Processing {md_file} in {mode} mode...")
     success = await summarize_md_file(md_file, grok_api, mode=mode)
     if not success:
