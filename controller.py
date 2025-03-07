@@ -11,7 +11,7 @@ import random
 from components.traffic_analyzer import TrafficAnalyzer
 from components.js_json_extractor import extract_js_json
 from components.crawler import crawl_url
-from components.game_checker import GameChecker  # Импорт GameChecker
+from components.game_checker import GameChecker
 
 def setup_logging():
     os.makedirs("logs", exist_ok=True)
@@ -31,16 +31,7 @@ def setup_logging():
     return logging.getLogger()
 
 def run_script(script_name, args=None):
-    """
-    Runs an external script with advanced logging and checks
-    
-    Args:
-        script_name: The name of the script to run
-        args: Argument string for the script
-        
-    Returns:
-        tuple: (success, output, error)
-    """
+    # Оставляем без изменений
     if not os.path.exists(script_name):
         logger.error(f"Script file not found: {script_name}")
         return False, "", f"File not found: {script_name}"
@@ -91,18 +82,7 @@ def run_script(script_name, args=None):
         return False, "", str(e)
 
 async def run_script_async(script_name, args=None, max_retries=3, retry_delay=5):
-    """
-    Asynchronously runs an external script with retries
-    
-    Args:
-        script_name: The name of the script to run
-        args: Argument string for the script
-        max_retries: Maximum number of retries
-        retry_delay: Delay between retries in seconds
-        
-    Returns:
-        tuple: (success, output, error)
-    """
+    # Оставляем без изменений
     attempt = 0
     last_error = ""
     
@@ -137,7 +117,7 @@ async def run_script_async(script_name, args=None, max_retries=3, retry_delay=5)
     return False, "", last_error
 
 def check_prerequisites():
-    """Проверка необходимых условий перед запуском"""
+    # Оставляем без изменений
     prerequisites_met = True
     
     for directory in ["markdown", "summaries", "screenshots"]:
@@ -182,7 +162,6 @@ async def main_async(force_screenshots=False):
         logger.error("Prerequisites check failed. Please fix the issues above.")
         return
     
-    # Инициализация GameChecker
     game_checker = GameChecker()
     if not game_checker.login():
         logger.error("Failed to authenticate with GameChecker. Aborting.")
@@ -194,7 +173,8 @@ async def main_async(force_screenshots=False):
     failed_urls = []
     visual_analysis_failures = []
     processed_urls = []
-    skipped_urls = []  # Для учета пропущенных URL
+    skipped_urls = []
+    newly_processed_urls = []  # Отслеживаем только новые обработанные URL
     
     try:
         with open('links.txt', 'r') as f:
@@ -229,11 +209,10 @@ async def main_async(force_screenshots=False):
     for index, url in enumerate(urls, 1):
         logger.info(f"Processing URL {index}/{len(urls)}: {url}")
         
-        # Проверяем, существует ли игра в базе
         if game_checker.game_exists(url):
             logger.info(f"Skipping URL {url} as it already exists in the catalog")
             skipped_urls.append(url)
-            processed_urls.append(url)  # Считаем обработанным, чтобы статистика была корректной
+            processed_urls.append(url)
             continue
         
         try:
@@ -242,7 +221,6 @@ async def main_async(force_screenshots=False):
             md_file = f"{project_name}.md"
             md_path = f"markdown/{md_file}"
             
-            # Пробуем разные методы обработки
             if crawl_url(project_json_url):
                 logger.info(f"Text extracted via crawl_url for {url}")
             else:
@@ -271,9 +249,10 @@ async def main_async(force_screenshots=False):
                     continue
             
             processed_urls.append(url)
+            newly_processed_urls.append(url)  # Добавляем только новые URL
+            
             base_url = normalize_url(url).replace('/project.json', '/')
             
-            # Делаем или используем скриншот
             success, output, error = await create_screenshot(base_url, project_name)
             webp_path = f"screenshots/{project_name}.webp"
             if not success:
@@ -283,7 +262,6 @@ async def main_async(force_screenshots=False):
                 logger.error(f"Screenshot file not found after processing: {webp_path}")
                 visual_analysis_failures.append(base_url)
             
-            # Запускаем summarize.py с нужным режимом
             logger.info(f"Running summarization for {md_file} in sent_search mode")
             success, output, error = await run_script_async(
                 "summarize.py", 
@@ -309,20 +287,23 @@ async def main_async(force_screenshots=False):
             logger.error(f"Unhandled exception processing URL {url}: {str(e)}")
             failed_urls.append(url)
     
-    # Запуск prepare_and_upload.py
-    test_mode = '--test' in sys.argv
-    logger.info(f"Running prepare_and_upload.py in {'test' if test_mode else 'live'} mode")
-    upload_args = " --test" if test_mode else ""
-    success, output, error = await run_script_async(
-        "prepare_and_upload.py",
-        upload_args,
-        max_retries=MAX_RETRIES
-    )
-    if not success:
-        logger.error(f"prepare_and_upload.py failed: {error}")
+    # Запуск prepare_and_upload.py только если есть новые обработанные URL
+    if newly_processed_urls:
+        test_mode = '--test' in sys.argv
+        logger.info(f"Running prepare_and_upload.py in {'test' if test_mode else 'live'} mode")
+        upload_args = " --test" if test_mode else ""
+        success, output, error = await run_script_async(
+            "prepare_and_upload.py",
+            upload_args,
+            max_retries=MAX_RETRIES
+        )
+        if not success:
+            logger.error(f"prepare_and_upload.py failed: {error}")
+        else:
+            logger.info("prepare_and_upload.py completed successfully")
     else:
-        logger.info("prepare_and_upload.py completed successfully")
-
+        logger.info("No new URLs processed. Skipping prepare_and_upload.py execution.")
+    
     # Генерация отчёта
     logger.info("Generating final report")
     timestamp = datetime.datetime.now().strftime('[%Y-%m-%d %H:%M:%S]')
@@ -331,6 +312,7 @@ async def main_async(force_screenshots=False):
         f"\n{timestamp} Processing summary:",
         f"  Total URLs processed: {len(urls)}",
         f"  Successfully processed: {len(processed_urls)}",
+        f"  Newly processed: {len(newly_processed_urls)}",
         f"  Skipped (already in catalog): {len(skipped_urls)}",
         f"  Failed to process: {len(failed_urls)}",
         f"  Visual analysis failures: {len(visual_analysis_failures)}"
@@ -349,6 +331,11 @@ async def main_async(force_screenshots=False):
     if skipped_urls:
         report.append("  Skipped URLs (already in catalog):")
         for url in skipped_urls:
+            report.append(f"    - {url}")
+    
+    if newly_processed_urls:
+        report.append("  Newly processed URLs:")
+        for url in newly_processed_urls:
             report.append(f"    - {url}")
     
     for line in report:

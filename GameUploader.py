@@ -1,4 +1,4 @@
-#GameUploader.py
+# GameUploader.py
 
 import os
 import json
@@ -10,51 +10,46 @@ import mimetypes
 import sys
 import shutil
 import time
+import logging
 
 load_dotenv()
 
-# Допустимые MIME-типы изображений согласно схеме коллекции
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.FileHandler("logs/game_uploader.log"),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
+
 ALLOWED_IMAGE_MIME_TYPES = [
-    'image/png',
-    'image/jpeg',
-    'image/gif',
-    'image/webp', 
-    'image/avif',
-    'image/svg+xml'
+    'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'image/avif', 'image/svg+xml'
 ]
 
-# Соответствие расширений файлов MIME-типам
 EXTENSION_TO_MIME = {
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.gif': 'image/gif',
-    '.webp': 'image/webp',
-    '.avif': 'image/avif',
-    '.svg': 'image/svg+xml'
+    '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif', '.webp': 'image/webp', '.avif': 'image/avif', '.svg': 'image/svg+xml'
 }
 
 class AuthorManager:
     def __init__(self, base_url, token):
         self.base_url = base_url
         self.token = token
-        self.authors_cache = {}  # Кэш авторов: имя -> id
-        
+        self.authors_cache = {}
+        logger.info("AuthorManager initialized")
+
     def load_authors(self):
-        """Загружает всех авторов из API"""
+        logger.info("Loading existing authors from API")
         try:
             if not self.token:
                 raise Exception("Not authenticated")
-                
-            headers = {
-                'Authorization': self.token
-            }
-            
-            # Получаем всех авторов (с пагинацией)
+            headers = {'Authorization': self.token}
             all_authors = []
             page = 1
             per_page = 200
-            
             while True:
                 response = requests.get(
                     f'{self.base_url}/collections/authors/records',
@@ -62,69 +57,71 @@ class AuthorManager:
                     params={'page': page, 'perPage': per_page}
                 )
                 response.raise_for_status()
-                
                 data = response.json()
                 authors_chunk = data.get('items', [])
                 all_authors.extend(authors_chunk)
-                
-                # Проверяем, есть ли еще страницы
                 if len(authors_chunk) < per_page:
                     break
-                    
                 page += 1
-            
-            print(f'Downloaded {len(all_authors)} existing authors')
-            
-            # Создаем словарь для быстрого поиска авторов по имени
+            logger.info(f'Downloaded {len(all_authors)} existing authors')
             for author in all_authors:
                 self.authors_cache[author['name'].lower()] = author['id']
-            
             return all_authors
         except Exception as e:
-            print(f'Error getting existing authors: {e}')
+            logger.error(f'Error getting existing authors: {e}')
             return []
-    
+
     def create_author(self, name, description=""):
-        """Создает нового автора"""
+        logger.info(f"Creating new author: {name}")
         try:
             if not self.token:
                 raise Exception("Not authenticated")
-                
-            headers = {
-                'Authorization': self.token
-            }
-            
+            headers = {'Authorization': self.token}
             response = requests.post(
                 f'{self.base_url}/collections/authors/records',
                 headers=headers,
-                json={
-                    'name': name,
-                    'description': description
-                }
+                json={'name': name, 'description': description}
             )
             response.raise_for_status()
-            
             author_data = response.json()
-            print(f'Created author: {name} with ID: {author_data["id"]}')
-            
-            # Обновляем кэш
+            logger.info(f'Created author: {name} with ID: {author_data["id"]}')
             self.authors_cache[name.lower()] = author_data["id"]
-            
             return author_data["id"]
         except Exception as e:
-            print(f'Error creating author "{name}": {e}')
+            logger.error(f'Error creating author "{name}": {e}')
             return None
-    
+
     def get_or_create_author(self, name, description=""):
-        """Получает ID автора по имени или создает нового"""
+        # Поддержка списка авторов: обрабатываем только одного автора здесь
+        if isinstance(name, list):
+            logger.warning("get_or_create_author received a list; use get_or_create_authors for multiple authors")
+            if not name:
+                return None
+            name = name[0]  # Для обратной совместимости берём первого
         name_lower = name.lower()
-        
-        # Проверяем кэш
         if name_lower in self.authors_cache:
+            logger.info(f"Found existing author: {name} (ID: {self.authors_cache[name_lower]})")
             return self.authors_cache[name_lower]
-        
-        # Если автора нет в кэше, создаем нового
         return self.create_author(name, description)
+
+    def get_or_create_authors(self, authors, description=""):
+        """Обрабатывает список авторов и возвращает их ID."""
+        if not isinstance(authors, list):
+            authors = [authors]  # Преобразуем строку в список из одного элемента
+        author_ids = []
+        for name in authors:
+            if not name:
+                logger.warning("Empty author name encountered, skipping")
+                continue
+            name_lower = name.lower()
+            if name_lower in self.authors_cache:
+                logger.info(f"Found existing author: {name} (ID: {self.authors_cache[name_lower]})")
+                author_ids.append(self.authors_cache[name_lower])
+            else:
+                author_id = self.create_author(name, description)
+                if author_id:
+                    author_ids.append(author_id)
+        return author_ids
 
 class TagManager:
     def __init__(self):
@@ -132,43 +129,35 @@ class TagManager:
         self.email = os.getenv('EMAIL')
         self.password = os.getenv('PASSWORD')
         self.token = None
-        self.category_id = "phc2n4pqe7hxe36"  # ID категории Custom
-        self.existing_tags = {}  # Словарь для хранения существующих тегов (имя -> {id, description})
-        
+        self.category_id = "phc2n4pqe7hxe36"
+        self.existing_tags = {}
+        logger.info("TagManager initialized")
+
     def login(self):
-        """Авторизация в API"""
+        logger.info("Attempting TagManager login")
         try:
             response = requests.post(
                 f'{self.base_url}/collections/users/auth-with-password',
-                json={
-                    'identity': self.email,
-                    'password': self.password
-                }
+                json={'identity': self.email, 'password': self.password}
             )
             response.raise_for_status()
             data = response.json()
             self.token = data['token']
-            print('Successfully logged in')
+            logger.info('TagManager successfully logged in')
             return True
         except Exception as e:
-            print(f'Login error: {e}')
+            logger.error(f'TagManager login error: {e}')
             return False
-    
+
     def get_all_tags(self):
-        """Получение всех существующих тегов"""
+        logger.info("Loading all existing tags")
         try:
             if not self.token:
                 raise Exception("Not authenticated")
-                
-            headers = {
-                'Authorization': self.token
-            }
-            
-            # Получаем все теги (может потребоваться пагинация для большего количества)
+            headers = {'Authorization': self.token}
             all_tags = []
             page = 1
             per_page = 200
-            
             while True:
                 response = requests.get(
                     f'{self.base_url}/collections/tags/records',
@@ -176,127 +165,83 @@ class TagManager:
                     params={'page': page, 'perPage': per_page}
                 )
                 response.raise_for_status()
-                
                 data = response.json()
                 tags_chunk = data.get('items', [])
                 all_tags.extend(tags_chunk)
-                
-                # Проверяем, есть ли еще страницы
                 if len(tags_chunk) < per_page:
                     break
-                    
                 page += 1
-            
-            print(f'Downloaded {len(all_tags)} existing tags')
-            
-            # Создаем словарь для быстрого поиска тегов по имени
-            self.existing_tags = {}  # Сбрасываем словарь перед повторным заполнением
+            logger.info(f'Downloaded {len(all_tags)} existing tags')
+            self.existing_tags = {}
             for tag in all_tags:
-                # Приводим все имена к нижнему регистру для нечувствительного к регистру поиска
                 tag_name_lower = tag['name'].lower()
                 self.existing_tags[tag_name_lower] = {
-                    'id': tag['id'],
-                    'name': tag['name'],  # Сохраняем оригинальное имя
-                    'description': tag.get('description', '')
+                    'id': tag['id'], 'name': tag['name'], 'description': tag.get('description', '')
                 }
-            
-            return all_tags  # Возвращаем полный список для использования в других функциях
+            return all_tags
         except Exception as e:
-            print(f'Error getting existing tags: {e}')
+            logger.error(f'Error getting existing tags: {e}')
             return []
-    
+
     def create_tag(self, name, description=""):
-        """Создание нового тега"""
+        logger.info(f"Creating new tag: {name}")
         try:
             if not self.token:
                 raise Exception("Not authenticated")
-                
-            headers = {
-                'Authorization': self.token
-            }
-            
+            headers = {'Authorization': self.token}
             response = requests.post(
                 f'{self.base_url}/collections/tags/records',
                 headers=headers,
-                json={
-                    'name': name,
-                    'description': description
-                }
+                json={'name': name, 'description': description}
             )
             response.raise_for_status()
-            
             tag_data = response.json()
-            print(f'Created tag: {name} with ID: {tag_data["id"]}')
-            
-            # Обновляем локальный словарь тегов
+            logger.info(f'Created tag: {name} with ID: {tag_data["id"]}')
             self.existing_tags[name.lower()] = {
-                'id': tag_data["id"],
-                'name': name,
-                'description': description
+                'id': tag_data["id"], 'name': name, 'description': description
             }
-            
-            # Добавляем тег в категорию Custom
             self.add_tag_to_category(tag_data["id"])
-            
             return tag_data["id"]
         except Exception as e:
-            print(f'Error creating tag "{name}": {e}')
+            logger.error(f'Error creating tag "{name}": {e}')
             return None
-    
+
     def add_tag_to_category(self, tag_id):
-        """Добавление тега в категорию Custom"""
+        logger.info(f"Adding tag {tag_id} to category Custom")
         try:
             if not self.token:
                 raise Exception("Not authenticated")
-                
-            headers = {
-                'Authorization': self.token
-            }
-            
-            # Сначала получаем текущие данные категории
+            headers = {'Authorization': self.token}
             response = requests.get(
                 f'{self.base_url}/collections/tag_categories/records/{self.category_id}',
                 headers=headers
             )
             response.raise_for_status()
-            
             category_data = response.json()
             current_tags = category_data.get('tags', [])
-            
-            # Добавляем новый тег, если его еще нет
             if tag_id not in current_tags:
                 current_tags.append(tag_id)
-                
-                # Обновляем категорию
                 response = requests.patch(
                     f'{self.base_url}/collections/tag_categories/records/{self.category_id}',
                     headers=headers,
-                    json={
-                        'tags': current_tags
-                    }
+                    json={'tags': current_tags}
                 )
                 response.raise_for_status()
-                print(f'Added tag {tag_id} to category Custom')
+                logger.info(f'Added tag {tag_id} to category Custom')
                 return True
             else:
-                print(f'Tag {tag_id} already in category Custom')
+                logger.info(f'Tag {tag_id} already in category Custom')
                 return True
         except Exception as e:
-            print(f'Error adding tag {tag_id} to category: {e}')
+            logger.error(f'Error adding tag {tag_id} to category: {e}')
             return False
-    
-    def get_or_create_tag(self, tag_name):
-        """Получение ID тега по имени или создание нового, если тег не существует"""
-        tag_name_lower = tag_name.lower()
-        
-        # Проверяем, существует ли тег
-        if tag_name_lower in self.existing_tags:
-            print(f"Found existing tag: {tag_name} -> {self.existing_tags[tag_name_lower]['id']}")
-            return self.existing_tags[tag_name_lower]['id']
-        
-        # Если тег не существует, создаем новый
-        return self.create_tag(tag_name)
 
+    def get_or_create_tag(self, tag_name):
+        tag_name_lower = tag_name.lower()
+        if tag_name_lower in self.existing_tags:
+            logger.info(f"Found existing tag: {tag_name} (ID: {self.existing_tags[tag_name_lower]['id']})")
+            return self.existing_tags[tag_name_lower]['id']
+        return self.create_tag(tag_name)
 
 class GameUploader:
     def __init__(self):
@@ -305,67 +250,48 @@ class GameUploader:
         self.password = os.getenv('PASSWORD')
         self.token = None
         self.tag_manager = TagManager()
-        self.author_manager = None  # Будет инициализирован после логина
-        self.request_delay = 3  # Задержка между запросами в секундах
+        self.author_manager = None
+        self.request_delay = 3
+        logger.info("GameUploader initialized")
 
     def login(self):
+        logger.info("Attempting to login")
         try:
             response = requests.post(
                 f'{self.base_url}/collections/users/auth-with-password',
-                json={
-                    'identity': self.email,
-                    'password': self.password
-                }
+                json={'identity': self.email, 'password': self.password}
             )
             response.raise_for_status()
             data = response.json()
             self.token = data['token']
-            print('Successfully logged in')
-            
-            # Также выполняем логин для менеджера тегов
+            logger.info("Successfully logged in")
             self.tag_manager.login()
-            
-            # Загружаем все существующие теги
             self.tag_manager.get_all_tags()
-            print(f"Loaded {len(self.tag_manager.existing_tags)} tags into cache")
-            
-            # Инициализируем менеджер авторов
+            logger.info(f"Loaded {len(self.tag_manager.existing_tags)} tags into cache")
             self.author_manager = AuthorManager(self.base_url, self.token)
             self.author_manager.load_authors()
-            
+            logger.info(f"Loaded {len(self.author_manager.authors_cache)} authors into cache")
             return data
         except Exception as e:
-            print(f'Login error: {e}')
+            logger.error(f'Login failed: {str(e)}')
             return None
-
-
 
     def create_game(self, game_data):
         game_data['img_or_link'] = game_data['img_or_link'].lower()
+        logger.info(f"Creating game: {game_data['title']}")
         try:
             if not self.token:
                 raise Exception("Not authenticated")
-
-            headers = {
-                'Authorization': self.token
-            }
-
-            # Проверяем наличие изображения (обложки)
+            headers = {'Authorization': self.token}
             image_path = Path(game_data['image'])
             if not image_path.exists():
                 raise FileNotFoundError(f"Cover image not found: {image_path}")
 
-            # Определяем MIME-тип изображения
             file_ext = image_path.suffix.lower()
-            mime_type = EXTENSION_TO_MIME.get(file_ext)
-            if not mime_type:
-                mime_type, _ = mimetypes.guess_type(str(image_path))
-                
-            # Проверяем, что MIME-тип допустимый
+            mime_type = EXTENSION_TO_MIME.get(file_ext, mimetypes.guess_type(str(image_path))[0])
             if mime_type not in ALLOWED_IMAGE_MIME_TYPES:
-                raise ValueError(f"Unsupported image format: {mime_type}. Supported formats: {', '.join(ALLOWED_IMAGE_MIME_TYPES)}")
+                raise ValueError(f"Unsupported image format: {mime_type}")
 
-            # Преобразуем имена тегов в ID тегов
             tag_ids = []
             if game_data.get('tags'):
                 for tag_name in game_data['tags']:
@@ -373,160 +299,128 @@ class GameUploader:
                     if tag_id:
                         tag_ids.append(tag_id)
                     else:
-                        print(f"Warning: Failed to get or create tag '{tag_name}'")
+                        logger.warning(f"Failed to get or create tag '{tag_name}'")
 
-            # Создаем multipart form-data
-            form_data = []  # Используем список кортежей вместо словаря
-            
-            # Добавляем базовые поля
-            form_data.append(('title', game_data['title']))
-            form_data.append(('description', game_data['description']))
-            form_data.append(('img_or_link', game_data['img_or_link']))
-            form_data.append(('uploader', game_data['uploader']))
-
-            # Добавляем автора, если он указан
+            # Получаем список ID авторов
+            author_ids = []
             if 'author' in game_data:
-                author_id = self.author_manager.get_or_create_author(game_data['author'])
-                if author_id:
-                    # После создания игры мы добавим связь с автором отдельным запросом
-                    print(f"Will link game to author: {game_data['author']} (ID: {author_id})")
+                author_ids = self.author_manager.get_or_create_authors(game_data['author'])
+                logger.info(f"Authors for game: {game_data['author']} (IDs: {author_ids})")
 
-            # Добавляем iframe_url только если это "link"-игра
+            form_data = [
+                ('title', game_data['title']),
+                ('description', game_data['description']),
+                ('img_or_link', game_data['img_or_link']),
+                ('uploader', game_data['uploader']),
+            ]
             if game_data['img_or_link'] == 'link' and game_data.get('iframe_url'):
                 form_data.append(('iframe_url', game_data['iframe_url']))
-
-            # Добавляем теги как отдельные поля
             for tag_id in tag_ids:
                 form_data.append(('tags', tag_id))
+            # Добавляем всех авторов в form_data
+            for author_id in author_ids:
+                form_data.append(('authors', author_id))
 
-            # Открываем файл изображения для обложки
-            cover_image_file = open(image_path, 'rb')
-            
-            files = {
-                'image': ('blob', cover_image_file, mime_type)
-            }
-            
-            # Если это игра с изображениями, добавляем страницы CYOA
-            if game_data['img_or_link'] == 'img' and game_data.get('cyoa_pages'):
-                for i, page_path in enumerate(game_data['cyoa_pages']):
-                    page_path_obj = Path(page_path)
-                    if page_path_obj.exists():
-                        # Определяем MIME-тип страницы
-                        page_ext = page_path_obj.suffix.lower()
-                        page_mime_type = EXTENSION_TO_MIME.get(page_ext)
-                        if not page_mime_type:
-                            page_mime_type, _ = mimetypes.guess_type(str(page_path_obj))
-                            
-                        # Проверяем, что MIME-тип допустимый
-                        if page_mime_type not in ALLOWED_IMAGE_MIME_TYPES:
-                            print(f"Warning: Unsupported image format for page {page_path}: {page_mime_type}. Skipping.")
-                            continue
-                            
-                        page_file = open(page_path_obj, 'rb')
-                        files[f'cyoa_pages[{i}]'] = (f'page_{i}', page_file, page_mime_type)
-                    else:
-                        print(f"Warning: CYOA page not found: {page_path}")
+            files = {}
+            with open(image_path, 'rb') as cover_image_file:
+                files['image'] = ('blob', cover_image_file, mime_type)
+                if game_data['img_or_link'] == 'img' and game_data.get('cyoa_pages'):
+                    for i, page_path in enumerate(game_data['cyoa_pages']):
+                        page_path_obj = Path(page_path)
+                        if page_path_obj.exists():
+                            page_mime_type = EXTENSION_TO_MIME.get(page_path_obj.suffix.lower(), mimetypes.guess_type(str(page_path_obj))[0])
+                            if page_mime_type not in ALLOWED_IMAGE_MIME_TYPES:
+                                logger.warning(f"Unsupported format for page {page_path}: {page_mime_type}")
+                                continue
+                            with open(page_path_obj, 'rb') as page_file:
+                                files[f'cyoa_pages[{i}]'] = (f'page_{i}', page_file, page_mime_type)
+                        else:
+                            logger.warning(f"CYOA page not found: {page_path}")
 
-            print("Form data:", form_data)
-            print("Files:", {k: f"Binary content ({v[2]})" for k, v in files.items()})
-
-            try:
+                logger.debug(f"Form data: {form_data}")
+                logger.debug(f"Files: {[k for k in files.keys()]}")
                 response = requests.post(
                     f'{self.base_url}/collections/games/records',
                     headers=headers,
                     data=form_data,
                     files=files
                 )
-                
-                print(f"Status code: {response.status_code}")
-                print(f"Response: {response.text}")
-                
+                logger.info(f"API response status: {response.status_code}")
+                logger.debug(f"API response text: {response.text}")
                 response.raise_for_status()
                 game_record = response.json()
-                
-                # Если был указан автор, связываем игру с автором
-                if 'author' in game_data:
-                    author_id = self.author_manager.get_or_create_author(game_data['author'])
-                    if author_id:
-                        # Добавляем задержку перед следующим запросом
-                        time.sleep(self.request_delay)
-                        self.link_game_to_author(game_record['id'], author_id)
-                
-                return game_record
-            finally:
-                # Закрываем файл обложки после отправки запроса
-                cover_image_file.close()
-                
-                # Закрываем файлы страниц CYOA, если они были открыты
-                if game_data['img_or_link'] == 'img' and game_data.get('cyoa_pages'):
-                    for key in list(files.keys()):
-                        if key.startswith('cyoa_pages'):
-                            files[key][1].close()
+                logger.info(f"Game created successfully: {game_record['id']}")
 
+            # Связываем авторов с игрой (на случай, если API не обработал authors в form_data)
+            for author_id in author_ids:
+                time.sleep(self.request_delay)
+                self.link_game_to_author(game_record['id'], author_id)
+
+            return game_record
         except Exception as e:
-            print(f'Error creating game: {str(e)}')
-            print(f'Error type: {type(e)}')
+            logger.error(f"Failed to create game '{game_data['title']}': {str(e)}", exc_info=True)
             raise
-    
+
     def link_game_to_author(self, game_id, author_id):
-        """Связывает игру с автором"""
+        logger.info(f"Linking game {game_id} to author {author_id}")
         try:
             if not self.token:
                 raise Exception("Not authenticated")
-                
-            headers = {
-                'Authorization': self.token
-            }
-            
-            # Сначала получаем текущие данные автора
+            headers = {'Authorization': self.token}
+            # Получаем текущие данные игры
+            response = requests.get(
+                f'{self.base_url}/collections/games/records/{game_id}',
+                headers=headers
+            )
+            response.raise_for_status()
+            game_data = response.json()
+            current_authors = game_data.get('authors', [])
+            if author_id not in current_authors:
+                current_authors.append(author_id)
+                response = requests.patch(
+                    f'{self.base_url}/collections/games/records/{game_id}',
+                    headers=headers,
+                    json={'authors': current_authors}
+                )
+                response.raise_for_status()
+                logger.info(f'Linked game {game_id} to author {author_id}')
+            else:
+                logger.info(f'Game {game_id} already linked to author {author_id}')
+            # Обновляем автора (двусторонняя связь)
             response = requests.get(
                 f'{self.base_url}/collections/authors/records/{author_id}',
                 headers=headers
             )
             response.raise_for_status()
-            
             author_data = response.json()
             current_games = author_data.get('games', [])
-            
-            # Добавляем новую игру, если ее еще нет
             if game_id not in current_games:
                 current_games.append(game_id)
-                
-                # Обновляем автора
                 response = requests.patch(
                     f'{self.base_url}/collections/authors/records/{author_id}',
                     headers=headers,
-                    json={
-                        'games': current_games
-                    }
+                    json={'games': current_games}
                 )
                 response.raise_for_status()
-                print(f'Linked game {game_id} to author {author_id}')
-                return True
-            else:
-                print(f'Game {game_id} already linked to author {author_id}')
-                return True
+                logger.info(f'Updated author {author_id} with game {game_id}')
+            return True
         except Exception as e:
-            print(f'Error linking game {game_id} to author {author_id}: {e}')
+            logger.error(f'Error linking game {game_id} to author {author_id}: {e}')
             return False
 
 def move_processed_files(game_data, processed_folder):
-    """Перемещает обработанные файлы в указанную папку"""
+    logger.info(f"Moving processed files for {game_data['title']} to {processed_folder}")
     try:
-        # Создаем папку для обработанных файлов, если она не существует
         os.makedirs(processed_folder, exist_ok=True)
-        print(f"Ensured folder exists: {processed_folder}")
-
-        # Используем путь к JSON из game_data, если он есть
+        logger.info(f"Ensured folder exists: {processed_folder}")
         json_path = game_data.get('json_path')
         if not json_path or not os.path.exists(json_path):
-            # Если путь не указан или файл не существует, ищем вручную
             json_path = None
             for file in os.listdir("New_Games"):
                 if file.endswith(".json"):
                     candidate_path = os.path.join("New_Games", file)
                     if os.path.getsize(candidate_path) == 0:
-                        print(f"Warning: Found empty file {file}")
+                        logger.warning(f"Found empty file {file}")
                         continue
                     try:
                         with open(candidate_path, 'r', encoding='utf-8') as f:
@@ -535,84 +429,61 @@ def move_processed_files(game_data, processed_folder):
                                 json_path = candidate_path
                                 break
                     except json.JSONDecodeError as e:
-                        print(f"Error decoding JSON in {candidate_path}: {e}")
-                        with open(candidate_path, 'r', encoding='utf-8') as f:
-                            print(f"Content of problematic file:\n{f.read()}")
+                        logger.error(f"Error decoding JSON in {candidate_path}: {e}")
                         continue
-        
         if not json_path:
-            print(f"Warning: Could not find JSON file for game {game_data['title']}")
+            logger.warning(f"Could not find JSON file for game {game_data['title']}")
             return False
-        
-        # Получаем имя JSON файла без пути
         json_filename = os.path.basename(json_path)
         base_name = os.path.splitext(json_filename)[0]
-        
-        # Перемещаем JSON файл
         shutil.move(json_path, os.path.join(processed_folder, json_filename))
-        print(f"Moved JSON file: {json_filename}")
-        
-        # Перемещаем файл изображения обложки
+        logger.info(f"Moved JSON file: {json_filename}")
         cover_path = game_data['image']
         cover_filename = os.path.basename(cover_path)
         shutil.move(cover_path, os.path.join(processed_folder, cover_filename))
-        print(f"Moved cover image: {cover_filename}")
-        
-        # Если это игра с изображениями, перемещаем папку с CYOA страницами
+        logger.info(f"Moved cover image: {cover_filename}")
         if game_data['img_or_link'] == 'img' and game_data.get('cyoa_pages'):
             pages_folder = os.path.join("New_Games", base_name)
             if os.path.isdir(pages_folder):
                 processed_pages_folder = os.path.join(processed_folder, base_name)
                 os.makedirs(processed_pages_folder, exist_ok=True)
-                
                 for page_file in os.listdir(pages_folder):
                     page_path = os.path.join(pages_folder, page_file)
                     if os.path.isfile(page_path):
                         shutil.move(page_path, os.path.join(processed_pages_folder, page_file))
-                
                 if len(os.listdir(pages_folder)) == 0:
                     os.rmdir(pages_folder)
-                
-                print(f"Moved CYOA pages folder: {base_name}")
-        
+                logger.info(f"Moved CYOA pages folder: {base_name}")
         return True
     except Exception as e:
-        print(f"Error moving processed files: {e}")
+        logger.error(f"Error moving processed files: {e}")
         return False
 
 def load_games_from_folder(folder_path):
-    """Загружает все JSON-файлы из указанной папки и их соответствующие изображения"""
+    logger.info(f"Loading games from folder: {folder_path}")
     games = []
     json_files = glob.glob(os.path.join(folder_path, "*.json"))
-    
     for json_file in json_files:
         try:
             with open(json_file, 'r', encoding='utf-8') as f:
                 game_data = json.load(f)
-            
             base_name = os.path.splitext(os.path.basename(json_file))[0]
             image_path = None
-            
             for ext in EXTENSION_TO_MIME.keys():
                 img_path = os.path.join(folder_path, f"{base_name}{ext}")
                 if os.path.exists(img_path):
                     image_path = img_path
                     break
-            
             if not image_path:
-                print(f"Warning: Cover image not found for {json_file}")
+                logger.warning(f"Cover image not found for {json_file}")
                 continue
-            
             game_data['image'] = image_path
-            game_data['json_path'] = json_file  # Добавляем путь к JSON
-            
+            game_data['json_path'] = json_file
             if 'img_or_link' not in game_data:
                 game_data['img_or_link'] = "img"
-            
             if game_data['img_or_link'] == 'link' and 'iframe_url' not in game_data:
-                print(f"Warning: iframe_url is missing for link-type game in {json_file}")
+                logger.warning(f"iframe_url missing for link-type game in {json_file}")
                 continue
-            
             if game_data['img_or_link'] == 'img':
                 if 'cyoa_pages' not in game_data or not game_data['cyoa_pages']:
                     pages_folder = os.path.join(folder_path, base_name)
@@ -624,60 +495,43 @@ def load_games_from_folder(folder_path):
                         if page_files:
                             game_data['cyoa_pages'] = page_files
                         else:
-                            print(f"Warning: No CYOA pages found in folder {pages_folder}")
+                            logger.warning(f"No CYOA pages found in folder {pages_folder}")
                     else:
-                        print(f"Warning: CYOA pages folder {pages_folder} not found")
-                
+                        logger.warning(f"CYOA pages folder {pages_folder} not found")
                 if 'cyoa_pages' not in game_data or not game_data['cyoa_pages']:
-                    print(f"Warning: No CYOA pages specified for img-type game in {json_file}")
+                    logger.warning(f"No CYOA pages specified for img-type game in {json_file}")
                     continue
-            
             if 'uploader' not in game_data:
                 game_data['uploader'] = "mar1q123caruaaw"
-            
             games.append(game_data)
-            print(f"Loaded game: {game_data['title']} ({game_data['img_or_link']})")
+            logger.info(f"Loaded game: {game_data['title']} ({game_data['img_or_link']})")
         except Exception as e:
-            print(f"Error loading {json_file}: {e}")
-    
+            logger.error(f"Error loading {json_file}: {e}")
     return games
- 
+
 def main():
     uploader = GameUploader()
-    # Папка для перемещения обработанных файлов
     processed_folder = "Processed_Games"
-    
     try:
         auth_data = uploader.login()
         if not auth_data:
             raise Exception("Failed to login")
-        
-        # Загружаем игры из папки New_Games
         games = load_games_from_folder("New_Games")
-        
-        print(f"Found {len(games)} games to upload")
-        
-        # Загружаем каждую игру
+        logger.info(f"Found {len(games)} games to upload")
         for i, game_data in enumerate(games):
             try:
-                print(f"Uploading {game_data['title']}...")
+                logger.info(f"Uploading game {i+1}/{len(games)}: {game_data['title']}")
                 record = uploader.create_game(game_data)
-                print(f"Successfully uploaded: {game_data['title']}")
-                
-                # Перемещаем обработанные файлы
+                logger.info(f"Successfully uploaded: {game_data['title']} (ID: {record['id']})")
                 if move_processed_files(game_data, processed_folder):
-                    print(f"Files for {game_data['title']} moved to {processed_folder}")
-                
-                # Добавляем задержку перед следующей загрузкой (кроме последней)
+                    logger.info(f"Files for {game_data['title']} moved to {processed_folder}")
                 if i < len(games) - 1:
-                    print(f"Waiting {uploader.request_delay} seconds before next upload...")
+                    logger.info(f"Waiting {uploader.request_delay} seconds before next upload")
                     time.sleep(uploader.request_delay)
-                
             except Exception as e:
-                print(f"Failed to upload {game_data.get('title', 'Unknown')}: {e}")
-        
+                logger.error(f"Failed to upload {game_data.get('title', 'Unknown')}: {str(e)}")
     except Exception as e:
-        print(f'Critical error: {e}')
+        logger.critical(f"Critical error in main: {str(e)}", exc_info=True)
 
 if __name__ == "__main__":
     main()
