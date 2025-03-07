@@ -140,7 +140,7 @@ def check_prerequisites():
     """Проверка необходимых условий перед запуском"""
     prerequisites_met = True
     
-    for directory in ["markdown", "summaries", "screenshoots"]:
+    for directory in ["markdown", "summaries", "screenshots"]:
         if not os.path.exists(directory):
             os.makedirs(directory, exist_ok=True)
     
@@ -200,7 +200,7 @@ async def main_async(force_screenshots=False):
     
     async def create_screenshot(base_url, project_name):
         async with screenshot_semaphore:
-            webp_path = f"screenshoots/{project_name}.webp"
+            webp_path = f"screenshots/{project_name}.webp"
             
             # Проверяем наличие скриншота и флаг принудительного обновления
             if not force_screenshots and os.path.exists(webp_path):
@@ -262,7 +262,7 @@ async def main_async(force_screenshots=False):
             
             # Делаем или используем скриншот
             success, output, error = await create_screenshot(base_url, project_name)
-            webp_path = f"screenshoots/{project_name}.webp"
+            webp_path = f"screenshots/{project_name}.webp"
             if not success:
                 logger.error(f"Screenshot processing failed for {base_url}: {error}")
                 visual_analysis_failures.append(base_url)

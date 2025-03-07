@@ -38,7 +38,7 @@ async def summarize_md_file(md_file, grok_api, mode="sent_search"):
     """Обрабатывает один Markdown файл через Grok 3 с учетом режима."""
     project_name = os.path.splitext(md_file)[0]
     md_path = os.path.join(MARKDOWN_DIR, md_file)
-    webp_path = f"screenshoots/{project_name}.webp"
+    webp_path = f"screenshots/{project_name}.webp"
     
     # Выбираем путь сохранения и промпт в зависимости от режима
     if mode == "sent_search":

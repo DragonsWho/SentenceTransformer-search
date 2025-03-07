@@ -8,7 +8,7 @@ from pathlib import Path
 
 # Константы
 CATALOG_JSON_DIR = "catalog_json"
-SCREENSHOTS_DIR = "screenshoots"
+SCREENSHOTS_DIR = "screenshots"
 NEW_GAMES_DIR = "New_Games"
 GAME_UPLOADER_SCRIPT = "GameUploader.py"
 

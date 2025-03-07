@@ -64,7 +64,7 @@ The project is a system for automatic collection, processing, and search of info
 - **get_screenshoot_puppy.js** - Browser automation:
   - Creates screenshots of web pages
   - Saves in PNG and WebP formats
-  - Saves results to screenshoots/
+  - Saves results to screenshots/
 
 - **vision_query.py** - Image analysis:
   - Generates descriptions of games' visual style

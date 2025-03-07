@@ -73,8 +73,8 @@ const sharp = require('sharp');
     await page.evaluate(() => window.scrollTo(0, 0));
     await new Promise(resolve => setTimeout(resolve, 3000)); // Final rendering delay
     // Create and convert screenshot
-    const screenshotPath = `screenshoots/${screenshotName}.png`;
-    const webpPath = `screenshoots/${screenshotName}.webp`;
+    const screenshotPath = `screenshots/${screenshotName}.png`;
+    const webpPath = `screenshots/${screenshotName}.webp`;
     
     await page.screenshot({ 
       path: screenshotPath,
@@ -122,7 +122,7 @@ const sharp = require('sharp');
   try {
     // Clean up temporary PNG file
     const fs = require('fs');
-    fs.unlinkSync(`screenshoots/${screenshotName}.png`);
+    fs.unlinkSync(`screenshots/${screenshotName}.png`);
   } catch (err) {
     console.error('Error cleaning up temporary file:', err);
   } finally {
