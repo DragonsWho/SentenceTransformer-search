@@ -8,10 +8,13 @@ import traceback
 import asyncio
 import concurrent.futures
 import random
+import json  # Добавлен импорт json
 from components.traffic_analyzer import TrafficAnalyzer
 from components.js_json_extractor import extract_js_json
-from components.crawler import crawl_url
+from components.crawler import crawl_url, json_to_md
 from components.game_checker import GameChecker
+from components.project_downloader import crawl_and_download, create_session
+from urllib.parse import urlparse
 
 def setup_logging():
     os.makedirs("logs", exist_ok=True)
@@ -31,7 +34,6 @@ def setup_logging():
     return logging.getLogger()
 
 def run_script(script_name, args=None):
-    # Оставляем без изменений
     if not os.path.exists(script_name):
         logger.error(f"Script file not found: {script_name}")
         return False, "", f"File not found: {script_name}"
@@ -82,7 +84,6 @@ def run_script(script_name, args=None):
         return False, "", str(e)
 
 async def run_script_async(script_name, args=None, max_retries=3, retry_delay=5):
-    # Оставляем без изменений
     attempt = 0
     last_error = ""
     
@@ -117,7 +118,6 @@ async def run_script_async(script_name, args=None, max_retries=3, retry_delay=5)
     return False, "", last_error
 
 def check_prerequisites():
-    # Оставляем без изменений
     prerequisites_met = True
     
     for directory in ["markdown", "summaries", "screenshots"]:
@@ -174,7 +174,14 @@ async def main_async(force_screenshots=False):
     visual_analysis_failures = []
     processed_urls = []
     skipped_urls = []
-    newly_processed_urls = []  # Отслеживаем только новые обработанные URL
+    newly_processed_urls = []
+    
+    # Создаем сессию для скачивания
+    download_session = create_session()
+    
+    # Путь для сохранения скачанных игр
+    downloaded_games_dir = "downloaded_games"
+    os.makedirs(downloaded_games_dir, exist_ok=True)
     
     try:
         with open('links.txt', 'r') as f:
@@ -209,6 +216,28 @@ async def main_async(force_screenshots=False):
     for index, url in enumerate(urls, 1):
         logger.info(f"Processing URL {index}/{len(urls)}: {url}")
         
+        # Получаем имя домена и игры для структуры папок
+        parsed_url = urlparse(url)
+        domain = parsed_url.netloc
+        path_parts = parsed_url.path.strip('/').split('/')
+        game_name = path_parts[-1] if path_parts else ''
+        download_path = os.path.join(downloaded_games_dir, f"{domain}/{game_name}")
+        
+        # Скачиваем игру целиком независимо от того, есть она в каталоге или нет
+        logger.info(f"Downloading game to {download_path}")
+        completed, failed = crawl_and_download(
+            url,
+            download_path,
+            session=download_session,
+            max_workers=5
+        )
+        
+        if failed > 0:
+            logger.error(f"Failed to download some resources for {url}")
+            failed_urls.append(url)
+            continue
+            
+        # Проверяем наличие игры в каталоге после скачивания
         if game_checker.game_exists(url):
             logger.info(f"Skipping URL {url} as it already exists in the catalog")
             skipped_urls.append(url)
@@ -221,35 +250,50 @@ async def main_async(force_screenshots=False):
             md_file = f"{project_name}.md"
             md_path = f"markdown/{md_file}"
             
-            if crawl_url(project_json_url):
-                logger.info(f"Text extracted via crawl_url for {url}")
+            # Проверяем наличие локального project.json
+            local_json_path = os.path.join(download_path, "project.json")
+            if os.path.exists(local_json_path):
+                logger.info(f"Using local project.json from {local_json_path}")
+                with open(local_json_path, 'r', encoding='utf-8') as f:
+                    json_data = json.load(f)
+                md_content = json_to_md(json_data)
+                os.makedirs("markdown", exist_ok=True)
+                with open(md_path, 'w', encoding='utf-8') as f:
+                    game_title = project_name.replace('_', ' ')
+                    game_url = url
+                    f.write(f"Game URL: {game_url}\n\nPossible title: {game_title}\n\n{md_content}")
             else:
-                text_content = None
-                result = extract_js_json(url)
-                if result:
-                    text_content = result
-                    logger.info(f"Text extracted via extract_js_json for {url}")
+                # Если локального JSON нет (хотя он должен быть после скачивания)
+                logger.warning(f"Local project.json not found at {local_json_path}, falling back to network methods")
+                if crawl_url(project_json_url):
+                    logger.info(f"Text extracted via crawl_url for {url}")
                 else:
-                    analyzer = TrafficAnalyzer()
-                    try:
-                        result = analyzer.process_url(url)
-                        if result:
-                            text_content = result
-                            logger.info(f"Text extracted via TrafficAnalyzer for {url}")
-                    finally:
-                        analyzer.close()
-                
-                if text_content:
-                    os.makedirs("markdown", exist_ok=True)
-                    with open(md_path, 'w', encoding='utf-8') as f:
-                        f.write(text_content)
-                else:
-                    logger.error(f"All processing methods failed for URL: {url}")
-                    failed_urls.append(url)
-                    continue
+                    text_content = None
+                    result = extract_js_json(url)
+                    if result:
+                        text_content = result
+                        logger.info(f"Text extracted via extract_js_json for {url}")
+                    else:
+                        analyzer = TrafficAnalyzer()
+                        try:
+                            result = analyzer.process_url(url)
+                            if result:
+                                text_content = result
+                                logger.info(f"Text extracted via TrafficAnalyzer for {url}")
+                        finally:
+                            analyzer.close()
+                    
+                    if text_content:
+                        os.makedirs("markdown", exist_ok=True)
+                        with open(md_path, 'w', encoding='utf-8') as f:
+                            f.write(text_content)
+                    else:
+                        logger.error(f"All processing methods failed for URL: {url}")
+                        failed_urls.append(url)
+                        continue
             
             processed_urls.append(url)
-            newly_processed_urls.append(url)  # Добавляем только новые URL
+            newly_processed_urls.append(url)
             
             base_url = normalize_url(url).replace('/project.json', '/')
             
@@ -286,6 +330,9 @@ async def main_async(force_screenshots=False):
         except Exception as e:
             logger.error(f"Unhandled exception processing URL {url}: {str(e)}")
             failed_urls.append(url)
+    
+    # Закрываем сессию скачивания
+    download_session.close()
     
     # Запуск prepare_and_upload.py только если есть новые обработанные URL
     if newly_processed_urls:
