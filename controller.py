@@ -223,19 +223,15 @@ async def main_async(force_screenshots=False):
         game_name = path_parts[-1] if path_parts else ''
         download_path = os.path.join(downloaded_games_dir, f"{domain}/{game_name}")
         
-        # Скачиваем игру целиком независимо от того, есть она в каталоге или нет
+        # Скачиваем игру целиком независимо от того, есть она в каталоге или нет 
         logger.info(f"Downloading game to {download_path}")
-        completed, failed = crawl_and_download(
+        completed, downloaded, failed = crawl_and_download(
             url,
             download_path,
             session=download_session,
             max_workers=5
         )
-        
-        if failed > 0:
-            logger.error(f"Failed to download some resources for {url}")
-            failed_urls.append(url)
-            continue
+        logger.info(f"Download result: Processed {completed} files, Downloaded {downloaded}, Failed {failed}")
             
         # Проверяем наличие игры в каталоге после скачивания
         if game_checker.game_exists(url):

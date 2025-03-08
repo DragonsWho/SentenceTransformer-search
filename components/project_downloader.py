@@ -16,14 +16,20 @@ import chardet
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+import threading
+from pathlib import Path
+import requests
+import logging
 
 # Set up logging
 log_file_path = os.path.join('logs', 'project_downloader.log')
 logging.basicConfig(
     filename=log_file_path,
-    level=logging.WARNING,
+    level=logging.DEBUG,  # Установим DEBUG для более детального анализа
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
+
+metadata_lock = threading.Lock()
 
 # -------------------- Helper Functions -------------------- #
 
@@ -108,13 +114,29 @@ def create_session():
     return session
 
 def download_file(url, path, session, base_domain, metadata_path, retries=3, delay=5, request_delay=0.1):
+    """
+    Скачивает файл и обновляет метаданные, полагаясь только на ETag для проверки актуальности.
+    
+    Args:
+        url (str): URL файла для загрузки
+        path (str): Локальный путь для сохранения файла
+        session (requests.Session): Сессия для HTTP-запросов
+        base_domain (str): Базовый домен для проверки валидности URL
+        metadata_path (str): Путь к файлу метаданных (metadata.json)
+        retries (int): Количество попыток повторного запроса
+        delay (int): Задержка между повторными попытками
+        request_delay (float): Задержка после успешной загрузки
+    
+    Returns:
+        tuple: (success: bool, was_downloaded: bool)
+    """
     path = Path(path)
-    metadata_path = Path(metadata_path)  # Путь к metadata.json в папке проекта
+    metadata_path = Path(metadata_path)
 
     # Пропускаем специальные случаи
     if url.endswith('favicon.ico') or url.startswith('data:'):
         logging.debug(f"Skipping special URL: {url}")
-        return True
+        return True, False
 
     # Читаем существующие метаданные
     metadata = {}
@@ -125,46 +147,28 @@ def download_file(url, path, session, base_domain, metadata_path, retries=3, del
         except Exception as e:
             logging.warning(f"Could not load metadata from {metadata_path}: {e}")
 
-    # Проверка актуальности файла
+    # Проверка актуальности по ETag
     if path.exists() and url in metadata:
-        try:
-            local_metadata = metadata.get(url, {})
-            local_etag = local_metadata.get('ETag')
-            local_mtime = local_metadata.get('Last-Modified')
-            local_size = local_metadata.get('Content-Length', 0)
+        local_metadata = metadata.get(url, {})
+        local_etag = local_metadata.get('ETag')
+        logging.debug(f"Checking file: {url}, Local ETag: {local_etag}, File exists: {path.exists()}")
 
-            # Запрос HEAD с If-None-Match для ETag
-            headers = {}
-            if local_etag:
-                headers['If-None-Match'] = local_etag
-            elif local_mtime:
-                headers['If-Modified-Since'] = local_mtime
+        if local_etag:
+            try:
+                headers = {'If-None-Match': local_etag}
+                head = session.head(url, allow_redirects=True, timeout=15, headers=headers)
+                head.raise_for_status()
 
-            head = session.head(url, allow_redirects=True, timeout=15, headers=headers)
-            head.raise_for_status()
+                if head.status_code == 304:
+                    logging.debug(f"File up to date (304 Not Modified): {path}")
+                    return True, False
 
-            if head.status_code == 304:
-                logging.debug(f"File up to date (304 Not Modified): {path}")
-                return True
-
-            server_etag = head.headers.get('ETag')
-            server_mtime = head.headers.get('Last-Modified')
-            server_size = int(head.headers.get('Content-Length', 0))
-
-            # Если ETag совпадает, файл актуален
-            if server_etag and server_etag == local_etag:
-                logging.debug(f"File matches by ETag: {path}")
-                return True
-            # Проверка по Last-Modified и размеру
-            elif server_mtime and server_mtime == local_mtime and server_size == local_size:
-                logging.debug(f"File matches by Last-Modified and size: {path}")
-                return True
-            # Только размер как запасной вариант
-            elif server_size == local_size and server_size != 0:
-                logging.debug(f"File matches by size: {path}")
-                return True
-        except Exception as e:
-            logging.warning(f"Could not verify file metadata for {url}: {e}")
+                server_etag = head.headers.get('ETag')
+                if server_etag == local_etag:
+                    logging.debug(f"File matches by ETag: {path}")
+                    return True, False
+            except requests.RequestException as e:
+                logging.warning(f"HEAD request failed for {url}: {e}, proceeding to download")
 
     # Скачивание файла
     try:
@@ -173,8 +177,6 @@ def download_file(url, path, session, base_domain, metadata_path, retries=3, del
             response.raise_for_status()
             content_type = response.headers.get('Content-Type', '')
             server_etag = response.headers.get('ETag')
-            server_mtime = response.headers.get('Last-Modified')
-            server_size = int(response.headers.get('Content-Length', 0))
 
             is_text_file = (
                 path.suffix.lower() in {'.html', '.htm', '.js', '.css', '.json', '.txt', '.xml', '.svg'} or
@@ -191,22 +193,26 @@ def download_file(url, path, session, base_domain, metadata_path, retries=3, del
                         if chunk:
                             f.write(chunk)
 
-            # Обновляем метаданные
-            metadata[url] = {
-                'ETag': server_etag,
-                'Last-Modified': server_mtime,
-                'Content-Length': server_size
-            }
-            metadata_path.parent.mkdir(parents=True, exist_ok=True)
-            with metadata_path.open('w', encoding='utf-8') as f:
-                json.dump(metadata, f, indent=2)
+            # Обновляем метаданные с синхронизацией
+            with metadata_lock:
+                if metadata_path.exists():
+                    try:
+                        with metadata_path.open('r', encoding='utf-8') as f:
+                            metadata = json.load(f)
+                    except Exception:
+                        logging.warning(f"Reloading metadata failed, using empty dict: {metadata_path}")
+                        metadata = {}
+                metadata[url] = {'ETag': server_etag}
+                metadata_path.parent.mkdir(parents=True, exist_ok=True)
+                with metadata_path.open('w', encoding='utf-8') as f:
+                    json.dump(metadata, f, indent=2)
 
-            logging.debug(f"Downloaded and updated metadata: {url} -> {path}")
+            logging.debug(f"Downloaded and updated metadata: {url} -> {path}, Server ETag: {server_etag}")
             sleep(request_delay)
-            return True
+            return True, True
     except Exception as e:
         logging.error(f"Failed to download {url}: {e}")
-        return False
+        return False, False
 
 def parse_html_for_resources(html_content, base_url, base_domain):
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -299,7 +305,7 @@ def handle_resource(full_url, session, base_path, base_url_path, base_domain, me
     if not is_valid_url(full_url, base_domain):
         logging.warning(f"Invalid or external URL skipped: {full_url}")
         return False
-    success = download_file(full_url, file_path, session, base_domain, metadata_path)
+    success, was_downloaded = download_file(full_url, file_path, session, base_domain, metadata_path)
     if not success:
         logging.error(f"Failed to download resource: {full_url}")
         return False
@@ -313,7 +319,7 @@ def handle_resource(full_url, session, base_path, base_url_path, base_domain, me
                 handle_resource(css_res, session, base_path, base_url_path, base_domain, metadata_path)
         except Exception as e:
             logging.error(f"Error parsing CSS {file_path}: {e}")
-    return True
+    return success
 
 def crawl_and_download(url, base_path, session=None, max_workers=5):
     if session is None:
@@ -322,28 +328,22 @@ def crawl_and_download(url, base_path, session=None, max_workers=5):
     base_path = Path(base_path)
     metadata_path = base_path / 'metadata.json'
 
-    try:
-        response = session.get(url, timeout=15)
-        response.raise_for_status()
-    except Exception as e:
-        logging.error(f"Error downloading page {url}: {e}")
-        return 0, 0
+    # Загрузка index.html
+    index_path = base_path / 'index.html'
+    index_success, index_downloaded = download_file(
+        url, index_path, session, urlparse(url).netloc, metadata_path
+    )
+    if not index_success:
+        logging.error(f"Failed to download index.html for {url}")
+        return 0, 0, 0
 
-    raw_content = response.content
+    raw_content = index_path.read_bytes() if index_path.exists() else b""
     encoding = detect_encoding(raw_content)
     try:
         html_content = raw_content.decode(encoding, errors='replace')
     except Exception as e:
         logging.error(f"Error decoding content from {url}: {e}")
-        html_content = raw_content.decode('utf-8', errors='replace')
-
-    index_path = base_path / 'index.html'
-    try:
-        index_path.parent.mkdir(parents=True, exist_ok=True)
-        index_path.write_text(html_content, encoding='utf-8')
-        logging.debug(f"Saved index.html: {index_path}")
-    except Exception as e:
-        logging.error(f"Error saving index.html to {index_path}: {e}")
+        html_content = ""
 
     parsed_base = urlparse(url)
     base_domain = parsed_base.netloc
@@ -359,7 +359,7 @@ def crawl_and_download(url, base_path, session=None, max_workers=5):
 
     project_json_url = urljoin(f"{parsed_base.scheme}://{base_domain}{base_url_path}", 'project.json')
     project_json_path = base_path / 'project.json'
-    project_json_downloaded = download_file(
+    project_json_success, project_json_downloaded = download_file(
         project_json_url, 
         project_json_path, 
         session, 
@@ -369,7 +369,7 @@ def crawl_and_download(url, base_path, session=None, max_workers=5):
         delay=1
     )
 
-    if project_json_downloaded:
+    if project_json_success and project_json_downloaded:
         logging.debug(f"Successfully downloaded project.json from {project_json_url}")
         try:
             project_data = json.loads(project_json_path.read_text(encoding='utf-8'))
@@ -387,8 +387,13 @@ def crawl_and_download(url, base_path, session=None, max_workers=5):
         logging.warning(f"Failed to download project.json from {project_json_url}")
 
     logging.debug(f"Starting download of {len(resources)} resources")
-    completed = 0
-    failed = 0
+    completed = 1 if index_success else 0
+    downloaded = 1 if index_downloaded else 0
+    failed = 0 if index_success else 1
+    if project_json_success and project_json_downloaded:
+        downloaded += 1
+    elif not project_json_success:
+        failed += 1
     
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_resource = {
@@ -406,18 +411,22 @@ def crawl_and_download(url, base_path, session=None, max_workers=5):
         for future in as_completed(future_to_resource):
             res = future_to_resource[future]
             try:
-                result = future.result()
-                if result:
+                success = future.result()
+                if success:
                     completed += 1
+                    # Проверяем, был ли файл загружен (временное решение через размер)
+                    file_path = os.path.join(base_path, urlparse(res).path.lstrip('/'))
+                    if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+                        downloaded += 1
                 else:
                     failed += 1
-                logging.debug(f"Resource {res} download completed. Success: {result}")
+                logging.debug(f"Resource {res} processing completed. Success: {success}")
             except Exception as e:
                 failed += 1
                 logging.error(f"Error processing resource {res}: {e}")
 
-    logging.info(f"Download completed. Successfully downloaded: {completed}, Failed: {failed}")
-    return completed, failed
+    logging.info(f"Download completed. Successfully processed: {completed}, Actually downloaded: {downloaded}, Failed: {failed}")
+    return completed, downloaded, failed
 
 if __name__ == "__main__":
     import sys
@@ -426,5 +435,5 @@ if __name__ == "__main__":
         sys.exit(1)
     url = sys.argv[1]
     base_path = f"downloaded_games/{url.split('/')[-2]}"
-    completed, failed = crawl_and_download(url, base_path)
-    print(f"Completed: {completed}, Failed: {failed}")
+    completed, downloaded, failed = crawl_and_download(url, base_path)
+    print(f"Completed: {completed}, Downloaded: {downloaded}, Failed: {failed}")

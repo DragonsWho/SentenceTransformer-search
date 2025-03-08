@@ -1,4 +1,4 @@
-for replace screenshots use:    python image_replacer.py "Cyoa title from catalog"    
+for replace screenshots use:    python image_replacer.py "Cyoa title from catalog"
 
 
 
