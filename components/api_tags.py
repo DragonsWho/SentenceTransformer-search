@@ -1,4 +1,4 @@
-# tag_categories.py
+# components/api_tags.py
 
 import os
 import json

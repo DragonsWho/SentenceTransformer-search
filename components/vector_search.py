@@ -1,4 +1,4 @@
-#components/vector_search.py
+# components/vector_search.py
 
 import os
 import numpy as np

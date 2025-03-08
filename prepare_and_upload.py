@@ -1,3 +1,5 @@
+# prepare_and_upload.py
+
 import os
 import shutil
 import subprocess
@@ -5,8 +7,20 @@ import sys
 import json
 import re
 from pathlib import Path
+import logging
 
-# Константы
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("logs/prepare_and_upload.log"),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Constants
 CATALOG_JSON_DIR = "catalog_json"
 SCREENSHOTS_DIR = "screenshots"
 NEW_GAMES_DIR = "New_Games"
@@ -14,7 +28,7 @@ PROCESSED_GAMES_DIR = "Processed_Games"
 GAME_UPLOADER_SCRIPT = "GameUploader.py"
 
 def remove_json_comments(json_text):
-    """Удаляет однострочные комментарии вида // из JSON, сохраняя // в строках."""
+    """Remove single-line comments (//) from JSON, preserving them in strings."""
     lines = json_text.splitlines()
     cleaned_lines = []
     in_string = False
@@ -43,42 +57,59 @@ def remove_json_comments(json_text):
 
     return '\n'.join(cleaned_lines)
 
+def strip_markdown_wrappers(json_text):
+    """Strip Markdown code block wrappers (e.g., ```json and ```) from JSON text."""
+    lines = json_text.splitlines()
+    cleaned_lines = []
+    
+    # Skip lines that are part of Markdown code block markers
+    for line in lines:
+        stripped_line = line.strip()
+        if stripped_line == "```json" or stripped_line == "```":
+            continue
+        cleaned_lines.append(line)
+    
+    return '\n'.join(cleaned_lines)
+
 def validate_and_clean_json(json_path):
-    """Проверяет и очищает JSON от комментариев, возвращает оригинал и очищенный текст."""
+    """Validate and clean JSON from comments and Markdown wrappers, return original and cleaned text."""
     try:
         with open(json_path, 'r', encoding='utf-8') as f:
             original_content = f.read()
         
-        cleaned_content = remove_json_comments(original_content)
+        # First strip Markdown wrappers
+        content_no_markdown = strip_markdown_wrappers(original_content)
+        # Then remove comments
+        cleaned_content = remove_json_comments(content_no_markdown)
         
+        # Validate the cleaned content
         try:
             json.loads(cleaned_content)
+            logger.info(f"JSON validated successfully after cleaning: {json_path}")
         except json.JSONDecodeError as e:
-            print(f"Invalid JSON in {json_path}: {e}")
-            print("Cleaned content:")
-            lines = cleaned_content.splitlines()
-            for i, line in enumerate(lines, 1):
-                print(f"{i:3d}: {line}")
+            logger.error(f"Invalid JSON in {json_path} after cleaning: {e}")
+            logger.debug(f"Cleaned content:\n{cleaned_content}")
             return None, None
         
         return original_content, cleaned_content
     except Exception as e:
-        print(f"Error processing JSON {json_path}: {e}")
+        logger.error(f"Error processing JSON {json_path}: {e}")
         return None, None
 
 def prepare_game_files(test_mode=False):
-    """Копирует JSON и скриншот в New_Games для каждой игры."""
+    """Copy JSON and screenshot to New_Games for each game, skipping invalid files."""
     if not os.path.exists(CATALOG_JSON_DIR):
-        print(f"Error: {CATALOG_JSON_DIR} directory not found!")
+        logger.error(f"Directory not found: {CATALOG_JSON_DIR}")
         return False
 
     os.makedirs(NEW_GAMES_DIR, exist_ok=True)
     json_files = [f for f in os.listdir(CATALOG_JSON_DIR) if f.endswith(".json")]
     if not json_files:
-        print(f"No JSON files found in {CATALOG_JSON_DIR}")
+        logger.warning(f"No JSON files found in {CATALOG_JSON_DIR}")
         return False
 
-    success = True
+    logger.info(f"Found {len(json_files)} JSON files to process")
+    success_count = 0
     for json_file in json_files:
         try:
             project_name = os.path.splitext(json_file)[0]
@@ -90,97 +121,102 @@ def prepare_game_files(test_mode=False):
 
             original_json, cleaned_json = validate_and_clean_json(json_src)
             if cleaned_json is None:
-                success = False
+                logger.warning(f"Skipping {json_file} due to invalid JSON after cleaning")
                 continue
 
             with open(json_dest, 'w', encoding='utf-8') as f:
                 f.write(cleaned_json)
-            print(f"Copied cleaned JSON: {json_file} to {NEW_GAMES_DIR}")
+            logger.info(f"Copied cleaned JSON: {json_file} to {NEW_GAMES_DIR}")
 
             with open(json_with_comments_dest, 'w', encoding='utf-8') as f:
                 f.write(original_json)
-            print(f"Copied JSON with comments: {project_name}_with_comments.json to {NEW_GAMES_DIR}")
+            logger.info(f"Copied JSON with comments: {project_name}_with_comments.json to {NEW_GAMES_DIR}")
 
             if os.path.exists(screenshot_src):
                 shutil.copy2(screenshot_src, screenshot_dest)
-                print(f"Copied screenshot: {project_name}.webp to {NEW_GAMES_DIR}")
+                logger.info(f"Copied screenshot: {project_name}.webp to {NEW_GAMES_DIR}")
             else:
-                print(f"Warning: Screenshot {screenshot_src} not found for {project_name}")
+                logger.warning(f"Screenshot not found: {screenshot_src}")
 
+            success_count += 1
         except Exception as e:
-            print(f"Error preparing files for {json_file}: {e}")
-            success = False
+            logger.error(f"Error preparing files for {json_file}: {e}")
+            continue  # Continue processing other files
 
-    return success
+    if success_count == 0:
+        logger.error("No files were successfully prepared")
+        return False
+    logger.info(f"Successfully prepared {success_count} out of {len(json_files)} files")
+    return True
 
 def run_game_uploader():
-    """Запускает GameUploader.py."""
+    """Run GameUploader.py."""
     if not os.path.exists(GAME_UPLOADER_SCRIPT):
-        print(f"Error: {GAME_UPLOADER_SCRIPT} not found!")
+        logger.error(f"Script not found: {GAME_UPLOADER_SCRIPT}")
         return False
 
     try:
+        logger.info("Starting GameUploader.py")
         result = subprocess.run(
             [sys.executable, GAME_UPLOADER_SCRIPT],
             check=True,
             text=True,
             capture_output=True
         )
-        print("GameUploader output:")
-        print(result.stdout)
+        logger.info("GameUploader.py completed successfully")
+        logger.debug(f"Output:\n{result.stdout}")
         if result.stderr:
-            print("GameUploader errors:")
-            print(result.stderr)
+            logger.warning(f"GameUploader.py stderr:\n{result.stderr}")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"Error running {GAME_UPLOADER_SCRIPT}: {e}")
-        print(f"Output: {e.output}")
+        logger.error(f"GameUploader.py failed with exit code {e.returncode}: {e.output}")
+        logger.debug(f"Stderr: {e.stderr}")
         return False
     except Exception as e:
-        print(f"Unexpected error running {GAME_UPLOADER_SCRIPT}: {e}")
+        logger.error(f"Unexpected error running GameUploader.py: {e}")
         return False
 
 def cleanup_catalog_json():
-    """Удаляет все файлы из catalog_json после успешной обработки."""
+    """Remove all files from catalog_json after successful processing."""
     if os.path.exists(CATALOG_JSON_DIR):
         for file in os.listdir(CATALOG_JSON_DIR):
             file_path = os.path.join(CATALOG_JSON_DIR, file)
             try:
                 if os.path.isfile(file_path):
                     os.remove(file_path)
-                    print(f"Removed {file} from {CATALOG_JSON_DIR}")
+                    logger.info(f"Removed {file} from {CATALOG_JSON_DIR}")
             except Exception as e:
-                print(f"Error removing {file_path}: {e}")
+                logger.error(f"Error removing {file_path}: {e}")
 
 def move_comments_files_to_processed():
-    """Переносит файлы с комментариями в Processed_Games."""
+    """Move files with comments to Processed_Games."""
     os.makedirs(PROCESSED_GAMES_DIR, exist_ok=True)
     for file in os.listdir(NEW_GAMES_DIR):
         if file.endswith("_with_comments.json"):
             src = os.path.join(NEW_GAMES_DIR, file)
             dest = os.path.join(PROCESSED_GAMES_DIR, file)
             shutil.move(src, dest)
-            print(f"Moved {file} to {PROCESSED_GAMES_DIR}")
+            logger.info(f"Moved {file} to {PROCESSED_GAMES_DIR}")
 
 def main():
     test_mode = "--test" in sys.argv
-    print(f"Running in {'test' if test_mode else 'live'} mode")
+    logger.info(f"Running in {'test' if test_mode else 'live'} mode")
 
     if not prepare_game_files(test_mode):
-        print("Failed to prepare game files. Aborting.")
+        logger.error("Failed to prepare game files. Aborting.")
         sys.exit(1)
 
     if not test_mode:
-        print("Starting GameUploader...")
+        logger.info("Starting game upload process")
         if not run_game_uploader():
-            print("GameUploader failed!")
+            logger.error("GameUploader failed. Aborting.")
             sys.exit(1)
-        print("Game uploading completed successfully!")
+        logger.info("Game uploading completed successfully")
         
         move_comments_files_to_processed()
-        cleanup_catalog_json()  # Очищаем catalog_json после успешной загрузки
+        cleanup_catalog_json()
     else:
-        print("Test mode: Skipping GameUploader execution, file moving, and cleanup.")
+        logger.info("Test mode: Skipping upload, file moving, and cleanup.")
 
 if __name__ == "__main__":
     main()

@@ -1,3 +1,5 @@
+# components/js_json_extractor.py
+
 import json
 import re
 import logging

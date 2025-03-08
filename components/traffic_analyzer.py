@@ -1,3 +1,5 @@
+# components/traffic_analyzer.py
+
 import json
 import time
 import logging

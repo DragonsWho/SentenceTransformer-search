@@ -54,6 +54,7 @@ If the game has specific themes, aesthetics, mechanics, or content not covered b
 When responding to prompts requesting a JSON structure:
 - Deliver your response strictly as the raw JSON content, without any wrappers like ```json, additional explanations, or commentary outside the JSON structure.
 - Ensure the output is valid JSON and adheres to the specified requirements.
+- Strictly adhere to the JSON-only rule; any deviation will break my script. The message must begin with { and end with }
 
 
 Clarifications on which tags to use:

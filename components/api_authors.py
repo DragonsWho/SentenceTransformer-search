@@ -1,4 +1,4 @@
-# author_list.py
+# components/api_authors.py
 
 import os
 from dotenv import load_dotenv

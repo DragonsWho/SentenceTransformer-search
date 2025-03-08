@@ -1,3 +1,8 @@
+for replace screenshots use:    python image_replacer.py "Cyoa title from catalog"    
+
+
+
+
 # Project: Semantic Search System for Text Games
 
 ## Description
