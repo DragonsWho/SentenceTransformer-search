@@ -1,5 +1,3 @@
-# components/js_json_extractor.py
-
 import json
 import re
 import logging
@@ -10,7 +8,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
@@ -22,7 +19,7 @@ class JSJsonExtractor:
     
     def __init__(self):
         self.driver = self._init_driver()
-        self.json_pattern = re.compile(r'Store\(\{state:\{app:(.*?)\},getters:\{checkRequireds', re.DOTALL)
+        self.json_pattern = re.compile(r'Store\(\{state:\{app:(.*?)\},getters:', re.DOTALL)
         
     def _init_driver(self):
         """Initialize Chrome WebDriver with performance logging"""
@@ -41,20 +38,23 @@ class JSJsonExtractor:
             raise
 
     def _extract_json(self, js_content):
-        """Extract JSON content between markers"""
+        """Extract JSON content between Store({state:{app: and },getters:"""
         try:
             match = self.json_pattern.search(js_content)
             if match:
                 json_str = match.group(1).strip()
                 if json_str.startswith('{') and json_str.endswith('}'):
                     return json.loads(json_str)
-                elif json_str.startswith('//'):
-                    # Handle commented JSON
-                    json_str = json_str.split('\n', 1)[1]
-                    return json.loads(json_str)
+                else:
+                    logger.error(f"Extracted content is not a valid JSON object: {json_str[:100]}...")
+                    return None
+            logger.warning("No JSON found matching the pattern in JS content")
             return None
         except json.JSONDecodeError as e:
             logger.error(f"Failed to decode JSON: {str(e)}")
+            return None
+        except Exception as e:
+            logger.error(f"Unexpected error extracting JSON: {str(e)}")
             return None
 
     def _json_to_md(self, data):
@@ -139,15 +139,11 @@ class JSJsonExtractor:
             
             md_content = self._json_to_md(json_data)
             project_name = url.split('/')[-2]
-            md_filename = f"markdown/{project_name}.md"
-            game_title = url.split('/')[-2].replace('_', ' ')
-            md_content = f"title: {game_title}\n\n{md_content}"
+            game_title = project_name.replace('_', ' ')
+            full_md_content = f"Game URL: {url}\n\nPossible title: {game_title}\n\n{md_content}"
             
-            with open(md_filename, 'w', encoding='utf-8') as f:
-                f.write(md_content)
-            
-            logger.info(f"Successfully processed {url} to {md_filename}")
-            return md_filename
+            logger.info(f"Successfully extracted content for {url}")
+            return full_md_content
             
         except Exception as e:
             logger.error(f"Error processing {url}: {str(e)}")
@@ -168,16 +164,3 @@ def extract_js_json(url):
         return extractor.process_url(url)
     finally:
         extractor.close()
-
-if __name__ == "__main__":
-    import sys
-    if len(sys.argv) != 2:
-        print("Usage: python js_json_extractor.py <url>")
-        sys.exit(1)
-        
-    url = sys.argv[1]
-    result = extract_js_json(url)
-    if result:
-        print(f"Successfully created: {result}")
-    else:
-        print("Failed to process URL")

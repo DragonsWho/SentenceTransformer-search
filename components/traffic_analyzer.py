@@ -119,15 +119,11 @@ class TrafficAnalyzer:
             
             md_content = self._json_to_md(data)
             project_name = url.split('/')[-2]
-            md_filename = f"markdown/{project_name}.md"
-            game_title = url.split('/')[-2].replace('_', ' ')
-            md_content = f"title: {game_title}\n\n{md_content}"
+            game_title = project_name.replace('_', ' ')
+            full_md_content = f"Game URL: {url}\n\nPossible title: {game_title}\n\n{md_content}"
             
-            with open(md_filename, 'w', encoding='utf-8') as f:
-                f.write(md_content)
-            
-            logger.info(f"Successfully processed {url} to {md_filename}")
-            return md_filename
+            logger.info(f"Successfully extracted content for {url}")
+            return full_md_content  # Возвращаем содержимое, а не путь к файлу
             
         except Exception as e:
             logger.error(f"Error processing {url}: {str(e)}")

@@ -2,6 +2,8 @@ import os
 
 # Список относительных путей к файлам
 file_paths = [
+
+    "controller.py",
     "components/grok3_api.py",
     "components/api_authors.py",
     "components/api_tags.py",
@@ -10,7 +12,6 @@ file_paths = [
     "components/js_json_extractor.py",
     "components/traffic_analyzer.py",
     "components/vector_search.py",
-    "controller.py",
     "GameUploader.py",
     "get_screenshoot_puppy.js",
     "prepare_and_upload.py",
