@@ -15,6 +15,7 @@ file_paths = [
     "get_screenshoot_puppy.js",
     "prepare_and_upload.py",
     "summarize.py",
+    "components/project_downloader.py",
     "vision_query.py"
 ]
 
