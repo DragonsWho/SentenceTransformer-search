@@ -3490,73 +3490,75 @@ def create_session():
 
 def download_file(url, path, session, base_domain, retries=3, delay=5, request_delay=0.1):
     path = Path(path)
-    
-    if url.endswith('favicon.ico'):
-        try:
-            head = session.head(url, allow_redirects=True, timeout=15)
-            if head.status_code == 404:
-                logging.debug(f"Favicon not found: {url} (this is normal)")
-                return True
-        except Exception:
-            logging.debug(f"Could not check favicon: {url} (skipping)")
-            return True
 
-    if url.startswith('data:'):
-        logging.debug(f"Skipping base64 data URL: {url}")
+    # Пропускаем специальные случаи
+    if url.endswith('favicon.ico') or url.startswith('data:'):
+        logging.debug(f"Skipping special URL: {url}")
         return True
 
+    # Проверка актуальности файла
     if path.exists():
         try:
-            mtime = path.stat().st_mtime
-            headers = {'If-Modified-Since': formatdate(mtime, usegmt=True)}
-            head = session.head(url, allow_redirects=True, timeout=15, headers=headers)
-            if head.status_code == 304:
-                logging.debug(f"File up to date: {path}")
-                return True
-            server_size = int(head.headers.get('Content-Length', 0))
+            # Получаем локальные метаданные
+            local_mtime = formatdate(path.stat().st_mtime, usegmt=True)
             local_size = path.stat().st_size
-            if server_size == local_size and server_size != 0:
-                logging.debug(f"File already exists and is complete: {path}")
+
+            # Запрос HEAD для получения серверных метаданных
+            headers = {'If-Modified-Since': local_mtime}
+            head = session.head(url, allow_redirects=True, timeout=15, headers=headers)
+            head.raise_for_status()
+
+            if head.status_code == 304:
+                logging.debug(f"File up to date (304 Not Modified): {path}")
+                return True
+
+            server_size = int(head.headers.get('Content-Length', 0))
+            server_mtime = head.headers.get('Last-Modified')
+            server_etag = head.headers.get('ETag')
+
+            # Проверка по ETag (если доступен)
+            if server_etag:
+                # Предполагаем, что локальный ETag хранится где-то (например, в метаданных)
+                # Для простоты используем размер как fallback
+                if server_size == local_size:
+                    logging.debug(f"File matches by size and ETag available: {path}")
+                    return True
+            # Проверка по Last-Modified и размеру
+            elif server_mtime and server_mtime == local_mtime and server_size == local_size:
+                logging.debug(f"File matches by Last-Modified and size: {path}")
+                return True
+            # Только размер как последний резерв
+            elif server_size == local_size and server_size != 0:
+                logging.debug(f"File matches by size: {path}")
                 return True
         except Exception as e:
-            logging.warning(f"Could not verify file size for {url}: {e}")
+            logging.warning(f"Could not verify file metadata for {url}: {e}")
 
+    # Скачивание файла
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-    except Exception as e:
-        logging.error(f"Error creating directories for {path}: {e}")
-        return False
-
-    for attempt in range(1, retries + 1):
-        try:
-            with session.get(url, stream=True, timeout=15) as response:
-                response.raise_for_status()
-                content_type = response.headers.get('Content-Type', '')
-                is_text_file = (
-                    path.suffix.lower() in {'.html', '.htm', '.js', '.css', '.json', '.txt', '.xml', '.svg'} or
-                    'text' in content_type or 
-                    'javascript' in content_type
-                )
-                if is_text_file:
-                    content = response.content
-                    encoding = detect_encoding(content)
-                    text = content.decode(encoding, errors='replace')
-                    path.write_text(text, encoding='utf-8')
-                else:
-                    with path.open('wb') as f:
-                        for chunk in response.iter_content(chunk_size=8192):
-                            if chunk:
-                                f.write(chunk)
+        with session.get(url, stream=True, timeout=15) as response:
+            response.raise_for_status()
+            content_type = response.headers.get('Content-Type', '')
+            is_text_file = (
+                path.suffix.lower() in {'.html', '.htm', '.js', '.css', '.json', '.txt', '.xml', '.svg'} or
+                'text' in content_type or 'javascript' in content_type
+            )
+            if is_text_file:
+                content = response.content
+                encoding = detect_encoding(content)
+                text = content.decode(encoding, errors='replace')
+                path.write_text(text, encoding='utf-8')
+            else:
+                with path.open('wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
             logging.debug(f"Downloaded: {url} -> {path}")
             sleep(request_delay)
             return True
-        except Exception as e:
-            logging.warning(f"Attempt {attempt} failed for {url}: {e}")
-            if attempt < retries:
-                sleep(delay)
-            else:
-                logging.error(f"Failed to download {url} after {retries} attempts.")
-                return False
+    except Exception as e:
+        logging.error(f"Failed to download {url}: {e}")
+        return False
 
 def parse_html_for_resources(html_content, base_url, base_domain):
     soup = BeautifulSoup(html_content, 'html.parser')

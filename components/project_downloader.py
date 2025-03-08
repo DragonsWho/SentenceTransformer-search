@@ -107,75 +107,106 @@ def create_session():
     })
     return session
 
-def download_file(url, path, session, base_domain, retries=3, delay=5, request_delay=0.1):
+def download_file(url, path, session, base_domain, metadata_path, retries=3, delay=5, request_delay=0.1):
     path = Path(path)
-    
-    if url.endswith('favicon.ico'):
-        try:
-            head = session.head(url, allow_redirects=True, timeout=15)
-            if head.status_code == 404:
-                logging.debug(f"Favicon not found: {url} (this is normal)")
-                return True
-        except Exception:
-            logging.debug(f"Could not check favicon: {url} (skipping)")
-            return True
+    metadata_path = Path(metadata_path)  # Путь к metadata.json в папке проекта
 
-    if url.startswith('data:'):
-        logging.debug(f"Skipping base64 data URL: {url}")
+    # Пропускаем специальные случаи
+    if url.endswith('favicon.ico') or url.startswith('data:'):
+        logging.debug(f"Skipping special URL: {url}")
         return True
 
-    if path.exists():
+    # Читаем существующие метаданные
+    metadata = {}
+    if metadata_path.exists():
         try:
-            mtime = path.stat().st_mtime
-            headers = {'If-Modified-Since': formatdate(mtime, usegmt=True)}
+            with metadata_path.open('r', encoding='utf-8') as f:
+                metadata = json.load(f)
+        except Exception as e:
+            logging.warning(f"Could not load metadata from {metadata_path}: {e}")
+
+    # Проверка актуальности файла
+    if path.exists() and url in metadata:
+        try:
+            local_metadata = metadata.get(url, {})
+            local_etag = local_metadata.get('ETag')
+            local_mtime = local_metadata.get('Last-Modified')
+            local_size = local_metadata.get('Content-Length', 0)
+
+            # Запрос HEAD с If-None-Match для ETag
+            headers = {}
+            if local_etag:
+                headers['If-None-Match'] = local_etag
+            elif local_mtime:
+                headers['If-Modified-Since'] = local_mtime
+
             head = session.head(url, allow_redirects=True, timeout=15, headers=headers)
+            head.raise_for_status()
+
             if head.status_code == 304:
-                logging.debug(f"File up to date: {path}")
+                logging.debug(f"File up to date (304 Not Modified): {path}")
                 return True
+
+            server_etag = head.headers.get('ETag')
+            server_mtime = head.headers.get('Last-Modified')
             server_size = int(head.headers.get('Content-Length', 0))
-            local_size = path.stat().st_size
-            if server_size == local_size and server_size != 0:
-                logging.debug(f"File already exists and is complete: {path}")
+
+            # Если ETag совпадает, файл актуален
+            if server_etag and server_etag == local_etag:
+                logging.debug(f"File matches by ETag: {path}")
+                return True
+            # Проверка по Last-Modified и размеру
+            elif server_mtime and server_mtime == local_mtime and server_size == local_size:
+                logging.debug(f"File matches by Last-Modified and size: {path}")
+                return True
+            # Только размер как запасной вариант
+            elif server_size == local_size and server_size != 0:
+                logging.debug(f"File matches by size: {path}")
                 return True
         except Exception as e:
-            logging.warning(f"Could not verify file size for {url}: {e}")
+            logging.warning(f"Could not verify file metadata for {url}: {e}")
 
+    # Скачивание файла
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
-    except Exception as e:
-        logging.error(f"Error creating directories for {path}: {e}")
-        return False
+        with session.get(url, stream=True, timeout=15) as response:
+            response.raise_for_status()
+            content_type = response.headers.get('Content-Type', '')
+            server_etag = response.headers.get('ETag')
+            server_mtime = response.headers.get('Last-Modified')
+            server_size = int(response.headers.get('Content-Length', 0))
 
-    for attempt in range(1, retries + 1):
-        try:
-            with session.get(url, stream=True, timeout=15) as response:
-                response.raise_for_status()
-                content_type = response.headers.get('Content-Type', '')
-                is_text_file = (
-                    path.suffix.lower() in {'.html', '.htm', '.js', '.css', '.json', '.txt', '.xml', '.svg'} or
-                    'text' in content_type or 
-                    'javascript' in content_type
-                )
-                if is_text_file:
-                    content = response.content
-                    encoding = detect_encoding(content)
-                    text = content.decode(encoding, errors='replace')
-                    path.write_text(text, encoding='utf-8')
-                else:
-                    with path.open('wb') as f:
-                        for chunk in response.iter_content(chunk_size=8192):
-                            if chunk:
-                                f.write(chunk)
-            logging.debug(f"Downloaded: {url} -> {path}")
+            is_text_file = (
+                path.suffix.lower() in {'.html', '.htm', '.js', '.css', '.json', '.txt', '.xml', '.svg'} or
+                'text' in content_type or 'javascript' in content_type
+            )
+            if is_text_file:
+                content = response.content
+                encoding = detect_encoding(content)
+                text = content.decode(encoding, errors='replace')
+                path.write_text(text, encoding='utf-8')
+            else:
+                with path.open('wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        if chunk:
+                            f.write(chunk)
+
+            # Обновляем метаданные
+            metadata[url] = {
+                'ETag': server_etag,
+                'Last-Modified': server_mtime,
+                'Content-Length': server_size
+            }
+            metadata_path.parent.mkdir(parents=True, exist_ok=True)
+            with metadata_path.open('w', encoding='utf-8') as f:
+                json.dump(metadata, f, indent=2)
+
+            logging.debug(f"Downloaded and updated metadata: {url} -> {path}")
             sleep(request_delay)
             return True
-        except Exception as e:
-            logging.warning(f"Attempt {attempt} failed for {url}: {e}")
-            if attempt < retries:
-                sleep(delay)
-            else:
-                logging.error(f"Failed to download {url} after {retries} attempts.")
-                return False
+    except Exception as e:
+        logging.error(f"Failed to download {url}: {e}")
+        return False
 
 def parse_html_for_resources(html_content, base_url, base_domain):
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -254,7 +285,7 @@ def parse_css_for_resources(css_content, base_url, base_domain):
             resources.add(full_url)
     return resources
 
-def handle_resource(full_url, session, base_path, base_url_path, base_domain):
+def handle_resource(full_url, session, base_path, base_url_path, base_domain, metadata_path):
     logging.debug(f"Starting to handle resource: {full_url}")
     parsed_url = urlparse(full_url)
     path = parsed_url.path.lstrip('/')
@@ -268,7 +299,7 @@ def handle_resource(full_url, session, base_path, base_url_path, base_domain):
     if not is_valid_url(full_url, base_domain):
         logging.warning(f"Invalid or external URL skipped: {full_url}")
         return False
-    success = download_file(full_url, file_path, session, base_domain)
+    success = download_file(full_url, file_path, session, base_domain, metadata_path)
     if not success:
         logging.error(f"Failed to download resource: {full_url}")
         return False
@@ -279,7 +310,7 @@ def handle_resource(full_url, session, base_path, base_url_path, base_domain):
             css_resources = parse_css_for_resources(css_content, full_url, base_domain)
             logging.debug(f"Found {len(css_resources)} resources in CSS: {file_path}")
             for css_res in css_resources:
-                handle_resource(css_res, session, base_path, base_url_path, base_domain)
+                handle_resource(css_res, session, base_path, base_url_path, base_domain, metadata_path)
         except Exception as e:
             logging.error(f"Error parsing CSS {file_path}: {e}")
     return True
@@ -288,6 +319,9 @@ def crawl_and_download(url, base_path, session=None, max_workers=5):
     if session is None:
         session = create_session()
     
+    base_path = Path(base_path)
+    metadata_path = base_path / 'metadata.json'
+
     try:
         response = session.get(url, timeout=15)
         response.raise_for_status()
@@ -303,7 +337,7 @@ def crawl_and_download(url, base_path, session=None, max_workers=5):
         logging.error(f"Error decoding content from {url}: {e}")
         html_content = raw_content.decode('utf-8', errors='replace')
 
-    index_path = Path(base_path) / 'index.html'
+    index_path = base_path / 'index.html'
     try:
         index_path.parent.mkdir(parents=True, exist_ok=True)
         index_path.write_text(html_content, encoding='utf-8')
@@ -324,12 +358,13 @@ def crawl_and_download(url, base_path, session=None, max_workers=5):
     )
 
     project_json_url = urljoin(f"{parsed_base.scheme}://{base_domain}{base_url_path}", 'project.json')
-    project_json_path = Path(base_path) / 'project.json'
+    project_json_path = base_path / 'project.json'
     project_json_downloaded = download_file(
         project_json_url, 
-        str(project_json_path), 
+        project_json_path, 
         session, 
         base_domain,
+        metadata_path,
         retries=3,
         delay=1
     )
@@ -363,7 +398,8 @@ def crawl_and_download(url, base_path, session=None, max_workers=5):
                 session, 
                 base_path, 
                 base_url_path, 
-                base_domain
+                base_domain,
+                metadata_path
             ): res for res in resources
         }
 
