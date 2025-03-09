@@ -115,8 +115,10 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
     game_name = folder_path.name
     ocr_raw_dir = folder_path / "ocr_raw"
     ocr_md_dir = folder_path / "ocr_markdown_pages"
+    summaries_dir = folder_path / "summaries"
     os.makedirs(ocr_raw_dir, exist_ok=True)
     os.makedirs(ocr_md_dir, exist_ok=True)
+    os.makedirs(summaries_dir, exist_ok=True)
     
     # Инициализируем GrokAPI
     try:
@@ -125,77 +127,135 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
         logger.error(f"Failed to initialize Grok API: {str(e)}")
         return False
     
-    # Загружаем промпт
-    prompt_path = "prompts/Grok_ocr_to_md.md"
+    # Загружаем промпты
+    ocr_prompt_path = "prompts/Grok_ocr_to_md.md"
+    sent_search_prompt_path = "prompts/Grok_for_sent_search.md"
+    catalog_prompt_path = "prompts/Grok_description_for_catalog.md"
     try:
-        prompt = load_prompt(prompt_path)
+        ocr_prompt = load_prompt(ocr_prompt_path)
+        sent_search_prompt = load_prompt(sent_search_prompt_path)
+        catalog_prompt = load_prompt(catalog_prompt_path)
     except Exception as e:
-        logger.error(f"Error loading prompt: {str(e)}")
+        logger.error(f"Error loading prompts: {str(e)}")
         return False
     
-    # Step 1: OCR all images in the folder
+    # Step 1: Проверяем изображения и наличие OCR данных
     image_extensions = (".jpg", ".jpeg", ".png", ".bmp")
     images = [f for f in folder_path.iterdir() if f.suffix.lower() in image_extensions]
     if not images:
         logger.warning(f"No images found in folder: {folder_path}")
         return False
     
-    logger.info(f"Processing {len(images)} images in folder: {folder_path}")
+    images = sorted(images)  # Сортируем для консистентности
+    logger.info(f"Found {len(images)} images in folder: {folder_path}")
+    
+    # Проверка ocr_raw
+    ocr_raw_files = {f.stem: f for f in ocr_raw_dir.iterdir() if f.suffix == ".json"}
+    expected_ocr_raw = {img.stem: f"{img.stem}_ocr.json" for img in images}
+    ocr_raw_complete = all(
+        name in ocr_raw_files and os.path.getsize(ocr_raw_files[name]) > 0 
+        for name in expected_ocr_raw
+    )
+    
     combined_text_blocks = []
     
-    for i, image_path in enumerate(sorted(images), 1):
-        logger.info(f"Running OCR on image {i}/{len(images)}: {image_path}")
-        ocr_output_file = ocr_raw_dir / f"{image_path.stem}_ocr.json"
-        success, output, error = run_script("components/ocr/ocr.py", [str(image_path), str(ocr_output_file)])
-        if not success:
-            logger.error(f"OCR failed for {image_path}: {error}")
-            continue
-        
-        # Загружаем сырые данные OCR
-        try:
-            with open(ocr_output_file, "r", encoding="utf-8") as f:
-                ocr_data = json.load(f)
-        except Exception as e:
-            logger.error(f"Error loading OCR JSON {ocr_output_file}: {str(e)}")
-            continue
-        
-        # Оптимизируем JSON для API
-        optimized_json = optimize_ocr_json(ocr_data)
-        
-        # Формируем запрос для Grok API
-        full_prompt = f"{prompt}\n\n=== OCR JSON ===\n{optimized_json}"
-        logger.info(f"Sending optimized prompt to Grok API for {image_path.name}")
-        
-        # Отправляем запрос в Grok API
-        try:
-            response = grok_api.ask(full_prompt, timeout=120)
-            if response.startswith("Error:"):
-                logger.error(f"Grok API failed for {image_path.name}: {response}")
+    if not ocr_raw_complete:
+        logger.info(f"OCR raw data incomplete or missing for some images in {folder_path}")
+        for i, image_path in enumerate(images, 1):
+            ocr_output_file = ocr_raw_dir / f"{image_path.stem}_ocr.json"
+            if (image_path.stem not in ocr_raw_files or 
+                not os.path.exists(ocr_output_file) or 
+                os.path.getsize(ocr_output_file) == 0):
+                logger.info(f"Running OCR on image {i}/{len(images)}: {image_path}")
+                success, output, error = run_script("components/ocr/ocr.py", [str(image_path), str(ocr_output_file)])
+                if not success:
+                    logger.error(f"OCR failed for {image_path}: {error}")
+                    continue
+            else:
+                logger.info(f"Using existing OCR file for {image_path}: {ocr_output_file}")
+            
+            # Загружаем сырые данные OCR
+            try:
+                with open(ocr_output_file, "r", encoding="utf-8") as f:
+                    ocr_data = json.load(f)
+                for block in ocr_data.get("text_blocks", []):
+                    block["source_image"] = str(image_path.name)
+                    combined_text_blocks.append(block)
+            except Exception as e:
+                logger.error(f"Error loading OCR JSON {ocr_output_file}: {str(e)}")
                 continue
-        except Exception as e:
-            logger.error(f"Exception during Grok API call for {image_path.name}: {str(e)}")
-            continue
-        
-        # Сохраняем результат в ocr_markdown_pages
-        md_output_file = ocr_md_dir / f"{image_path.stem}.md"
-        try:
-            with open(md_output_file, "w", encoding="utf-8") as f:
-                f.write(response)
-            logger.info(f"Markdown from Grok API saved to {md_output_file}")
-        except Exception as e:
-            logger.error(f"Error saving Markdown for {image_path.name}: {str(e)}")
-            continue
-        
-        # Добавляем сырые данные в combined_text_blocks для общего Markdown
-        for block in ocr_data.get("text_blocks", []):
-            block["source_image"] = str(image_path.name)
-            combined_text_blocks.append(block)
+    else:
+        logger.info(f"All OCR raw files exist and are valid in {ocr_raw_dir}")
+        for image_path in images:
+            ocr_output_file = ocr_raw_dir / f"{image_path.stem}_ocr.json"
+            try:
+                with open(ocr_output_file, "r", encoding="utf-8") as f:
+                    ocr_data = json.load(f)
+                for block in ocr_data.get("text_blocks", []):
+                    block["source_image"] = str(image_path.name)
+                    combined_text_blocks.append(block)
+            except Exception as e:
+                logger.error(f"Error loading existing OCR JSON {ocr_output_file}: {str(e)}")
+                continue
     
     if not combined_text_blocks:
         logger.error(f"No text blocks extracted for folder: {folder_path}")
         return False
     
-    # Step 2: Convert raw OCR to Markdown
+    # Step 2: Проверка ocr_markdown_pages
+    ocr_md_files = {f.stem: f for f in ocr_md_dir.iterdir() if f.suffix == ".md"}
+    expected_ocr_md = {img.stem: f"{img.stem}.md" for img in images}
+    ocr_md_complete = all(
+        name in ocr_md_files and os.path.getsize(ocr_md_files[name]) > 0 
+        for name in expected_ocr_md
+    )
+    
+    if not ocr_md_complete:
+        logger.info(f"OCR Markdown files incomplete or missing in {folder_path}")
+        for i, image_path in enumerate(images, 1):
+            md_output_file = ocr_md_dir / f"{image_path.stem}.md"
+            if (image_path.stem not in ocr_md_files or 
+                not os.path.exists(md_output_file) or 
+                os.path.getsize(md_output_file) == 0):
+                ocr_output_file = ocr_raw_dir / f"{image_path.stem}_ocr.json"
+                try:
+                    with open(ocr_output_file, "r", encoding="utf-8") as f:
+                        ocr_data = json.load(f)
+                except Exception as e:
+                    logger.error(f"Error loading OCR JSON for Markdown generation {ocr_output_file}: {str(e)}")
+                    continue
+                
+                # Оптимизируем JSON для API
+                optimized_json = optimize_ocr_json(ocr_data)
+                
+                # Формируем запрос для Grok API (OCR to MD)
+                full_prompt = f"{ocr_prompt}\n\n=== OCR JSON ===\n{optimized_json}"
+                logger.info(f"Sending optimized prompt to Grok API for {image_path.name}")
+                
+                # Отправляем запрос в Grok API
+                try:
+                    response = grok_api.ask(full_prompt, timeout=120)
+                    if response.startswith("Error:"):
+                        logger.error(f"Grok API failed for {image_path.name}: {response}")
+                        continue
+                except Exception as e:
+                    logger.error(f"Exception during Grok API call for {image_path.name}: {str(e)}")
+                    continue
+                
+                # Сохраняем результат в ocr_markdown_pages
+                try:
+                    with open(md_output_file, "w", encoding="utf-8") as f:
+                        f.write(response)
+                    logger.info(f"Markdown from Grok API saved to {md_output_file}")
+                except Exception as e:
+                    logger.error(f"Error saving Markdown for {image_path.name}: {str(e)}")
+                    continue
+            else:
+                logger.info(f"Using existing Markdown file for {image_path}: {md_output_file}")
+    else:
+        logger.info(f"All OCR Markdown files exist and are valid in {ocr_md_dir}")
+    
+    # Step 3: Convert raw OCR to Markdown (общий файл)
     os.makedirs(output_dir, exist_ok=True)
     md_path = os.path.join(output_dir, f"{game_name}.md")
     md_content = [f"Game Folder: {folder_path}\n\nPossible title: {game_name.replace('_', ' ')}\n"]
@@ -207,8 +267,51 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
         f.write("\n".join(md_content))
     
     logger.info(f"Raw OCR Markdown saved to {md_path}")
+    
+    # Step 4: Combine all enhanced Markdown files and generate summaries
+    md_files = [f for f in ocr_md_dir.iterdir() if f.suffix == ".md"]
+    if not md_files:
+        logger.error(f"No enhanced Markdown files found in {ocr_md_dir}")
+        return False
+    
+    combined_md_content = ""
+    for md_file in sorted(md_files):
+        with open(md_file, "r", encoding="utf-8") as f:
+            combined_md_content += f"\n\n=== {md_file.name} ===\n{f.read()}"
+    
+    # Запрос для поисковика (sent_search)
+    sent_search_full_prompt = f"{sent_search_prompt}\n\n=== Combined Enhanced Game Text ===\n{combined_md_content}"
+    logger.info(f"Sending sent_search prompt to Grok API for {game_name}")
+    try:
+        sent_search_response = grok_api.ask(sent_search_full_prompt, timeout=120)
+        if sent_search_response.startswith("Error:"):
+            logger.error(f"Grok API failed for sent_search on {game_name}: {sent_search_response}")
+        else:
+            sent_search_output_path = summaries_dir / f"{game_name}_sent_search.md"
+            with open(sent_search_output_path, "w", encoding="utf-8") as f:
+                f.write(sent_search_response)
+            logger.info(f"Sent_search summary saved to {sent_search_output_path}")
+    except Exception as e:
+        logger.error(f"Exception during sent_search Grok API call for {game_name}: {str(e)}")
+    
+    # Запрос для каталога (catalog)
+    catalog_full_prompt = f"{catalog_prompt}\n\n=== Combined Enhanced Game Text ===\n{combined_md_content}"
+    logger.info(f"Sending catalog prompt to Grok API for {game_name}")
+    try:
+        catalog_response = grok_api.ask(catalog_full_prompt, timeout=120)
+        if catalog_response.startswith("Error:"):
+            logger.error(f"Grok API failed for catalog on {game_name}: {catalog_response}")
+        else:
+            catalog_output_path = summaries_dir / f"{game_name}_catalog.json"
+            with open(catalog_output_path, "w", encoding="utf-8") as f:
+                f.write(catalog_response)
+            logger.info(f"Catalog JSON saved to {catalog_output_path}")
+    except Exception as e:
+        logger.error(f"Exception during catalog Grok API call for {game_name}: {str(e)}")
+    
     logger.info(f"Raw OCR data saved in {ocr_raw_dir}")
     logger.info(f"Grok-processed Markdown saved in {ocr_md_dir}")
+    logger.info(f"Summaries saved in {summaries_dir}")
     return True
 
 def main():

@@ -1,0 +1,427 @@
+# GameUploader_static.py
+
+import os
+import json
+import requests
+from pathlib import Path
+import mimetypes
+import sys
+import time
+import logging
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.FileHandler("logs/game_uploader_static.log"),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
+
+ALLOWED_IMAGE_MIME_TYPES = [
+    'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'image/avif', 'image/svg+xml'
+]
+
+EXTENSION_TO_MIME = {
+    '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif', '.webp': 'image/webp', '.avif': 'image/avif', '.svg': 'image/svg+xml'
+}
+
+class AuthorManager:
+    def __init__(self, base_url, token):
+        self.base_url = base_url
+        self.token = token
+        self.authors_cache = {}
+        logger.info("AuthorManager initialized")
+
+    def load_authors(self):
+        logger.info("Loading existing authors from API")
+        try:
+            if not self.token:
+                raise Exception("Not authenticated")
+            headers = {'Authorization': self.token}
+            all_authors = []
+            page = 1
+            per_page = 200
+            while True:
+                response = requests.get(
+                    f'{self.base_url}/collections/authors/records',
+                    headers=headers,
+                    params={'page': page, 'perPage': per_page}
+                )
+                response.raise_for_status()
+                data = response.json()
+                authors_chunk = data.get('items', [])
+                all_authors.extend(authors_chunk)
+                if len(authors_chunk) < per_page:
+                    break
+                page += 1
+            logger.info(f'Downloaded {len(all_authors)} existing authors')
+            for author in all_authors:
+                self.authors_cache[author['name'].lower()] = author['id']
+            return all_authors
+        except Exception as e:
+            logger.error(f'Error getting existing authors: {e}')
+            return []
+
+    def create_author(self, name, description=""):
+        logger.info(f"Creating new author: {name}")
+        try:
+            if not self.token:
+                raise Exception("Not authenticated")
+            headers = {'Authorization': self.token}
+            response = requests.post(
+                f'{self.base_url}/collections/authors/records',
+                headers=headers,
+                json={'name': name, 'description': description}
+            )
+            response.raise_for_status()
+            author_data = response.json()
+            logger.info(f'Created author: {name} with ID: {author_data["id"]}')
+            self.authors_cache[name.lower()] = author_data["id"]
+            return author_data["id"]
+        except Exception as e:
+            logger.error(f'Error creating author "{name}": {e}')
+            return None
+
+    def get_or_create_authors(self, authors, description=""):
+        if not isinstance(authors, list):
+            authors = [authors]
+        author_ids = []
+        for name in authors:
+            if not name:
+                logger.warning("Empty author name encountered, skipping")
+                continue
+            name_lower = name.lower()
+            if name_lower in self.authors_cache:
+                logger.info(f"Found existing author: {name} (ID: {self.authors_cache[name_lower]})")
+                author_ids.append(self.authors_cache[name_lower])
+            else:
+                author_id = self.create_author(name, description)
+                if author_id:
+                    author_ids.append(author_id)
+        return author_ids
+
+class TagManager:
+    def __init__(self):
+        self.base_url = 'https://cyoa.cafe/api'
+        self.email = os.getenv('EMAIL')
+        self.password = os.getenv('PASSWORD')
+        self.token = None
+        self.category_id = "phc2n4pqe7hxe36"
+        self.existing_tags = {}
+        logger.info("TagManager initialized")
+
+    def login(self):
+        logger.info("Attempting TagManager login")
+        try:
+            response = requests.post(
+                f'{self.base_url}/collections/users/auth-with-password',
+                json={'identity': self.email, 'password': self.password}
+            )
+            response.raise_for_status()
+            data = response.json()
+            self.token = data['token']
+            logger.info('TagManager successfully logged in')
+            return True
+        except Exception as e:
+            logger.error(f'TagManager login error: {e}')
+            return False
+
+    def get_all_tags(self):
+        logger.info("Loading all existing tags")
+        try:
+            if not self.token:
+                raise Exception("Not authenticated")
+            headers = {'Authorization': self.token}
+            all_tags = []
+            page = 1
+            per_page = 200
+            while True:
+                response = requests.get(
+                    f'{self.base_url}/collections/tags/records',
+                    headers=headers,
+                    params={'page': page, 'perPage': per_page}
+                )
+                response.raise_for_status()
+                data = response.json()
+                tags_chunk = data.get('items', [])
+                all_tags.extend(tags_chunk)
+                if len(tags_chunk) < per_page:
+                    break
+                page += 1
+            logger.info(f'Downloaded {len(all_tags)} existing tags')
+            self.existing_tags = {tag['name'].lower(): tag['id'] for tag in all_tags}
+            return all_tags
+        except Exception as e:
+            logger.error(f'Error getting existing tags: {e}')
+            return []
+
+    def create_tag(self, name, description=""):
+        logger.info(f"Creating new tag: {name}")
+        try:
+            if not self.token:
+                raise Exception("Not authenticated")
+            headers = {'Authorization': self.token}
+            response = requests.post(
+                f'{self.base_url}/collections/tags/records',
+                headers=headers,
+                json={'name': name, 'description': description}
+            )
+            response.raise_for_status()
+            tag_data = response.json()
+            logger.info(f'Created tag: {name} with ID: {tag_data["id"]}')
+            self.existing_tags[name.lower()] = tag_data["id"]
+            self.add_tag_to_category(tag_data["id"])
+            return tag_data["id"]
+        except Exception as e:
+            logger.error(f'Error creating tag "{name}": {e}')
+            return None
+
+    def add_tag_to_category(self, tag_id):
+        logger.info(f"Adding tag {tag_id} to category Custom")
+        try:
+            if not self.token:
+                raise Exception("Not authenticated")
+            headers = {'Authorization': self.token}
+            response = requests.get(
+                f'{self.base_url}/collections/tag_categories/records/{self.category_id}',
+                headers=headers
+            )
+            response.raise_for_status()
+            category_data = response.json()
+            current_tags = category_data.get('tags', [])
+            if tag_id not in current_tags:
+                current_tags.append(tag_id)
+                response = requests.patch(
+                    f'{self.base_url}/collections/tag_categories/records/{self.category_id}',
+                    headers=headers,
+                    json={'tags': current_tags}
+                )
+                response.raise_for_status()
+                logger.info(f'Added tag {tag_id} to category Custom')
+        except Exception as e:
+            logger.error(f'Error adding tag {tag_id} to category: {e}')
+
+    def get_or_create_tag(self, tag_name):
+        tag_name_lower = tag_name.lower()
+        if tag_name_lower in self.existing_tags:
+            logger.info(f"Found existing tag: {tag_name} (ID: {self.existing_tags[tag_name_lower]})")
+            return self.existing_tags[tag_name_lower]
+        return self.create_tag(tag_name)
+
+class GameUploaderStatic:
+    def __init__(self):
+        self.base_url = 'https://cyoa.cafe/api'
+        self.email = os.getenv('EMAIL')
+        self.password = os.getenv('PASSWORD')
+        self.token = None
+        self.tag_manager = TagManager()
+        self.author_manager = None
+        self.request_delay = 3
+        logger.info("GameUploaderStatic initialized")
+
+    def login(self):
+        logger.info("Attempting to login")
+        try:
+            response = requests.post(
+                f'{self.base_url}/collections/users/auth-with-password',
+                json={'identity': self.email, 'password': self.password}
+            )
+            response.raise_for_status()
+            data = response.json()
+            self.token = data['token']
+            logger.info("Successfully logged in")
+            self.tag_manager.login()
+            self.tag_manager.get_all_tags()
+            self.author_manager = AuthorManager(self.base_url, self.token)
+            self.author_manager.load_authors()
+            return data
+        except Exception as e:
+            logger.error(f'Login failed: {str(e)}')
+            return None
+
+    def load_and_enrich_game_data(self, json_path, game_folder):
+        """Загружает JSON и добавляет пути к изображениям из папки."""
+        logger.info(f"Loading and enriching game data from {json_path} with images from {game_folder}")
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                game_data = json.load(f)
+
+            # Устанавливаем тип игры как "img"
+            game_data['img_or_link'] = 'img'
+
+            # Определяем пути к изображениям
+            folder_path = Path(game_folder)
+            image_extensions = ('.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif', '.svg')
+            images = sorted([f for f in folder_path.iterdir() if f.suffix.lower() in image_extensions])
+
+            if not images:
+                raise ValueError(f"No images found in folder: {game_folder}")
+
+            # Первое изображение как обложка, остальные как страницы
+            game_data['image'] = str(images[0])
+            game_data['cyoa_pages'] = [str(img) for img in images]  # Все изображения как страницы
+
+            logger.info(f"Enriched game data with image: {game_data['image']}, pages: {len(game_data['cyoa_pages'])}")
+            return game_data
+        except Exception as e:
+            logger.error(f"Error enriching game data: {str(e)}")
+            raise
+
+    def create_game(self, game_data):
+        logger.info(f"Creating static game: {game_data['title']}")
+        try:
+            if not self.token:
+                raise Exception("Not authenticated")
+            headers = {'Authorization': self.token}
+
+            # Проверяем обложку
+            image_path = Path(game_data['image'])
+            if not image_path.exists():
+                raise FileNotFoundError(f"Cover image not found: {image_path}")
+            mime_type = EXTENSION_TO_MIME.get(image_path.suffix.lower(), mimetypes.guess_type(str(image_path))[0])
+            if mime_type not in ALLOWED_IMAGE_MIME_TYPES:
+                raise ValueError(f"Unsupported image format: {mime_type}")
+
+            # Проверяем страницы
+            if 'cyoa_pages' not in game_data or not game_data['cyoa_pages']:
+                raise ValueError("No CYOA pages provided for static game")
+            for page_path in game_data['cyoa_pages']:
+                page_path_obj = Path(page_path)
+                if not page_path_obj.exists():
+                    raise FileNotFoundError(f"Game page not found: {page_path}")
+
+            # Обрабатываем теги
+            tag_ids = []
+            if game_data.get('tags'):
+                for tag_name in game_data['tags']:
+                    tag_id = self.tag_manager.get_or_create_tag(tag_name)
+                    if tag_id:
+                        tag_ids.append(tag_id)
+                    else:
+                        logger.warning(f"Failed to get or create tag '{tag_name}'")
+
+            # Обрабатываем авторов
+            author_ids = []
+            if 'author' in game_data:
+                author_ids = self.author_manager.get_or_create_authors(game_data['author'])
+                logger.info(f"Authors for game: {game_data['author']} (IDs: {author_ids})")
+
+            # Формируем данные формы
+            form_data = [
+                ('title', game_data['title']),
+                ('description', game_data['description']),
+                ('img_or_link', 'img'),
+                ('uploader', game_data.get('uploader', 'mar1q123caruaaw')),
+            ]
+            for tag_id in tag_ids:
+                form_data.append(('tags', tag_id))
+            for author_id in author_ids:
+                form_data.append(('authors', author_id))
+
+            # Подготавливаем файлы для загрузки
+            files = {}
+            with open(image_path, 'rb') as cover_image_file:
+                files['image'] = ('blob', cover_image_file, mime_type)
+                for i, page_path in enumerate(game_data['cyoa_pages']):
+                    page_path_obj = Path(page_path)
+                    page_mime_type = EXTENSION_TO_MIME.get(page_path_obj.suffix.lower(), mimetypes.guess_type(str(page_path_obj))[0])
+                    if page_mime_type not in ALLOWED_IMAGE_MIME_TYPES:
+                        logger.warning(f"Unsupported format for page {page_path}: {page_mime_type}")
+                        continue
+                    with open(page_path_obj, 'rb') as page_file:
+                        files[f'cyoa_pages[{i}]'] = (f'page_{i}', page_file, page_mime_type)
+
+                # Отправляем запрос
+                response = requests.post(
+                    f'{self.base_url}/collections/games/records',
+                    headers=headers,
+                    data=form_data,
+                    files=files
+                )
+                response.raise_for_status()
+                game_record = response.json()
+                logger.info(f"Game created successfully: {game_record['id']}")
+
+            # Связываем авторов с игрой
+            for author_id in author_ids:
+                time.sleep(self.request_delay)
+                self.link_game_to_author(game_record['id'], author_id)
+
+            return game_record
+        except Exception as e:
+            logger.error(f"Failed to create game '{game_data['title']}': {str(e)}", exc_info=True)
+            raise
+
+    def link_game_to_author(self, game_id, author_id):
+        logger.info(f"Linking game {game_id} to author {author_id}")
+        try:
+            if not self.token:
+                raise Exception("Not authenticated")
+            headers = {'Authorization': self.token}
+            response = requests.get(
+                f'{self.base_url}/collections/games/records/{game_id}',
+                headers=headers
+            )
+            response.raise_for_status()
+            game_data = response.json()
+            current_authors = game_data.get('authors', [])
+            if author_id not in current_authors:
+                current_authors.append(author_id)
+                response = requests.patch(
+                    f'{self.base_url}/collections/games/records/{game_id}',
+                    headers=headers,
+                    json={'authors': current_authors}
+                )
+                response.raise_for_status()
+                logger.info(f'Linked game {game_id} to author {author_id}')
+            response = requests.get(
+                f'{self.base_url}/collections/authors/records/{author_id}',
+                headers=headers
+            )
+            response.raise_for_status()
+            author_data = response.json()
+            current_games = author_data.get('games', [])
+            if game_id not in current_games:
+                current_games.append(game_id)
+                response = requests.patch(
+                    f'{self.base_url}/collections/authors/records/{author_id}',
+                    headers=headers,
+                    json={'games': current_games}
+                )
+                response.raise_for_status()
+                logger.info(f'Updated author {author_id} with game {game_id}')
+            return True
+        except Exception as e:
+            logger.error(f'Error linking game {game_id} to author {author_id}: {e}')
+            return False
+
+def main():
+    if len(sys.argv) < 3:
+        logger.error("Usage: python GameUploader_static.py <json_path> <game_folder>")
+        sys.exit(1)
+
+    json_path = sys.argv[1]
+    game_folder = sys.argv[2]
+
+    uploader = GameUploaderStatic()
+    try:
+        auth_data = uploader.login()
+        if not auth_data:
+            raise Exception("Failed to login")
+
+        game_data = uploader.load_and_enrich_game_data(json_path, game_folder)
+        record = uploader.create_game(game_data)
+        logger.info(f"Successfully uploaded: {game_data['title']} (ID: {record['id']})")
+    except Exception as e:
+        logger.critical(f"Critical error in main: {str(e)}", exc_info=True)
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

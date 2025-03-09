@@ -486,3 +486,10 @@
   Failed to process: 0
   Successfully processed folders:
     - cyoa_static/alchemical potions
+
+[2025-03-09 18:37:50] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical potions
