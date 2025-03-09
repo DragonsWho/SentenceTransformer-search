@@ -168,6 +168,7 @@ async def summarize_md_file(md_file, grok_api, mode="sent_search"):
         return False
 
     vision_description = ""
+    file_paths = []
     if os.path.exists(webp_path):
         vision_output = await run_vision_query(webp_path)
         if vision_output:
@@ -177,6 +178,7 @@ async def summarize_md_file(md_file, grok_api, mode="sent_search"):
                 "This describes the visual style and content of the game's first page, "
                 "which can be used to enhance the game's description."
             )
+        file_paths.append(webp_path)  # Добавляем путь к скриншоту для отправки
 
     additional_data = ""
     if mode == "catalog":
@@ -191,10 +193,11 @@ async def summarize_md_file(md_file, grok_api, mode="sent_search"):
         additional_data += csv_hint
 
     full_prompt = f"{prompt}{additional_data}\n\n=== Game Text ===\n{game_text}{vision_description}"
-    logger.info(f"Sending prompt to Grok API for {md_file}")
+    logger.info(f"Sending prompt to Grok API for {md_file} with file: {webp_path if file_paths else 'None'}")
     
     try:
-        response = grok_api.ask(full_prompt, timeout=120)
+        # Передаем как текстовый промпт, так и файл скриншота
+        response = grok_api.ask(full_prompt, file_paths=file_paths, timeout=120)
         if response.startswith("Error:"):
             logger.error(f"Grok 3 API failed for {md_file}: {response}")
             return False

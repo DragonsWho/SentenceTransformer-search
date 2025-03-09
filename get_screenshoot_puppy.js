@@ -61,8 +61,16 @@ const fs = require('fs');
     document.body.style.height = 'auto';
   });
 
-  // Add virtual menu
+  // Add virtual floating menu
   await addControlMenu(page);
+
+  // Scroll down a couple of screens (2 * viewport height) and wait 5 seconds
+  await page.evaluate(async () => {
+    const scrollAmount = window.innerHeight * 2; // Scroll down 2 screens
+    window.scrollTo(0, scrollAmount);
+  });
+  console.log('Scrolled down 2 screens, waiting 5 seconds for content to load...');
+  await new Promise(resolve => setTimeout(resolve, 5000)); // Pause for 5 seconds
 
   // Wait for "STOP" and "CONTINUE" presses
   let isPaused = startPaused;
@@ -142,12 +150,12 @@ const fs = require('fs');
   await browser.close();
 })();
 
-// Function to add virtual menu
+// Function to add virtual floating menu
 async function addControlMenu(page) {
   await page.evaluate(() => {
     const menu = document.createElement('div');
     menu.id = 'control-menu';
-    menu.style.position = 'absolute';
+    menu.style.position = 'fixed'; // Changed to fixed to stay in place during scroll
     menu.style.top = '10px';
     menu.style.left = '10px';
     menu.style.zIndex = '9999';
@@ -158,7 +166,7 @@ async function addControlMenu(page) {
     menu.style.gap = '20px';
 
     const stopButton = document.createElement('button');
-    stopButton.innerText = 'STOP'; // Translated from "СТОП"
+    stopButton.innerText = 'STOP';
     stopButton.style.padding = '15px 30px';
     stopButton.style.fontSize = '24px';
     stopButton.style.background = '#ff4444';
@@ -169,7 +177,7 @@ async function addControlMenu(page) {
     stopButton.onclick = () => console.log('STOP_PRESSED');
 
     const continueButton = document.createElement('button');
-    continueButton.innerText = 'CONTINUE'; // Translated from "ПРОДОЛЖИТЬ"
+    continueButton.innerText = 'CONTINUE';
     continueButton.style.padding = '15px 30px';
     continueButton.style.fontSize = '24px';
     continueButton.style.background = '#44ff44';

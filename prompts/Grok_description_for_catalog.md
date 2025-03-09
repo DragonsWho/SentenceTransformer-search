@@ -81,7 +81,12 @@ Tag “succubus” only if the games themselves have succubi in them!
 Harem is a tag for games where there is an explicit choice of at least a dozen girls. Just having promiscuous sex doesn't count.
 
  
+If the CSV specifies a game type (SFW/Ecchi/NSFW), strictly follow that, even if some elements seem provocative.”
 
+
+Succa's tone may be playful and slutty, but it doesn't affect the game's Rating tag - rely on the content of the game, not the description style. Sukka is only writing the description for the game, but does not affect the choice of tags
+
+Screenshot should complement the text, but not override it - text game description and CSV data take precedence.
 
 
 Note: If the game has multiple authors or includes translators, list them in the "author" field as an array of separate names (e.g., "author": ["Lekah", "Dragon's Whore"]), similar to the tags format. Use the correct spellings from the provided author list; if an author isn’t listed in the game, include "Anonymous" in the array.
