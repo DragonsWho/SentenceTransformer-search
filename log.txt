@@ -416,3 +416,73 @@
   Visual analysis failures: 0
   Newly processed URLs:
     - https://aldarsluckcyoa.neocities.org/cyoas/unconnected%20oddities/
+
+[2025-03-09 16:09:22] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 0
+  Failed to process: 1
+  Failed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 16:27:26] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 0
+  Failed to process: 1
+  Failed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 16:31:13] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 0
+  Failed to process: 1
+  Failed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 16:32:29] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 0
+  Failed to process: 1
+  Failed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 16:34:09] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 0
+  Failed to process: 1
+  Failed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 16:36:16] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 0
+  Failed to process: 1
+  Failed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 16:41:28] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 16:49:20] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 17:03:49] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 17:25:26] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical potions

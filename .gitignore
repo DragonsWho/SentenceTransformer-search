@@ -24,3 +24,5 @@ New_Games/
 catalog_json/
 Processed_Games/
 downloaded_games/
+
+google_vision_API_for_OCR.json

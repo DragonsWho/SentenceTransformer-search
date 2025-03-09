@@ -1,0 +1,1161 @@
+{
+    "image_path": "/home/dw/Documents/Coding/SentenceTransformer-search/cyoa_static/alchemical potions/02.png",
+    "text_blocks": [
+        {
+            "text": "Day 1",
+            "coordinates": [ [693, 9], [803, 4], [804, 38], [694, 42] ]
+        },
+        {
+            "text": "Garutaisa",
+            "coordinates": [ [1254, 41], [1337, 41], [1337, 55], [1254, 55] ]
+        },
+        {
+            "text": "You sat for hours , mixing your ingredients together until you deemed you made enough . With your potions made , it was finally time to open your doors to the world . You put the signs up on the shelves and labels on all the potion flasks , and sat back in your seat . Now all you had to do was wait for the customers to start pouring in .",
+            "coordinates": [ [103, 96], [1381, 96], [1381, 172], [103, 172] ]
+        },
+        {
+            "text": "( Customers are the people that'll pay for your potions . Every customer will have a certain problem that can be fixed with a certain potion . They will state what potions they need , and how much they'll pay for them . Customers also have a relationship with you , shown by how many stars they have . The more stars , the better your relationship with them will be , and if you earn all five stars , then they'll pay double of whatever is stated . Some customers start with no stars while others start with 1 or 2 , and every time you sell potions to a customer , their relationship improves by 1 star . By the way , I hope you've saved up some Energy Points , because customers can also give you side quests . These side quests will cost some Energy Points , but can lead you into gaining more Gold , or more Stars . You do not need to give everyone every potion they ask for , or do every side quest given everyday , but the more people you sell to and help , the more Gold you'll get . )",
+            "coordinates": [ [111, 209], [1394, 209], [1394, 376], [111, 376] ]
+        },
+        {
+            "text": "Niliu Chahui",
+            "coordinates": [ [78, 433], [184, 433], [184, 448], [78, 448] ]
+        },
+        {
+            "text": "Efe",
+            "coordinates": [ [79, 964], [107, 964], [107, 977], [79, 977] ]
+        },
+        {
+            "text": "Luck Potion I -- > 7 Gold Luck Potion II -- > 12 Gold",
+            "coordinates": [ [112, 862], [331, 858], [332, 901], [113, 905] ]
+        },
+        {
+            "text": "Lucia - The Practising Mage Lucia is an energetic , and eccentric person . She's currently learning and studying to become a mage in an academy a little outside of Lustford . She's been having a little trouble in her studies , but she is determined to keep working until she's the greatest mage ever ... or at least until she can graduate . \" Oh ! You're the new alchemist in town ! You see , I really need some extra help in my studies right now . By any chance , do you have something that could help me with this ? \"",
+            "coordinates": [ [368, 449], [718, 449], [718, 779], [368, 779] ]
+        },
+        {
+            "text": "Nisetanaka",
+            "coordinates": [ [770, 444], [866, 441], [866, 456], [770, 459] ]
+        },
+        {
+            "text": "Mila - The Timid Milkmaid Mila is a very timid girl . She owns a small dairy farm just outside the Lustford village . She usually stays indoors , and doesn't really talk to people a lot . Her farm only contains a handful of minotaurs , so she's able to run her farm by herself . The few times she leaves her farm is spent at the market , where she sells her goods . \" Y - you're the new Alchemist , right ? Umm ... I'm the main supplier of Dairy around here , so I could use some help getting more milk so ... Do you have something that might help ? \"",
+            "coordinates": [ [368, 982], [725, 982], [725, 1311], [368, 1311] ]
+        },
+        {
+            "text": "Libido Potion I --- > 6 Gold Libido Potion II -- > 12 Gold",
+            "coordinates": [ [112, 1392], [345, 1392], [345, 1431], [112, 1431] ]
+        },
+        {
+            "text": "Growth Potion I -- > 5 Gold Growth Potion II -- > 13 Gold",
+            "coordinates": [ [450, 1391], [690, 1387], [691, 1432], [451, 1436] ]
+        },
+        {
+            "text": "Foxeleos",
+            "coordinates": [ [165, 1552], [238, 1552], [238, 1566], [165, 1566] ]
+        },
+        {
+            "text": "Strength Potion I Strength Potion II",
+            "coordinates": [ [795, 872], [945, 870], [946, 913], [796, 915] ]
+        },
+        {
+            "text": "-- > 12 Gold .. > 20 Gold",
+            "coordinates": [ [960, 873], [1050, 872], [1051, 911], [961, 912] ]
+        },
+        {
+            "text": "Kuutamo",
+            "coordinates": [ [770, 964], [847, 963], [847, 978], [770, 979] ]
+        },
+        {
+            "text": "Libido Potion I -- > 6 Gold Libido Potion II --- > 12 Gold",
+            "coordinates": [ [805, 1390], [1037, 1389], [1037, 1431], [805, 1432] ]
+        },
+        {
+            "text": "- No Side Quests Today --",
+            "coordinates": [ [566, 1501], [951, 1503], [951, 1533], [566, 1531] ]
+        },
+        {
+            "text": "Emily - The Courageous Knight Emily is a knight . Though strong , and skilled with a sword , she can be quite the ditz . But , She's still a very caring person that would give her life to protect Lustford . Since Lustford isn't that big , she is currently the sole knight , with the occasional adventurer as her back up , but she is determined to keep Lustford safe . \" Hm , a new potion store ? Let's see ... is there anything that could be useful in a fight ? There seems to be an increase in monsters around lately , so I'll need some extra help . \"",
+            "coordinates": [ [1062, 460], [1409, 461], [1408, 791], [1060, 790] ]
+        },
+        {
+            "text": "Health Potion I →→ ‣ 6 Gold Health Potion II -- > 11 Gold",
+            "coordinates": [ [1149, 872], [1380, 871], [1380, 912], [1149, 913] ]
+        },
+        {
+            "text": "Aelith - The Lewd Priestess Aelith is a priestess for the Goddess of Love and Pleasure . Being a priestess to this particular goddess , the village of Lustford is the perfect home for her . Everyday , she works tirelessly in her small temple to please and worship her goddess . She also comes into town to spread her goddesses love and pleasure around the land . \" So , you're the new alchemist in town ? We don't get many new residents these days . But any- ways , I was planning on conducting a ritual today , do you have anything that'd be useful ? \"",
+            "coordinates": [ [1060, 982], [1417, 982], [1417, 1312], [1060, 1312] ]
+        },
+        {
+            "text": "You make your way into your new bedroom , and collapse onto your bed . Your muscles and bones ache from the hard work you put in today , but you couldn't help but feel excited . A new chapter of your life has opened up before you . You couldn't wait to see what tomorrow held . You closed your eyes and began to drift off to sleep . You need to be well rested , in preparation for the next day .",
+            "coordinates": [ [102, 1608], [1389, 1608], [1389, 1685], [102, 1685] ]
+        },
+        {
+            "text": "( Congratulations ! You've completed your first day as an Alchemist in the village of Lustford . Of course , you weren't given any side quests , but it is your first day after all , but I'm sure you'll be given plenty tomorrow . Now what you'll need to do is go up and do the \" Scavenging \" and \" Alchemy \" sections again , then come back down and do Day 2. You'll have to do this loop again for the next couple days too , until you have to pay up your debt . Everything stays the same , you'll start with the same 15 Energy Points every morning and you can use whatever ingredients you have left over from previous days or scavenged for in your potions , unless you have any items that say otherwise . Good luck , and remember to save up enough Gold to pay off your debt . )",
+            "coordinates": [ [150, 1720], [1347, 1720], [1347, 1859], [150, 1859] ]
+        },
+        {
+            "text": "Nisetanaka",
+            "coordinates": [ [76, 1982], [172, 1982], [172, 1997], [76, 1997] ]
+        },
+        {
+            "text": "Day 2",
+            "coordinates": [ [689, 1910], [803, 1913], [802, 1948], [688, 1944] ]
+        },
+        {
+            "text": "Emily - T Courageous Knight Emily is a knight . Though strong , and skilled with a sword , she can be quite the ditz . But , She's still a very caring person that would give her life to protect Lustford . Since Lustford isn't that big , she is currently the sole knight , with the occasional adventurer as her back up , but she is determined to keep Lustford safe . \" Hey , Alchemist ! You see , I've been getting some trouble from a group of goblins on my daily patrol . Do you have anything that could help with dealing with them ? \"",
+            "coordinates": [ [366, 2004], [716, 2004], [716, 2334], [366, 2334] ]
+        },
+        {
+            "text": "Jagaimo ( Kkamja )",
+            "coordinates": [ [768, 1982], [919, 1980], [919, 2000], [768, 2003] ]
+        },
+        {
+            "text": "rmer",
+            "coordinates": [ [1324, 2010], [1372, 2010], [1372, 2021], [1324, 2021] ]
+        },
+        {
+            "text": "Madie - The Diligent Madie is a diligent and hard - working farmer . She spends most of her time looking after her crops and livestock on her family farm . She makes most of her money by trading it outside of Lustford , but she keeps the best of her batch to sell or give out to the locals and the occasional adventurers . \" Heya , I haven't seen you around these parts , so you must be the new alchemist . Say , by any chance , do you have something that can help with a little bug problem of mine ? \"",
+            "coordinates": [ [1060, 2005], [1410, 2005], [1410, 2334], [1060, 2334] ]
+        },
+        {
+            "text": "Durability Potion I ... > 11 Gold Durability Potion II -- > 19 Gold",
+            "coordinates": [ [94, 2412], [360, 2409], [360, 2453], [94, 2455] ]
+        },
+        {
+            "text": "Poison Potion I -- > 6 Gold Poison Potion II →→ 13 Gold",
+            "coordinates": [ [799, 2412], [1036, 2409], [1036, 2454], [799, 2456] ]
+        },
+        {
+            "text": "Hy ( Hem Oo )",
+            "coordinates": [ [78, 2514], [186, 2515], [186, 2533], [78, 2532] ]
+        },
+        {
+            "text": "Niliu Chahui",
+            "coordinates": [ [769, 2513], [875, 2513], [875, 2528], [769, 2528] ]
+        },
+        {
+            "text": "Sara - The Cold Assassin",
+            "coordinates": [ [431, 2531], [660, 2531], [660, 2548], [431, 2548] ]
+        },
+        {
+            "text": "Sara is a cold assassin that lives periodically in the village of Lustford . Not much is known about her , except that she leaves the village for a period of time to \" take care of business \" before returning . The locals don't seem bothered by this , but",
+            "coordinates": [ [367, 2566], [725, 2565], [725, 2704], [367, 2706] ]
+        },
+        {
+            "text": "时",
+            "coordinates": [ [17, 2525], [409, 2521], [411, 2886], [19, 2890] ]
+        },
+        {
+            "text": "they do say that Sara can be quite cold and distant , especially to newcomers . \" Look , I don't want to get all buddy- buddy with you , but I need some extra help with a job of mine . Do you have anything that could come in handy ? \"",
+            "coordinates": [ [367, 2709], [714, 2710], [714, 2861], [367, 2860] ]
+        },
+        {
+            "text": "Lucia - The Practising Mage Lucia is an energetic , and eccentric person . She's currently learning and studying to become a mage in an academy a little outside of Lustford . She's been having a little trouble in her studies , but she is determined to keep working until she's the greatest mage ever ... or at least until she can graduate . \" Hey again , I want to try working on my elemental magic , but that hasn't been going so well lately . By any chance , do you have something that could help me with this ? \"",
+            "coordinates": [ [1060, 2529], [1416, 2529], [1416, 2863], [1060, 2863] ]
+        },
+        {
+            "text": "Poison Potion I - > 6 Gold",
+            "coordinates": [ [111, 2942], [335, 2942], [335, 2959], [111, 2959] ]
+        },
+        {
+            "text": "Poison Potion II -- > 13 Gold",
+            "coordinates": [ [103, 2967], [342, 2967], [342, 2984], [103, 2984] ]
+        },
+        {
+            "text": "Strength Potion I -- > 12 Gold Strength Potion II -- > 20 Gold",
+            "coordinates": [ [447, 2942], [701, 2939], [702, 2984], [448, 2988] ]
+        },
+        {
+            "text": "Elemental Control Potion I --- > 8 Gold Elemental Control Potion II -- > 17 Gold",
+            "coordinates": [ [779, 2942], [1107, 2938], [1108, 2983], [781, 2988] ]
+        },
+        {
+            "text": "Niliu Chahui",
+            "coordinates": [ [169, 3041], [276, 3040], [276, 3058], [169, 3059] ]
+        },
+        {
+            "text": "Side Quest - One on One Session",
+            "coordinates": [ [749, 3057], [1052, 3057], [1052, 3074], [749, 3074] ]
+        },
+        {
+            "text": "After you were going to close up shop for the day , you're approached by a certain Practising Mage . It seems like she was given an assignment from her academy : Make a potion using the process known as Alchemy . But since her mentor is busy , and she has no clue how to do this , she approaches you with her request . \" I really need your help . If it isn't too much to ask , could you come over to my home and help me with my alchemy assignment ? \"",
+            "coordinates": [ [487, 3083], [1316, 3088], [1315, 3243], [486, 3238] ]
+        },
+        {
+            "text": "Requires : 4 Energy Points",
+            "coordinates": [ [491, 3254], [697, 3254], [697, 3271], [491, 3271] ]
+        },
+        {
+            "text": "If Accepted : You close your store a little early , and head over to Lucia's home . When you arrive , she prepares you a quick dinner before you begin your tutoring lesson . It takes her a while to grasp on some of the intricacies of alchemy , but soon , she gets the hang of things . When you leave her home , you can feel that your relationship with her has definitely grown from this session .",
+            "coordinates": [ [486, 3276], [1305, 3275], [1305, 3368], [486, 3369] ]
+        },
+        {
+            "text": "Reward : +1 of any Potion , +2 Stars",
+            "coordinates": [ [984, 3416], [1274, 3417], [1274, 3434], [984, 3433] ]
+        },
+        {
+            "text": "Efe",
+            "coordinates": [ [78, 3722], [104, 3722], [104, 3736], [78, 3736] ]
+        },
+        {
+            "text": "You Rest in Preparation for the Next Day ...",
+            "coordinates": [ [378, 3531], [1122, 3531], [1122, 3566], [378, 3566] ]
+        },
+        {
+            "text": "Mila - The Timid Milkmaid",
+            "coordinates": [ [419, 3737], [672, 3737], [672, 3754], [419, 3754] ]
+        },
+        {
+            "text": "Day 3",
+            "coordinates": [ [691, 3652], [806, 3649], [807, 3681], [692, 3684] ]
+        },
+        {
+            "text": "Mila is a very timid girl . She owns a small dairy farm just outside the Lustford village . She usually stays indoors , and doesn't really talk to people a lot . Her farm only contains a handful of minotaurs , so she's able to run her farm by herself . The few times she leaves her farm is spent at the market , where she sells her goods . \" Uh ... Hello again . You see , I was just given an order for a whole lot of milk , but just milking One Minotaru takes a really long time .... Do you have anything that could help ... ? \"",
+            "coordinates": [ [367, 3774], [721, 3774], [721, 4066], [367, 4066] ]
+        },
+        {
+            "text": "Jagaimo ( Kkamja )",
+            "coordinates": [ [769, 3722], [922, 3718], [922, 3737], [769, 3741] ]
+        },
+        {
+            "text": "Madie - The Diligent Farmer Madie is a diligent and hard - working farmer . She spends most of her time looking after her crops and livestock on her family farm . She makes most of her money by trading it outside of Lustford , but she keeps the best of her batch to sell or give out to the locals and the occasional adventurers . \" Hey there Alchemist . I have a bit of a problem with my animals . It's supposed to be the breeding season , but none of my animals are in the \" mood \" . Do you have anything for this ? \"",
+            "coordinates": [ [1062, 3742], [1414, 3742], [1414, 4074], [1062, 4074] ]
+        },
+        {
+            "text": "Speed Potion I --- > 7 Gold Speed Potion II -- > 15 Gold",
+            "coordinates": [ [112, 4148], [339, 4146], [339, 4189], [112, 4191] ]
+        },
+        {
+            "text": "Kuutamo",
+            "coordinates": [ [75, 4252], [156, 4253], [156, 4266], [75, 4265] ]
+        },
+        {
+            "text": "Aelith - The Lewd Priestess Aelith is a priestess for the Goddess of Love and Pleasure . Being a priestess to this particular goddess , the village of Lustford is the perfect home for her . Everyday , she works tirelessly in her small temple to please and worship her goddess . She also comes into town to spread her goddesses love and pleasure around the land . \" Excuse me Alchemist . You see , some sort of freak accident broke a wall in my temple , so I need to fix it . But the construction might take a while . Do you have anything that can help ? \"",
+            "coordinates": [ [367, 4269], [723, 4269], [723, 4600], [367, 4600] ]
+        },
+        {
+            "text": "Libido Potion I --- > 6 Gold Libido Potion II --- > 12 Gold",
+            "coordinates": [ [805, 4149], [1038, 4146], [1038, 4188], [806, 4191] ]
+        },
+        {
+            "text": "Nisetanaka",
+            "coordinates": [ [771, 4251], [867, 4251], [867, 4266], [771, 4266] ]
+        },
+        {
+            "text": "Strength Potion I ... 12 Gold Strength Potion II",
+            "coordinates": [ [98, 4677], [349, 4674], [350, 4719], [99, 4722] ]
+        },
+        {
+            "text": "--- > 20 Gold",
+            "coordinates": [ [262, 4705], [353, 4702], [353, 4717], [262, 4720] ]
+        },
+        {
+            "text": "Speed Potion I -- > 7 Gold Speed Potion II -- > 15 Gold",
+            "coordinates": [ [461, 4677], [689, 4674], [690, 4719], [462, 4722] ]
+        },
+        {
+            "text": "Flexibility Potion I - > 6 Gold Flexibility Potion II --- > 12 Gold",
+            "coordinates": [ [789, 4680], [1057, 4678], [1057, 4722], [789, 4724] ]
+        },
+        {
+            "text": "Efe",
+            "coordinates": [ [169, 4780], [196, 4780], [196, 4794], [169, 4794] ]
+        },
+        {
+            "text": "Hy ( Hem Oo )",
+            "coordinates": [ [76, 5457], [185, 5459], [185, 5477], [76, 5476] ]
+        },
+        {
+            "text": "Flexibility Potion I - > 6 Gold Flexibility Potion II",
+            "coordinates": [ [94, 5885], [351, 5881], [352, 5926], [95, 5930] ]
+        },
+        {
+            "text": "-- > 12 Gold",
+            "coordinates": [ [273, 5911], [362, 5909], [362, 5925], [273, 5927] ]
+        },
+        {
+            "text": "Niliu Chahui",
+            "coordinates": [ [75, 5986], [181, 5985], [181, 6001], [75, 6002] ]
+        },
+        {
+            "text": "Growth Potion I -- > 6 Gold Growth Potion II",
+            "coordinates": [ [103, 6416], [339, 6416], [339, 6455], [103, 6455] ]
+        },
+        {
+            "text": "→ 13 Gold",
+            "coordinates": [ [264, 6441], [346, 6439], [346, 6454], [264, 6457] ]
+        },
+        {
+            "text": "Nisetanaka",
+            "coordinates": [ [75, 7193], [171, 7194], [171, 7208], [75, 7207] ]
+        },
+        {
+            "text": "Handplug",
+            "coordinates": [ [168, 6515], [256, 6515], [256, 6535], [168, 6535] ]
+        },
+        {
+            "text": "Emily - The Courageous Knight Emily is a knight . Though strong , and skilled with a sword , she can be quite the ditz . But , She's still a very caring person that would give her life to protect Lustford . Since Lustford isn't that big , she is currently the sole knight , with the occasional adventurer as her back up , but she is determined to keep Lustford safe . \" Good afternoon , Alchemist . I was tasked with taking care of some monsters that live in the caves nearby . But the holes are a little too small for me . Do you have anything that can help ? \"",
+            "coordinates": [ [1062, 4273], [1415, 4273], [1415, 4603], [1062, 4603] ]
+        },
+        {
+            "text": "Side Quest - Got Milk ?",
+            "coordinates": [ [799, 4791], [1003, 4790], [1003, 4810], [799, 4811] ]
+        },
+        {
+            "text": "As you were cleaning up for the day , Mila burst into your store . She would usually greet you , even though she's quite shy , but it seems like she's in a rush . She quickly approaches you to purchase some potions . As you hand some over , she realises that she forgot her Gold . She profusely apologises , and gives you a compromise . \" I - I'm really sorry ! I completely forgot to bring any gold ... If it's fine , you can come to my farm and I can give you the gold there , and I'll give you some milk as an apology ? \"",
+            "coordinates": [ [486, 4827], [1287, 4827], [1287, 4977], [486, 4977] ]
+        },
+        {
+            "text": "Requires : 5 Energy Points",
+            "coordinates": [ [491, 4989], [694, 4987], [694, 5006], [491, 5008] ]
+        },
+        {
+            "text": "If Accepted : You close up shop early and make your way over to Mila's Farm . When you arrive and walk into her small red barn , you find Mila milking one of her Minotaurs . She smiles and offers you the chance to milk the Minotaur yourself . It was difficult at first , but you got the hang of it . Afterwards she handed you a couple bottles of the freshly made milk , as well as the gold , and sent you on your way .",
+            "coordinates": [ [486, 5012], [1305, 5013], [1305, 5130], [486, 5129] ]
+        },
+        {
+            "text": "Reward : + 300ml of Milk , +10 Gold , +2 Stars",
+            "coordinates": [ [949, 5156], [1309, 5156], [1309, 5173], [949, 5173] ]
+        },
+        {
+            "text": "You Rest in Preparation for the Next Day ...",
+            "coordinates": [ [378, 5265], [1120, 5268], [1120, 5307], [378, 5303] ]
+        },
+        {
+            "text": "Sara - The Cold Assassin",
+            "coordinates": [ [428, 5474], [658, 5473], [658, 5492], [428, 5493] ]
+        },
+        {
+            "text": "Day 4",
+            "coordinates": [ [689, 5387], [804, 5384], [805, 5418], [690, 5421] ]
+        },
+        {
+            "text": "Sara is a cold assassin that lives periodically in the village of Lustford . Not much is known about her , except that she leaves the village for a period of time to \" take care of business \" before returning . The locals don't seem bothered by this , but they do say that Sara can be quite cold and distant , especially to newcomers . \" I wanted to say sorry for being rude the first time we met ... So , the reason that I'm here is that I have a job that requires me to squeeze into tight spaces , do you have anything for that ? \"",
+            "coordinates": [ [366, 5509], [723, 5509], [723, 5804], [366, 5804] ]
+        },
+        {
+            "text": "Kuutamo",
+            "coordinates": [ [770, 5459], [849, 5459], [849, 5471], [770, 5471] ]
+        },
+        {
+            "text": "Aelith - The Lewd Priestess Aelith is a priestess for the Goddess of Love and Pleasure . Being a priestess to this particular goddess , the village of Lustford is the perfect home for her . Everyday , she works tirelessly in her small temple to please and worship her goddess . She also comes into town to spread her goddesses love and pleasure around the land . \" Hey , Alchemist . You see , my faith requires me to spread pleasure through the village , but the way I spread pleasure is getting a little boring . Do you have anything that can spice things up ? \"",
+            "coordinates": [ [1060, 5476], [1419, 5476], [1419, 5805], [1060, 5805] ]
+        },
+        {
+            "text": "Speed Potion",
+            "coordinates": [ [807, 5909], [918, 5907], [918, 5926], [807, 5927] ]
+        },
+        {
+            "text": "Speed Potion II",
+            "coordinates": [ [815, 5884], [937, 5882], [938, 5925], [816, 5927] ]
+        },
+        {
+            "text": "I",
+            "coordinates": [ [928, 5883], [937, 5883], [937, 5899], [928, 5899] ]
+        },
+        {
+            "text": "-- > 7 Gold",
+            "coordinates": [ [951, 5884], [1029, 5881], [1030, 5898], [952, 5901] ]
+        },
+        {
+            "text": "-- > 15 Gold",
+            "coordinates": [ [952, 5910], [1037, 5906], [1038, 5924], [953, 5927] ]
+        },
+        {
+            "text": "Libido Potion I Libido Potion II",
+            "coordinates": [ [1153, 5883], [1284, 5884], [1284, 5925], [1153, 5924] ]
+        },
+        {
+            "text": ".. 6 Gold",
+            "coordinates": [ [1298, 5883], [1375, 5882], [1375, 5898], [1298, 5899] ]
+        },
+        {
+            "text": "--- > 12 Gold",
+            "coordinates": [ [1296, 5910], [1383, 5907], [1383, 5923], [1296, 5925] ]
+        },
+        {
+            "text": "Lucia - The Practising Mage Lucia is an energetic , and eccentric person . She's currently learning and studying to become a mage in an academy a little outside of Lustford . She's been having a little trouble in her studies , but she is determined to keep working until she's the greatest mage ever ... or at least until she can graduate . \" Alchemist ! I'm focusing more on my plant magic now , but I'm kinda having a little bit of trouble with it . Do you have something",
+            "coordinates": [ [366, 6003], [716, 6004], [715, 6312], [365, 6311] ]
+        },
+        {
+            "text": "Yurichtofen",
+            "coordinates": [ [770, 5984], [872, 5985], [872, 6001], [770, 6000] ]
+        },
+        {
+            "text": "that can give me a little help ? \"",
+            "coordinates": [ [433, 6316], [657, 6316], [657, 6335], [433, 6335] ]
+        },
+        {
+            "text": "45 Gold --- > Ring of Energy",
+            "coordinates": [ [812, 6426], [1039, 6429], [1039, 6447], [812, 6445] ]
+        },
+        {
+            "text": "Faceless Man",
+            "coordinates": [ [1176, 6003], [1302, 6003], [1302, 6018], [1176, 6018] ]
+        },
+        {
+            "text": "One day , when everyone else left your store , a man with a dark hood walked into your store . Their hood covered their face in shadow , hiding any discernible features , but you're sure you've never seen them around town either . What does catch your eye , however , is the Ring on their finger , which glows with magical energy . \" I need Gold , and I might have something you might be interested in . If you are willing to give me what I want , I'm willing to do a trade ... \" Ring of Energy : If worn , the user gains +5 more Energy Points every morning .",
+            "coordinates": [ [1059, 6037], [1416, 6037], [1416, 6367], [1059, 6367] ]
+        },
+        {
+            "text": "Side Quest - The Pleasure Palace",
+            "coordinates": [ [747, 6527], [1051, 6525], [1051, 6546], [747, 6547] ]
+        },
+        {
+            "text": "It was almost closing time , and you were just tidying up when Aelith walked in . She looks a little dishevelled , her nun outfit was fitted lousily around her body , revealing a lot more skin than the , already lewd , priest usually does . When she sees you , she grins and quickly approaches you . She grabs onto your hands and pulls you closer into her . \" Listen , I really need your help with something ... There's a certain ritual I have to do to my goddess , but I need some assistance . So , what do you say ? \"",
+            "coordinates": [ [487, 6563], [1281, 6563], [1281, 6711], [487, 6711] ]
+        },
+        {
+            "text": "Requires : 5 Energy Points",
+            "coordinates": [ [491, 6725], [693, 6724], [693, 6743], [491, 6744] ]
+        },
+        {
+            "text": "If Accepted : Aelith practically drags you out of the store , and brings you to her temple . Once inside , she closes the doors and begins to undress , revealing her beautiful curves to you . After a couple moments , you both are completely nude , and she pushes you onto some soft pillows and climbs on top of you . You both proceed to \" Praise the Goddess \" for a couple hours , before you left to go home . You wouldn't mind doing that ritual again .",
+            "coordinates": [ [487, 6746], [1305, 6747], [1305, 6864], [487, 6862] ]
+        },
+        {
+            "text": "Reward : + 100ml of Succubus Fluids , +2 Stars",
+            "coordinates": [ [941, 6889], [1317, 6891], [1317, 6908], [941, 6905] ]
+        },
+        {
+            "text": "You Rest in Preparation for the Next Day ...",
+            "coordinates": [ [378, 7003], [1122, 7003], [1122, 7039], [378, 7039] ]
+        },
+        {
+            "text": "Day 5",
+            "coordinates": [ [690, 7123], [804, 7117], [806, 7152], [692, 7159] ]
+        },
+        {
+            "text": "Emily - The Courageous Knight Emily is a knight . Though strong , and skilled with a sword , she can be quite the ditz . But , She's still a very caring person that would give her life to protect Lustford . Since Lustford isn't that big , she is currently the sole knight , with the occasional adventurer as her back up , but she is determined to keep Lustford safe . \" Hello there , alchemist . Say , do you have something that could protect me from fire ? I saw a group of magma salamanders living near a cave , and they seem really aggressive . \"",
+            "coordinates": [ [366, 7212], [723, 7213], [723, 7546], [366, 7545] ]
+        },
+        {
+            "text": "Hy ( Hem Oo )",
+            "coordinates": [ [771, 7193], [879, 7192], [879, 7210], [771, 7211] ]
+        },
+        {
+            "text": "Sara - The Cold Assassin Sara is a cold assassin that lives periodically in the village of Lustford . Not much is known about her , except that she leaves the village for a period of time to \" take care of business \" before returning . The locals don't seem bothered by this , but they do say that Sara can be quite cold and distant , especially to newcomers . \" Hey again . I have a job that'll need",
+            "coordinates": [ [1059, 7210], [1415, 7209], [1416, 7466], [1060, 7467] ]
+        },
+        {
+            "text": "me",
+            "coordinates": [ [1101, 7472], [1126, 7472], [1126, 7491], [1101, 7491] ]
+        },
+        {
+            "text": "to have a particularly good grasp",
+            "coordinates": [ [1128, 7471], [1373, 7472], [1373, 7492], [1128, 7491] ]
+        },
+        {
+            "text": "on my motion in the air , do you have anything to help with that ? \"",
+            "coordinates": [ [1104, 7495], [1372, 7492], [1372, 7536], [1104, 7540] ]
+        },
+        {
+            "text": "Elemental Resistance Potion I -- > 8 Gold Elemental Resistance Potion II ... 17 Gold",
+            "coordinates": [ [74, 7621], [430, 7621], [430, 7662], [74, 7662] ]
+        },
+        {
+            "text": "Jagaimo ( Kkamja )",
+            "coordinates": [ [73, 7723], [225, 7721], [225, 7741], [73, 7743] ]
+        },
+        {
+            "text": "Libido Potion I --- > 6 Gold",
+            "coordinates": [ [117, 8152], [337, 8152], [337, 8167], [117, 8167] ]
+        },
+        {
+            "text": "Libido Potion II -- > 12 Gold",
+            "coordinates": [ [110, 8176], [346, 8176], [346, 8191], [110, 8191] ]
+        },
+        {
+            "text": "Kuutamo",
+            "coordinates": [ [75, 8930], [154, 8931], [154, 8945], [75, 8944] ]
+        },
+        {
+            "text": "Nisetanaka",
+            "coordinates": [ [169, 8252], [266, 8252], [266, 8267], [169, 8267] ]
+        },
+        {
+            "text": "Flight Potion I - > 7 Gold Flight Potion II - > 15 Gold",
+            "coordinates": [ [112, 9359], [339, 9358], [339, 9400], [112, 9401] ]
+        },
+        {
+            "text": "Jagaimo ( Kkamja )",
+            "coordinates": [ [72, 9460], [225, 9457], [225, 9476], [72, 9480] ]
+        },
+        {
+            "text": "Health Potion I -- > 6 Gold",
+            "coordinates": [ [116, 9889], [334, 9885], [334, 9905], [116, 9909] ]
+        },
+        {
+            "text": "Health Potion II -- > 11 Gold",
+            "coordinates": [ [109, 9914], [339, 9910], [339, 9929], [109, 9932] ]
+        },
+        {
+            "text": "Mk Modo",
+            "coordinates": [ [168, 9990], [253, 9989], [253, 10006], [168, 10007] ]
+        },
+        {
+            "text": "Hy ( Hem Oo )",
+            "coordinates": [ [76, 10667], [184, 10668], [184, 10687], [76, 10686] ]
+        },
+        {
+            "text": "Madie - The Diligent Farmer Madie is a diligent and hard - working",
+            "coordinates": [ [366, 7743], [678, 7744], [678, 7799], [366, 7798] ]
+        },
+        {
+            "text": "farmer .",
+            "coordinates": [ [365, 7803], [432, 7803], [432, 7822], [365, 7822] ]
+        },
+        {
+            "text": "She spends most of her time looking after her crops and livestock on her family farm . She makes most of her money by trading it outside of Lustford , but she keeps the best of her batch to sell or give out to the locals and the occasional adventurers . \" Heya Alchemist ! This week's harvest hasn't been that great , honestly . Do you have a little something that can boost the growth",
+            "coordinates": [ [366, 7803], [709, 7803], [709, 8051], [366, 8051] ]
+        },
+        {
+            "text": "of some of my crops ? \"",
+            "coordinates": [ [466, 8055], [623, 8055], [623, 8075], [466, 8075] ]
+        },
+        {
+            "text": "★",
+            "coordinates": [ [606, 8087], [627, 8087], [627, 8104], [606, 8104] ]
+        },
+        {
+            "text": "Efe",
+            "coordinates": [ [771, 7723], [798, 7723], [798, 7738], [771, 7738] ]
+        },
+        {
+            "text": "Speed Potion",
+            "coordinates": [ [812, 7624], [926, 7621], [926, 7639], [812, 7641] ]
+        },
+        {
+            "text": "I",
+            "coordinates": [ [928, 7621], [938, 7621], [938, 7638], [928, 7638] ]
+        },
+        {
+            "text": "-- > 7 Gold",
+            "coordinates": [ [953, 7624], [1029, 7620], [1030, 7637], [954, 7640] ]
+        },
+        {
+            "text": "Speed Potion II",
+            "coordinates": [ [805, 7646], [937, 7644], [937, 7662], [805, 7665] ]
+        },
+        {
+            "text": "-- > 15 Gold",
+            "coordinates": [ [953, 7647], [1037, 7643], [1038, 7660], [954, 7665] ]
+        },
+        {
+            "text": "Flight Potion I -- > 7 Gold Flight Potion II -- > 15 Gold",
+            "coordinates": [ [1161, 7623], [1387, 7621], [1387, 7663], [1161, 7665] ]
+        },
+        {
+            "text": "Mila - The Timid Milkmaid Mila is a very timid girl . She owns a small dairy farm just outside the Lustford village . She usually stays indoors , and doesn't really talk to people a lot . Her farm only contains a handful of minotaurs , so she's able to run her farm by herself . The few times she leaves her farm is spent at the market , where she sells her goods . \" I - I know this is really sudden , but some of my minotaur got sick somehow ! Do you have anything that can help them feel better ? I'd really appreciate it ! \"",
+            "coordinates": [ [1060, 7739], [1413, 7739], [1413, 8069], [1060, 8069] ]
+        },
+        {
+            "text": "Strength Potion I -- > 12 Gold",
+            "coordinates": [ [799, 8150], [1044, 8143], [1045, 8165], [800, 8173] ]
+        },
+        {
+            "text": "Health Potion I -- > 6 Gold",
+            "coordinates": [ [1158, 8147], [1378, 8149], [1378, 8166], [1158, 8164] ]
+        },
+        {
+            "text": "Strength Potion II -- > 20 Gold",
+            "coordinates": [ [791, 8175], [1046, 8171], [1046, 8189], [791, 8193] ]
+        },
+        {
+            "text": "Health Potion II",
+            "coordinates": [ [1152, 8175], [1285, 8175], [1285, 8189], [1152, 8189] ]
+        },
+        {
+            "text": "... 11 Gold",
+            "coordinates": [ [1297, 8174], [1381, 8173], [1381, 8189], [1297, 8190] ]
+        },
+        {
+            "text": "Side Quest - In Need of a Helping Hand",
+            "coordinates": [ [716, 8264], [1087, 8264], [1087, 8286], [716, 8286] ]
+        },
+        {
+            "text": "After a long day of work , Emily walks into your store , exhausted . She was in the middle of a patrol around Lustford when a couple goblins ambushed her . She was able to get out safely , but she sustained a couple cuts and bruises . You ask her if she needed help , but she simply smiles and waves you off . A couple more minutes of browsing later , she finally comes up to you and asks for help . \" Actually , these goblins have been a real pain , lately . I know you're not really a fighter , but if you can come and help me out , I'd really appreciate it . I'll pay you well for this . \"",
+            "coordinates": [ [484, 8300], [1310, 8300], [1310, 8449], [484, 8449] ]
+        },
+        {
+            "text": "Requires : 4 Energy Points",
+            "coordinates": [ [491, 8462], [696, 8461], [696, 8481], [491, 8482] ]
+        },
+        {
+            "text": "If Accepted : The next thing you know , you're following Emily into the forest , where she says that the goblins were seen . You search the woods , until a group of goblins ambush the two of you . They have crudely made spears , and you know that they are nothing compared to Emily . With your help , you were able to take out all the goblins . Afterwards , Emily pays and rewards you for your help , which involves a little fun between the two of you .",
+            "coordinates": [ [486, 8485], [1316, 8486], [1316, 8601], [486, 8600] ]
+        },
+        {
+            "text": "Reward : +35 Gold , +2 Stars",
+            "coordinates": [ [1014, 8627], [1244, 8629], [1244, 8646], [1014, 8644] ]
+        },
+        {
+            "text": "You Rest in Preparation for the Next Day ...",
+            "coordinates": [ [379, 8742], [1122, 8742], [1122, 8776], [379, 8776] ]
+        },
+        {
+            "text": "Day 6",
+            "coordinates": [ [691, 8861], [806, 8858], [807, 8892], [692, 8894] ]
+        },
+        {
+            "text": "Aelith - The Lewd Priestess",
+            "coordinates": [ [417, 8949], [673, 8949], [673, 8965], [417, 8965] ]
+        },
+        {
+            "text": "Aelith is a priestess for the Goddess of Love and Pleasure . Being a priestess to this particular goddess , the village of Lustford is the perfect home for her . Everyday , she works tirelessly in her small temple to please and worship her goddess . She also comes into town to spread her goddesses love and pleasure around the land . \" Hello again , Alchemist ! Today , I decided that I'll go on a trip outside of the village , to spread more pleasure ! But , I'll need a little help doing that . By any chance , do you have anything ? \"",
+            "coordinates": [ [366, 8984], [723, 8984], [723, 9278], [366, 9278] ]
+        },
+        {
+            "text": "Niliú Chahui",
+            "coordinates": [ [776, 8931], [884, 8931], [884, 8945], [776, 8945] ]
+        },
+        {
+            "text": "Lucia - The Practising Mage Lucia is an energetic , and eccentric person . She's currently learning and studying to become a mage in an academy a little outside of Lustford . She's been having a little trouble in her studies , but she is determined to keep working until she's the greatest mage ever ... or at least until she can graduate . \" Hi , Alchemist ! You see , my mentor is teaching us about levitation magic , and I really want to impress her . Do you think you can give me something that can help my float ? \"",
+            "coordinates": [ [1067, 8947], [1422, 8948], [1421, 9278], [1066, 9277] ]
+        },
+        {
+            "text": "Madie - The Diligent Farmer Madie is a diligent and hard - working",
+            "coordinates": [ [366, 9483], [679, 9483], [679, 9537], [366, 9537] ]
+        },
+        {
+            "text": "farmer .",
+            "coordinates": [ [365, 9542], [431, 9542], [431, 9560], [365, 9560] ]
+        },
+        {
+            "text": "She spends most of her time looking after her crops and livestock on her family farm . She makes most of her money by trading it outside of Lustford ,",
+            "coordinates": [ [366, 9542], [694, 9541], [694, 9633], [366, 9634] ]
+        },
+        {
+            "text": "but",
+            "coordinates": [ [366, 9638], [396, 9638], [396, 9656], [366, 9656] ]
+        },
+        {
+            "text": "she keeps the best of her batch to",
+            "coordinates": [ [398, 9638], [670, 9638], [670, 9656], [398, 9656] ]
+        },
+        {
+            "text": "sell or give out to the locals and the",
+            "coordinates": [ [366, 9662], [654, 9660], [654, 9678], [366, 9680] ]
+        },
+        {
+            "text": "occasional adventurers .",
+            "coordinates": [ [366, 9686], [565, 9686], [565, 9701], [366, 9701] ]
+        },
+        {
+            "text": "\" Heya Alchemist , for some reason , my crops seem to be dying out . I'm not sure what's happening , but I need something quick . Do you have anything ? \"",
+            "coordinates": [ [370, 9720], [717, 9720], [717, 9812], [370, 9812] ]
+        },
+        {
+            "text": "Growth Potion I - > 5 Gold Growth Potion II -- > 13 Gold",
+            "coordinates": [ [448, 9889], [689, 9889], [689, 9929], [448, 9929] ]
+        },
+        {
+            "text": "Efe",
+            "coordinates": [ [777, 9460], [804, 9459], [804, 9474], [777, 9475] ]
+        },
+        {
+            "text": "Flight Potion I .. > 7 Gold Flight Potion II -- > 15 Gold",
+            "coordinates": [ [813, 9359], [1039, 9358], [1039, 9401], [813, 9402] ]
+        },
+        {
+            "text": "Luck Potion I → 7 Gold",
+            "coordinates": [ [825, 9889], [1027, 9886], [1027, 9905], [825, 9908] ]
+        },
+        {
+            "text": "Luck Potion II -- > 12 Gold",
+            "coordinates": [ [818, 9914], [1035, 9914], [1035, 9930], [818, 9930] ]
+        },
+        {
+            "text": "Mila - The Timid Milkmaid Mila is a very timid girl . She owns a small dairy farm just outside the Lustford",
+            "coordinates": [ [1067, 9478], [1411, 9476], [1411, 9555], [1067, 9556] ]
+        },
+        {
+            "text": "village .",
+            "coordinates": [ [1067, 9560], [1128, 9560], [1128, 9581], [1067, 9581] ]
+        },
+        {
+            "text": "She usually stays indoors , and doesn't really talk to people a lot . Her farm only contains a handful of minotaurs , so she's able to run her farm by herself .",
+            "coordinates": [ [1067, 9559], [1417, 9558], [1417, 9652], [1067, 9653] ]
+        },
+        {
+            "text": "The",
+            "coordinates": [ [1369, 9633], [1403, 9633], [1403, 9652], [1369, 9652] ]
+        },
+        {
+            "text": "few times she leaves her farm is spent at the market , where she sells her goods . \" Ah , I - I'm sorry for bothering you . I was just wondering if you have anything that could get my minotaur into a better mood ? They've been down lately , and I want to cheer them up . \"",
+            "coordinates": [ [1067, 9654], [1416, 9654], [1416, 9806], [1067, 9806] ]
+        },
+        {
+            "text": "Side Quest - Some Honest Work",
+            "coordinates": [ [748, 10004], [1056, 10004], [1056, 10022], [748, 10022] ]
+        },
+        {
+            "text": "On a particularly hot day , Madie walks into your store . She's clearly been working out on her farm , evident by her dirty clothes , and the sweat that streamed down her soft curves . She came in to pick up a batch of potions she ordered earlier . While you're handing her her order over to her , she asks",
+            "coordinates": [ [487, 10040], [1301, 10040], [1301, 10105], [487, 10105] ]
+        },
+        {
+            "text": "you for some help with her farm .",
+            "coordinates": [ [486, 10111], [756, 10108], [756, 10127], [486, 10129] ]
+        },
+        {
+            "text": "Requires : 4 Energy Points",
+            "coordinates": [ [491, 10201], [696, 10199], [696, 10217], [491, 10219] ]
+        },
+        {
+            "text": "\" Hey , I know this might be asking a lot , but it's a really hot day today , and I have a bunch more work to do . If you could lend me a hand on the farm , I'd be really grateful . \" If Accepted : Madie smiles and leads you out of your store , and through the village , until you reach her family's farm . You began working on her crops , when half way through , Madie took off her shirt for being a little too tight . You tried not to get distracted while you completed the rest of your work . Afterwards , Madie paid you for your services , but you didn't mind working a little longer , to see what else she was gonna take off .",
+            "coordinates": [ [487, 10141], [1312, 10142], [1312, 10341], [487, 10340] ]
+        },
+        {
+            "text": "Reward : +30 Gold , +2 Stars",
+            "coordinates": [ [1014, 10368], [1244, 10368], [1244, 10383], [1014, 10383] ]
+        },
+        {
+            "text": "You Rest in Preparation for the Next Day ...",
+            "coordinates": [ [378, 10480], [1122, 10480], [1122, 10515], [378, 10515] ]
+        },
+        {
+            "text": "Sara - The Cold Assassin Sara is a cold assassin that lives periodically in the village of Lustford .",
+            "coordinates": [ [367, 10686], [676, 10684], [676, 10764], [367, 10765] ]
+        },
+        {
+            "text": "Day 7",
+            "coordinates": [ [692, 10598], [806, 10595], [807, 10628], [693, 10632] ]
+        },
+        {
+            "text": "Not much is known about her , except that she leaves the village for a period of time to",
+            "coordinates": [ [367, 10767], [722, 10768], [722, 10814], [367, 10813] ]
+        },
+        {
+            "text": "\" take",
+            "coordinates": [ [367, 10817], [411, 10817], [411, 10835], [367, 10835] ]
+        },
+        {
+            "text": "care of business \" before returning . The locals don't seem bothered by this , but they do say that Sara can be quite cold and distant , especially to newcomers . \" Alchemist . I need a way to keep myself warm . I have a job in a place that's experiencing a snowstorm right now . Do you have anything for my predicament ? \"",
+            "coordinates": [ [366, 10816], [717, 10817], [716, 11016], [365, 11015] ]
+        },
+        {
+            "text": "Nisetanaka",
+            "coordinates": [ [771, 10668], [867, 10668], [867, 10683], [771, 10683] ]
+        },
+        {
+            "text": "Elemental Resistance Potion I - > 8 Gold Elemental Resistance Potion II --- > 17 Gold",
+            "coordinates": [ [75, 11097], [428, 11096], [428, 11138], [75, 11139] ]
+        },
+        {
+            "text": "Kuutamo",
+            "coordinates": [ [76, 11199], [156, 11199], [156, 11212], [76, 11212] ]
+        },
+        {
+            "text": "બે",
+            "coordinates": [ [69, 11180], [311, 11180], [311, 11579], [69, 11579] ]
+        },
+        {
+            "text": "Aelith - The Lewd Priestess Aelith is a priestess for the Goddess of Love and Pleasure . Being a priestess to this particular goddess , the village of Lustford is the perfect home for her . Everyday , she works tirelessly in her small temple to please and worship her goddess . She also comes into town to spread her goddesses love and pleasure around the land . \" Oh , alchemist . I've been having a little bit of a dry spell lately . So , do you have anything that could get some of",
+            "coordinates": [ [367, 11216], [723, 11216], [723, 11522], [367, 11522] ]
+        },
+        {
+            "text": "my juices flowing again ? \"",
+            "coordinates": [ [450, 11525], [641, 11524], [641, 11545], [450, 11546] ]
+        },
+        {
+            "text": "Libido Potion I -- > 6 Gold Libido Potion II ... 12 Gold",
+            "coordinates": [ [112, 11627], [345, 11627], [345, 11666], [112, 11666] ]
+        },
+        {
+            "text": "Zefrableu",
+            "coordinates": [ [169, 11728], [250, 11728], [250, 11744], [169, 11744] ]
+        },
+        {
+            "text": "Emily - The Courageous Knight Emily is a knight . Though strong , and skilled with a sword , she can be quite the ditz . But , She's still a very caring person that would give her life to protect Lustford . Since Lustford isn't that big , she is currently the sole knight , with the occasional adventurer as her back up , but she is determined to keep Lustford safe . \" Hi there , Alchemist . I've heard a rumor about an oasis nearby , and I'd like to check it out . Do you have something that can make the trek a little less arduous ? \"",
+            "coordinates": [ [1062, 10689], [1410, 10690], [1409, 11018], [1060, 11017] ]
+        },
+        {
+            "text": "Speed Potion I",
+            "coordinates": [ [815, 11096], [937, 11093], [937, 11111], [815, 11114] ]
+        },
+        {
+            "text": "-- > 7 Gold",
+            "coordinates": [ [952, 11096], [1028, 11094], [1028, 11110], [952, 11112] ]
+        },
+        {
+            "text": "Speed Potion II 15 Gold",
+            "coordinates": [ [809, 11119], [1035, 11116], [1035, 11134], [809, 11138] ]
+        },
+        {
+            "text": "Flight Potion I -- > 7 Gold Flight Potion II → 15 Gold",
+            "coordinates": [ [1153, 11096], [1379, 11091], [1380, 11134], [1154, 11139] ]
+        },
+        {
+            "text": "Niliu Chahui",
+            "coordinates": [ [769, 11197], [876, 11196], [876, 11213], [769, 11214] ]
+        },
+        {
+            "text": "Strength Potion I ... 12 Gold Strength Potion II -- > 20 Gold",
+            "coordinates": [ [796, 11627], [1051, 11622], [1052, 11668], [797, 11673] ]
+        },
+        {
+            "text": "Lucia - The Practising Mage Lucia is an energetic , and eccentric person . She's currently learning and studying to become a mage in an academy having a little trouble in her studies , but a little outside of Lustford . She's been",
+            "coordinates": [ [1062, 11214], [1409, 11214], [1409, 11366], [1062, 11366] ]
+        },
+        {
+            "text": "she is determined to keep working until",
+            "coordinates": [ [1062, 11369], [1391, 11371], [1391, 11392], [1062, 11390] ]
+        },
+        {
+            "text": "she's",
+            "coordinates": [ [1062, 11395], [1102, 11395], [1102, 11413], [1062, 11413] ]
+        },
+        {
+            "text": "the greatest mage ever ... or at least",
+            "coordinates": [ [1106, 11395], [1396, 11395], [1396, 11413], [1106, 11413] ]
+        },
+        {
+            "text": "until",
+            "coordinates": [ [1062, 11417], [1102, 11418], [1102, 11436], [1062, 11435] ]
+        },
+        {
+            "text": "she can",
+            "coordinates": [ [1105, 11418], [1166, 11419], [1166, 11437], [1105, 11436] ]
+        },
+        {
+            "text": "graduate .",
+            "coordinates": [ [1169, 11419], [1251, 11420], [1251, 11438], [1169, 11437] ]
+        },
+        {
+            "text": "\" Hey , Alchemist ! You see , a few monsters appeared in the academy , I bet I could get some extra credit if I took them out ! Do you have anything to give me some extra firepower ? \"",
+            "coordinates": [ [1065, 11454], [1414, 11454], [1414, 11546], [1065, 11546] ]
+        },
+        {
+            "text": "Side Quest - Some Mischievous Fun Just before you were about to close , Sara walked in . The first time you met her , things went quite rough , but throughout the week , she slowly started warming up to you . When she walked in , there seemed to be a rather mischievous glint in her eye that usually isn't there on the cold assassin face . When you asked what she was here for , she grinned , and asked if you wanted to have some fun . \" Hey Alchemist , I heard that you're pretty close with some of the girls in this town . Why don't we pull some harmless pranks on a couple of them ! I promise it'll be fun ! \" Requires : 5 Energy Points If Accepted : Sara leads you to Aelith's temple , and together , you both set up a couple traps , before running off to watch from afar . The traps weren't harmful , but it certainly would put Aelith into some very compromising positions . It wasn't long before the traps were sprung , and the two of you got to see a rather lewd show , courtesy of the priestess . You weren't expecting Sara to be quite the trouble maker , but you certainly did have fun .",
+            "coordinates": [ [486, 11740], [1304, 11738], [1304, 12075], [486, 12077] ]
+        },
+        {
+            "text": "Reward : +20 Gold , +3 Stars",
+            "coordinates": [ [1014, 12102], [1245, 12103], [1245, 12121], [1014, 12120] ]
+        },
+        {
+            "text": "Arsenixc",
+            "coordinates": [ [164, 12217], [239, 12217], [239, 12229], [164, 12229] ]
+        },
+        {
+            "text": "End of the Week",
+            "coordinates": [ [624, 12189], [875, 12189], [875, 12212], [624, 12212] ]
+        },
+        {
+            "text": "After several days of hard work , you've finally made it to the end of the week , and it was an incredible week , at that . You've gained plenty of loyal customers , that you can say , without a doubt , can be called your friends , and experienced several wonderful nights , filled with pleasure . You can't wait to see what else this new chapter of your life will have in store , but first , there is a matter that requires your attention . It's time to pay off your Debt . If you have Less than 150 Gold : You've not earned enough to keep the store . You took a chance to move away , and live a life you always wanted , and that chance didn't work out . Your debt will be collected from your personal belongings . Your life as an alchemist , and your life in the village of Lustford have ended . Though it didn't work out this time , remember that life is a long game . There's always other chances , but for now ... Your Journey Ends Here .",
+            "coordinates": [ [102, 12269], [1390, 12269], [1390, 12458], [102, 12458] ]
+        },
+        {
+            "text": "If you have More than 150 Gold : You did it , you succeeded in prospering , and now , your new life as an alchemist has officially begun . Congratulations ,",
+            "coordinates": [ [139, 12494], [1368, 12494], [1368, 12514], [139, 12514] ]
+        },
+        {
+            "text": "because it's only just the beginning of your journey !",
+            "coordinates": [ [103, 12522], [531, 12522], [531, 12543], [103, 12543] ]
+        },
+        {
+            "text": "( Congratulations ! You've made it through the week , and have proven to be a very capable Alchemist . You've worked hard , made great friends , and had some fun experiences , and it all paid off in the end . Now that this portion is done , you can move onto the section ... )",
+            "coordinates": [ [225, 12577], [1275, 12577], [1275, 12629], [225, 12629] ]
+        },
+        {
+            "text": "Moving Forward ...",
+            "coordinates": [ [607, 12677], [891, 12672], [893, 12703], [608, 12709] ]
+        },
+        {
+            "text": "You wake up to another bright and beautiful day in the village of Lustford . The sun is shining through the open window , the birds are singing , and it's a great day to open your store as the official village alchemist . As you begin your morning routine , a thought runs through your mind . You're here to stay . After spending a week in the quaint village , it truly has become a home to you , and you can't wait to spend the rest of your days living and working here . You think back to all the new friends you've made , and can't help but smile . You can't wait to learn even more about them . Who knows ? Something interesting might happen with a couple of them ...",
+            "coordinates": [ [102, 12762], [1394, 12761], [1394, 12892], [102, 12893] ]
+        },
+        {
+            "text": "( Now that you've paid off all your debt , you're now able to stay in the village of Lustford as long as you want . With that , some new relation- ships are able to blossom . You will be able to enter into a relationship with any of the regulars that shop at your store , but there are 2 requirements . You're able to be in a relationship with , at most , 3 villagers , and the second requirement is that you would've had to Max out their relationship ( i.e. collect all their Stars ) . If you've done that , then the character is able to have a relationship with you . So go ahead , and choose below ... )",
+            "coordinates": [ [169, 12929], [1323, 12929], [1323, 13038], [169, 13038] ]
+        },
+        {
+            "text": "Niliu Chahui",
+            "coordinates": [ [74, 13095], [182, 13095], [182, 13110], [74, 13110] ]
+        },
+        {
+            "text": "Lucia - The Practising Mage Lucia , who was one of the first people to enter your store , has grown rather fond of you over the last week . She comes by a couple times after classes ,",
+            "coordinates": [ [397, 13110], [712, 13110], [712, 13240], [397, 13240] ]
+        },
+        {
+            "text": "just to",
+            "coordinates": [ [396, 13245], [449, 13245], [449, 13264], [396, 13264] ]
+        },
+        {
+            "text": "you .",
+            "coordinates": [ [395, 13271], [434, 13271], [434, 13288], [395, 13288] ]
+        },
+        {
+            "text": "spend a little more time with You've even spent a couple evenings together , where the two of you talked late into the night , or spent some \" alone time \" together .",
+            "coordinates": [ [395, 13241], [712, 13241], [712, 13360], [395, 13360] ]
+        },
+        {
+            "text": "Though Lucia loves magic , one of her favorite hobbies is actually baking . She had a collection of recipes that she loved to make , and sometimes , she'll even bring you a batch to try . She's actually quite skilled when it comes to baking , and her cookies and cakes are absolutely delicious . Her goal is to open up a magical bakery , where she can mix her love of baking and magic into one . Intimacy : When it comes to intimacy , Lucia isn't innocent or ignorant , but more like inexperienced . But despite her lack of experience , she's very eager to learn , and has a lot of energy . She wants to experiment and learn as much as she can , and will probably drag you along with her on her journey . Be prepared , because once she finds something that she enjoys , she'll want to do",
+            "coordinates": [ [85, 13409], [721, 13409], [721, 13670], [85, 13670] ]
+        },
+        {
+            "text": "it , over and over again .",
+            "coordinates": [ [85, 13673], [276, 13674], [276, 13693], [85, 13691] ]
+        },
+        {
+            "text": "Likes : Learning Magic , Baking Treats Kinks : Experimenting , Being Praised",
+            "coordinates": [ [102, 13723], [407, 13722], [407, 13768], [102, 13769] ]
+        },
+        {
+            "text": "Nisetanaka",
+            "coordinates": [ [769, 13095], [865, 13094], [865, 13109], [769, 13110] ]
+        },
+        {
+            "text": "Emily - The Courageous Knight Emily is a knight that regularly",
+            "coordinates": [ [1096, 13113], [1403, 13114], [1403, 13169], [1096, 13168] ]
+        },
+        {
+            "text": "stops",
+            "coordinates": [ [1092, 13174], [1135, 13174], [1135, 13193], [1092, 13193] ]
+        },
+        {
+            "text": "by your store , either just for a",
+            "coordinates": [ [1138, 13174], [1382, 13173], [1382, 13192], [1138, 13193] ]
+        },
+        {
+            "text": "visit ,",
+            "coordinates": [ [1091, 13197], [1134, 13197], [1134, 13216], [1091, 13216] ]
+        },
+        {
+            "text": "or to pick up a potion or two for",
+            "coordinates": [ [1137, 13197], [1400, 13197], [1400, 13216], [1137, 13216] ]
+        },
+        {
+            "text": "her patrols around the village . Though , she does have a habit of coming to your store after a fight , and asks if you a healing potion , which makes you",
+            "coordinates": [ [1092, 13219], [1417, 13220], [1417, 13314], [1092, 13313] ]
+        },
+        {
+            "text": "have",
+            "coordinates": [ [1369, 13268], [1409, 13268], [1409, 13289], [1369, 13289] ]
+        },
+        {
+            "text": "worry . You've spent some time with her , and you know that she's a bit of a",
+            "coordinates": [ [1091, 13318], [1399, 13316], [1399, 13359], [1091, 13361] ]
+        },
+        {
+            "text": "ditz , but you admire her courage .",
+            "coordinates": [ [1092, 13363], [1368, 13366], [1368, 13386], [1092, 13382] ]
+        },
+        {
+            "text": "Emily has lived in Lustford ever since she was little , and she vowed to",
+            "coordinates": [ [784, 13409], [1353, 13409], [1353, 13428], [784, 13428] ]
+        },
+        {
+            "text": "protect",
+            "coordinates": [ [781, 13434], [840, 13434], [840, 13455], [781, 13455] ]
+        },
+        {
+            "text": "the village ever since she was given her first sword . She is knight in the village , and is determined Despite the risks of her job , she will not",
+            "coordinates": [ [779, 13433], [1315, 13432], [1315, 13500], [779, 13501] ]
+        },
+        {
+            "text": "the",
+            "coordinates": [ [1318, 13432], [1345, 13432], [1345, 13451], [1318, 13451] ]
+        },
+        {
+            "text": "sole",
+            "coordinates": [ [1349, 13432], [1382, 13432], [1382, 13451], [1349, 13451] ]
+        },
+        {
+            "text": "to be the protector the village needs .",
+            "coordinates": [ [1107, 13458], [1405, 13458], [1405, 13477], [1107, 13477] ]
+        },
+        {
+            "text": "let",
+            "coordinates": [ [1108, 13482], [1128, 13482], [1128, 13501], [1108, 13501] ]
+        },
+        {
+            "text": "the",
+            "coordinates": [ [1132, 13482], [1157, 13482], [1157, 13501], [1132, 13501] ]
+        },
+        {
+            "text": "fear of failure , or death stop",
+            "coordinates": [ [1162, 13482], [1394, 13482], [1394, 13501], [1162, 13501] ]
+        },
+        {
+            "text": "her . Outside of battle , Emily is one of the nicest people you've met .",
+            "coordinates": [ [779, 13504], [1324, 13506], [1324, 13527], [779, 13525] ]
+        },
+        {
+            "text": "Intimacy : In the bedroom , Emily is just as bold as she is in combat . She doesn't like to beat around the bush , and prefers to get right to the point . She has high stamina , and she's not inexperienced at both dishing out and receiving pain , but she is willing to slow down and be a little gentler . She's the type of girl to be down for anything , if it means that her partner will feel",
+            "coordinates": [ [778, 13554], [1404, 13554], [1404, 13670], [778, 13670] ]
+        },
+        {
+            "text": "good .",
+            "coordinates": [ [779, 13675], [827, 13675], [827, 13693], [779, 13693] ]
+        },
+        {
+            "text": "Likes : Swords , Combat , Flowers Kinks : Marathon Sex , Wrestling for Dominance",
+            "coordinates": [ [797, 13722], [1179, 13721], [1179, 13767], [797, 13768] ]
+        },
+        {
+            "text": "Efe",
+            "coordinates": [ [75, 13825], [102, 13825], [102, 13839], [75, 13839] ]
+        },
+        {
+            "text": "Mila- The Timid Milkmaid Unlike a lot of the other villagers in Lustford , Mila is very shy . The first time she came into your store , she",
+            "coordinates": [ [397, 13842], [687, 13843], [687, 13947], [397, 13946] ]
+        },
+        {
+            "text": "could",
+            "coordinates": [ [397, 13951], [442, 13951], [442, 13969], [397, 13969] ]
+        },
+        {
+            "text": "barely even talk . But , she was she's started visiting your store quite regularly . Over the course of the week , able to slowly open up , and soon , you've spent a lot of time together , and you've grown quite fond of the",
+            "coordinates": [ [395, 13950], [717, 13949], [717, 14090], [395, 14091] ]
+        },
+        {
+            "text": "thoughtful milkmaid . Mila spends a lot of time alone in her barn , tending to her minotaur , so she isn't the most social of people , especially compared to the other villagers .",
+            "coordinates": [ [85, 14093], [700, 14091], [700, 14182], [85, 14185] ]
+        },
+        {
+            "text": "Kuutamo",
+            "coordinates": [ [770, 13825], [846, 13824], [846, 13839], [770, 13840] ]
+        },
+        {
+            "text": "Aelith - The Lewd Priestess From the moment the two of you met , the lustful priestess has had her eyes set on you . Aelith is one of your most loyal customers , and the one that is the most intimate with you . Since the first week , the two of you have spent a time together , and she's one of the people you've gotten closest with .",
+            "coordinates": [ [1091, 13842], [1413, 13842], [1413, 14067], [1091, 14067] ]
+        },
+        {
+            "text": "lot of",
+            "coordinates": [ [1369, 13999], [1416, 13999], [1416, 14018], [1369, 14018] ]
+        },
+        {
+            "text": "You're sure that the Goddess of Love is pleased with the priestess ' actions .",
+            "coordinates": [ [1091, 14070], [1409, 14070], [1409, 14115], [1091, 14115] ]
+        },
+        {
+            "text": "Being the priestess to this particular goddess , Aelith has had some tough times finding a place that will accept her . But , when she moved into Lustford ,",
+            "coordinates": [ [779, 14138], [1418, 14138], [1418, 14182], [779, 14182] ]
+        },
+        {
+            "text": "Though , you're an exception . She loves to spend time with you , and whenever she immediately fell in love with the quaint , and accepting village . The people",
+            "coordinates": [ [85, 14187], [1419, 14187], [1419, 14207], [85, 14207] ]
+        },
+        {
+            "text": "she sees you , she'll have a genuine , happy smile . When you're with her , she doesn't stutter as much , and can speak without much trouble , which is a sign that she is a lot more comfortable with you .",
+            "coordinates": [ [84, 14209], [717, 14210], [717, 14280], [84, 14279] ]
+        },
+        {
+            "text": "Intimacy : When it comes to intimacy , Mila is very innocent . She doesn't really know what she's doing , and will mostly rely on you to teach her , or lead the way . Don't expect her to be too aggressive , and be sure to reassure her that everything is okay . Though , don't mistake her shyness as a lack of desire ,",
+            "coordinates": [ [84, 14306], [722, 14306], [722, 14399], [84, 14399] ]
+        },
+        {
+            "text": "because she will be eager to learn .",
+            "coordinates": [ [85, 14401], [364, 14402], [364, 14421], [85, 14420] ]
+        },
+        {
+            "text": "Likes : Minotaur , Her Barn , Milk Kinks : Vanilla , Nipple Play",
+            "coordinates": [ [102, 14451], [365, 14451], [365, 14497], [102, 14497] ]
+        },
+        {
+            "text": "of Lustford didn't care what she was , and welcomed her with open arms , and now , she's found her true home . Intimacy : Her rather aggressive nature could lead you to believe she's more of the dominant type , but she actually prefers to take the more submissive role . She likes to focus more on your pleasure , rather than her own , and she does enjoy a bit of rough treatment , too . However , if you're a bit more on the vanilla side , she's still more than happy to spend a more romantic night",
+            "coordinates": [ [779, 14210], [1413, 14210], [1413, 14399], [779, 14399] ]
+        },
+        {
+            "text": "with you .",
+            "coordinates": [ [781, 14402], [857, 14405], [856, 14423], [779, 14419] ]
+        },
+        {
+            "text": "Likes : Pleasure , Her Goddess , \" Rituals \" Kinks : Masochism , Rough Sex , Romance",
+            "coordinates": [ [797, 14451], [1123, 14452], [1123, 14498], [797, 14497] ]
+        },
+        {
+            "text": "Semicolon9991",
+            "coordinates": [ [74, 14553], [200, 14554], [200, 14570], [74, 14569] ]
+        },
+        {
+            "text": "Madie - The Diligent Farmer Madie is one of the villagers that lives on a small farm just outside of Lustford . Even though she doesn't have many people in her life , she doesn't seem too bothered by it , and is perfectly content with just having her crops and livestock . However , over the last week , she's gotten closer with you , and now , you're one of the people that she is closest with .",
+            "coordinates": [ [396, 14571], [706, 14571], [706, 14843], [396, 14843] ]
+        },
+        {
+            "text": "When it comes to farming , Madie is a very hard worker . She's the one that grows all the crops in the village , and makes the best use of the soil . She also takes care of the livestock , and has a few pigs and chicken , which provide plenty of meat and eggs for the village . Despite her hard work , she still manages to find some free time to relax , and spend some time",
+            "coordinates": [ [85, 14868], [691, 14868], [691, 14985], [85, 14985] ]
+        },
+        {
+            "text": "with",
+            "coordinates": [ [85, 14987], [124, 14988], [123, 15006], [84, 15005] ]
+        },
+        {
+            "text": "you .",
+            "coordinates": [ [126, 14989], [165, 14990], [164, 15007], [125, 15006] ]
+        },
+        {
+            "text": "Intimacy : When it comes to sex , Madie is quite the wild girl . The hard work she does on her farm has given her a toned body , that she likes to flaunt around whenever she can . Whether that be out in the open on her farm , or when she's inside the privacy of her barn , she doesn't mind putting her body on display , and she enjoys it when you watch and stare .",
+            "coordinates": [ [85, 15035], [713, 15035], [713, 15151], [85, 15151] ]
+        },
+        {
+            "text": "Likes : Her Farm , Working Hard , Relaxing",
+            "coordinates": [ [104, 15180], [445, 15180], [445, 15200], [104, 15200] ]
+        },
+        {
+            "text": "Kinks : Exhibitionism , Voyeurism",
+            "coordinates": [ [102, 15203], [368, 15205], [368, 15225], [102, 15222] ]
+        },
+        {
+            "text": "Naomi ( Fantasia )",
+            "coordinates": [ [769, 14553], [913, 14552], [913, 14569], [769, 14570] ]
+        },
+        {
+            "text": "Sara- The Cold Assassin The first encounter you had with Sara was rough . It took a couple days for her to warm up to you , and start visiting you regularly . Despite the",
+            "coordinates": [ [1091, 14573], [1405, 14573], [1405, 14699], [1091, 14699] ]
+        },
+        {
+            "text": "rocky",
+            "coordinates": [ [1092, 14705], [1141, 14705], [1141, 14723], [1092, 14723] ]
+        },
+        {
+            "text": "start , Sara has grown closer to",
+            "coordinates": [ [1142, 14705], [1394, 14705], [1394, 14723], [1142, 14723] ]
+        },
+        {
+            "text": "you , and",
+            "coordinates": [ [1090, 14728], [1162, 14727], [1162, 14747], [1090, 14748] ]
+        },
+        {
+            "text": "You're",
+            "coordinates": [ [1091, 14752], [1148, 14752], [1148, 14771], [1091, 14771] ]
+        },
+        {
+            "text": "you're",
+            "coordinates": [ [1165, 14727], [1218, 14726], [1218, 14746], [1165, 14747] ]
+        },
+        {
+            "text": "happy to",
+            "coordinates": [ [1220, 14727], [1292, 14726], [1292, 14746], [1220, 14747] ]
+        },
+        {
+            "text": "be her friend .",
+            "coordinates": [ [1295, 14726], [1407, 14725], [1407, 14744], [1295, 14746] ]
+        },
+        {
+            "text": "glad that she's opening up , and being more social , but sometimes , she can be a bit of a prankster , but you're",
+            "coordinates": [ [1092, 14751], [1408, 14752], [1408, 14821], [1092, 14820] ]
+        },
+        {
+            "text": "willing to deal with it . Sara has lived in a far darker world than most , but the village of Lustford is her haven , where she can live the life she wants . Though she spends some time away from the village , she always looks forward to returning , and seeing all her friends . She'll never let anyone threaten her haven , and will do whatever it takes to protect the village , and the people in it . Intimacy : Despite the cold and distant demeanour , Sara is rather passionate and sensitive . She can be very loving , and will cherish the person that manages to win her over . If they can see past her cold attitude , and understand her , she'll repay their trust , and open herself up completely . it comes to intimacy , Sara is quite experienced , and is willing to teach",
+            "coordinates": [ [779, 14822], [1408, 14822], [1408, 15128], [779, 15128] ]
+        },
+        {
+            "text": "When",
+            "coordinates": [ [778, 15108], [831, 15108], [831, 15128], [778, 15128] ]
+        },
+        {
+            "text": "you , or even lead , if you prefer . Likes : Lustford , Pranks , Her Friends Kinks : Romance , Long Sessions",
+            "coordinates": [ [778, 15129], [1088, 15129], [1088, 15226], [778, 15226] ]
+        },
+        {
+            "text": "Arsenixc",
+            "coordinates": [ [45, 15412], [121, 15411], [121, 15425], [45, 15426] ]
+        },
+        {
+            "text": "( Congratulations , you've earned yourself a nice home and a job as the Alchemist of Lustford ! Your life in the quaint village has just begun , and it's going to be an amazing life . The people are nice , and your shop is popular , and you've grown close to a few villagers . There's a bright future ahead , and you couldn't be happier ! )",
+            "coordinates": [ [116, 15306], [1382, 15306], [1382, 15357], [116, 15357] ]
+        }
+    ]
+}

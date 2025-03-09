@@ -1,0 +1,493 @@
+{
+    "image_path": "/home/dw/Documents/Coding/SentenceTransformer-search/cyoa_static/alchemical potions/01.png",
+    "text_blocks": [
+        {
+            "text": "Arsenixc",
+            "coordinates": [ [13, 11], [86, 10], [86, 24], [13, 25] ]
+        },
+        {
+            "text": "Alchemical Potions",
+            "coordinates": [ [342, 46], [1150, 46], [1150, 113], [342, 113] ]
+        },
+        {
+            "text": "u / Literal garbage - can",
+            "coordinates": [ [264, 111], [558, 113], [558, 145], [264, 143] ]
+        },
+        {
+            "text": "All Characters in this CYOA are above the age of 18",
+            "coordinates": [ [980, 156], [1397, 158], [1397, 176], [980, 174] ]
+        },
+        {
+            "text": "Having no purpose in life , after graduating from your magic academy you picked up the hobby of making potions with your alchemy skill , and selling them in your local Market . It wasn't much , but you were making some good cash on the side . After a couple months of the same routine , you had a realisation . You loved making potions , but not only that , you were good at making potions too ! So fed up with the same boring routine you've been living through , you came to a decision . You were going to open up your own store ! After a couple weeks of searching , you come to another realisation . You are too broke . Sure you got a nice sum of money from your market sales , but that wasn't nearly enough to get a store . What do you do now ? As you began to ponder your options , you remembered seeing an ad in the papers . \" By chance are you looking into purchasing a store for cheap ? If so , contact me by sending a letter to ... \" It was worth a shot ! You send a letter , and within the next couple days , you get a response :",
+            "coordinates": [ [103, 211], [1396, 213], [1396, 404], [103, 402] ]
+        },
+        {
+            "text": "\" I'm very happy that you're interested . I'm a Plant Mage , and the store is where I used to sell my plants . If you drop by the village of Lustford , you can begin to set up shop . Let's say if you can pay me 150 Gold by the end of the week , you can have the store for good . Does that sound good ? \"",
+            "coordinates": [ [185, 437], [1311, 437], [1311, 488], [185, 488] ]
+        },
+        {
+            "text": "And with that , you began your journey to Lustford . Once you arrive at the quaint town of Lustford , you come to notice something . Everyone in the town was HOT . Like , ridiculously hot . You'd like to think that you weren't too terrible to look at , but these people were on another level . Keeping yourself focussed , you decide to make your way to the address of your new store . As you walk into the rather small building , you begin to imagine how your store will look once you have everything set up . Your eyes soon found a note laying on the counter , written by the previous owner :",
+            "coordinates": [ [103, 522], [1395, 522], [1395, 627], [103, 627] ]
+        },
+        {
+            "text": "\" From one store owner to another , I'd like to say that the people of Lustford are rather ... interesting . Let's just say , there's a reason the town's called LUST - ford . Some customers might ask for something extra , in return for more cash , if you catch my drift . Good luck , and see you in a week ... \"",
+            "coordinates": [ [174, 663], [1323, 663], [1323, 714], [174, 714] ]
+        },
+        {
+            "text": "Scavenging",
+            "coordinates": [ [634, 766], [865, 766], [865, 804], [634, 804] ]
+        },
+        {
+            "text": "Hariken",
+            "coordinates": [ [1266, 797], [1334, 798], [1334, 813], [1266, 812] ]
+        },
+        {
+            "text": "Well that is that . It was still very early in the morning in the village of Lustford , and you didn't intend to open your store for at least a couple more hours . You didn't bring anything with you except some living essentials , and the equipment you needed for alchemy , so you grabbed a map of the surroundings and a book of ingredients used in alchemy , and began scavenging .",
+            "coordinates": [ [103, 853], [1393, 853], [1393, 929], [103, 929] ]
+        },
+        {
+            "text": "( To make potions , you will need to scavenge for ingredients . These ingredients can be found throughout the land around Lustford , but will take quite a bit of energy to get them . Each morning , you will start with 15 Energy Points . These points can be used to scavenge for ingredients . These ingredients can then be used to make potions , where it can then be sold to customers . After \" going to sleep \" at the end of each day , you'll wake up and will come back to this portion , where you'll have 15 Energy Points again to scavenge for more items . Whatever ingredients you didn't used to make potions , can be used on later days . )",
+            "coordinates": [ [129, 965], [1367, 965], [1367, 1074], [129, 1074] ]
+        },
+        {
+            "text": "Mei",
+            "coordinates": [ [78, 1130], [109, 1130], [109, 1144], [78, 1144] ]
+        },
+        {
+            "text": "Fluids of a Succubus Energy req : 3 Points Collected : 60ml of Fluids Description : Fluids of a succubus are a very useful ingredient , used in a variety of potions , but mostly used in potions of the sexual kind . These fluids can be anything from the blood , or even tears of a succubus , but fluids produced during sex are the easiest to get ... and the most abundant .",
+            "coordinates": [ [84, 1142], [496, 1141], [497, 1442], [85, 1443] ]
+        },
+        {
+            "text": "\" Oh ? so you want some of my fluids , don't you- Well , it just so happens that I want some of your fluids too , so how's about a trade ! Deal ? \" -A Succubus",
+            "coordinates": [ [93, 1473], [494, 1472], [494, 1537], [93, 1538] ]
+        },
+        {
+            "text": "Rézeharu",
+            "coordinates": [ [75, 1590], [159, 1588], [159, 1608], [75, 1610] ]
+        },
+        {
+            "text": "Milk from Minotaurs Energy req : 1 Points Collected : 100ml of Milk",
+            "coordinates": [ [292, 1606], [495, 1605], [496, 1681], [293, 1682] ]
+        },
+        {
+            "text": "Kyuri Tizu",
+            "coordinates": [ [539, 1129], [627, 1126], [627, 1143], [540, 1146] ]
+        },
+        {
+            "text": "Tsuki Tokage",
+            "coordinates": [ [1001, 1126], [1115, 1128], [1115, 1148], [1001, 1146] ]
+        },
+        {
+            "text": "Birdfolk Eggs",
+            "coordinates": [ [795, 1141], [925, 1145], [924, 1165], [794, 1161] ]
+        },
+        {
+            "text": "Goo from Slimegirls",
+            "coordinates": [ [1221, 1141], [1417, 1143], [1417, 1164], [1221, 1162] ]
+        },
+        {
+            "text": "Energy req : 2 Points Collected : 2 Eggs Description : Birdfolk are the cheer- ful , playful residents of the Lustford Forest . Every once in a while ,",
+            "coordinates": [ [754, 1177], [949, 1177], [949, 1348], [754, 1348] ]
+        },
+        {
+            "text": "the Birdfolk produces eggs that , if fertilised , will hatch into another Birdfolk . Unfertilised eggs are a useful ingredient . If you ask nicely , you might get one from them .",
+            "coordinates": [ [547, 1353], [956, 1352], [956, 1442], [547, 1443] ]
+        },
+        {
+            "text": "\" So you want one of my eggs , do you ? Hmmm ... I guess I can give you some , but in return , you'll need to help me make a new egg , if you catch my drift \" -A Birdfolk",
+            "coordinates": [ [548, 1473], [962, 1472], [962, 1541], [548, 1542] ]
+        },
+        {
+            "text": "Ohgaki M",
+            "coordinates": [ [538, 1588], [622, 1589], [622, 1611], [538, 1610] ]
+        },
+        {
+            "text": "Energy req : 1 Points Collected : 250ml of Goo Description : Slimes are pretty abundant in the village of Lustford , but in some rare cases , these slimes",
+            "coordinates": [ [1216, 1178], [1416, 1178], [1416, 1350], [1216, 1350] ]
+        },
+        {
+            "text": "can evolve into Slimegirls . These Slimes produce a Goo that is very useful ingredient in alchemy , and since Slimegirls seem to produce it endless , there's more for you !",
+            "coordinates": [ [1008, 1351], [1410, 1353], [1409, 1445], [1007, 1443] ]
+        },
+        {
+            "text": "\" You really want some of my slime ? Sure , go right ahead , It's not like I have any use for this . There's just gonna be less slime for me to clean . \" -A Slimegirl",
+            "coordinates": [ [1019, 1473], [1415, 1473], [1415, 1540], [1019, 1540] ]
+        },
+        {
+            "text": "Daishippai",
+            "coordinates": [ [1001, 1592], [1095, 1592], [1095, 1611], [1001, 1611] ]
+        },
+        {
+            "text": "Fairy Dust",
+            "coordinates": [ [809, 1607], [909, 1606], [909, 1626], [809, 1627] ]
+        },
+        {
+            "text": "Description :",
+            "coordinates": [ [293, 1697], [397, 1696], [397, 1714], [293, 1715] ]
+        },
+        {
+            "text": "Minotours used to be",
+            "coordinates": [ [296, 1721], [472, 1721], [472, 1735], [296, 1735] ]
+        },
+        {
+            "text": "fierce creatures that",
+            "coordinates": [ [292, 1744], [462, 1744], [462, 1759], [292, 1759] ]
+        },
+        {
+            "text": "could destroy whole villages by themselves ,",
+            "coordinates": [ [292, 1768], [479, 1768], [479, 1811], [292, 1811] ]
+        },
+        {
+            "text": "but recently they've been domesticated to be a lot less dangerous . If you want some of their sweet , minotaur milk , just go ahead and ask for it . I'm sure they'll happily oblige .",
+            "coordinates": [ [83, 1816], [493, 1816], [493, 1908], [83, 1908] ]
+        },
+        {
+            "text": "\" You want some of my milk ? Of course , you can have as much as you want . Just be gentle with them , alright ? They're sensitive y'know ! \" -A Minotaur",
+            "coordinates": [ [100, 1934], [484, 1934], [484, 2004], [100, 2004] ]
+        },
+        {
+            "text": "N / A",
+            "coordinates": [ [78, 2055], [112, 2055], [112, 2070], [78, 2070] ]
+        },
+        {
+            "text": "Lustford's Water Energy req : 1 Points Collected : 250ml of H2O Description : Lustford has a river that passes straight through the village . That river is where most of the",
+            "coordinates": [ [292, 2068], [496, 2067], [497, 2270], [293, 2271] ]
+        },
+        {
+            "text": "denizens of the village get their water from . Water is a very important base of practically all potions , and since the river is open to everyone , it won't be hard to get some .",
+            "coordinates": [ [82, 2276], [494, 2278], [493, 2370], [81, 2368] ]
+        },
+        {
+            "text": "\" Traces of aphrodisiacs can be found in the waters of the Lustford river . Maybe that's why the people and monster of the town of Lustford is so sexual ... -You",
+            "coordinates": [ [94, 2398], [494, 2397], [494, 2465], [94, 2466] ]
+        },
+        {
+            "text": "Garutaisa",
+            "coordinates": [ [164, 2546], [247, 2546], [247, 2559], [164, 2559] ]
+        },
+        {
+            "text": "Energy req : 3 Points Collected : 20g of Dust Description : Living in the same place as the Birdfolk , Fairies are the mischievous spirits that live in the",
+            "coordinates": [ [753, 1642], [952, 1640], [954, 1809], [755, 1811] ]
+        },
+        {
+            "text": "Lustford Forest . Fairies produce a highly potent magical item called fairy dust . If you ask nicely , they might give you some dust , although it won't be a lot , by any means .",
+            "coordinates": [ [546, 1812], [947, 1815], [946, 1911], [545, 1908] ]
+        },
+        {
+            "text": "\" Oh ! You wanna get your hands on some of my fairy dust ! Alright , I'll give ya some , but you better be patient ! Making this stuff takes quite a while ! \" -A Fairy",
+            "coordinates": [ [547, 1936], [963, 1936], [963, 2003], [547, 2003] ]
+        },
+        {
+            "text": "Kkdxyon",
+            "coordinates": [ [540, 2055], [615, 2055], [615, 2072], [540, 2072] ]
+        },
+        {
+            "text": "Essence of Elemental Energy req : 2 Points Collected : 2 Essences Description : Elemental Essences , when distilled into a potion , can give the user the ability to control or",
+            "coordinates": [ [753, 2066], [958, 2066], [958, 2271], [753, 2271] ]
+        },
+        {
+            "text": "resist one of the four main elements . While many think Elementals are dangerous , most of them just want company . If you spend some time with them , they'd be happy to give you their Essences .",
+            "coordinates": [ [545, 2277], [959, 2276], [959, 2370], [545, 2371] ]
+        },
+        {
+            "text": "\" Oh , have we ever met ? Oh , you came for some of my Essence ? Sure you can have some , but before that , how's your day been going ? Are you well ? -An Elemental",
+            "coordinates": [ [550, 2396], [960, 2395], [960, 2467], [550, 2468] ]
+        },
+        {
+            "text": "Alchemy",
+            "coordinates": [ [659, 2507], [840, 2508], [840, 2544], [659, 2543] ]
+        },
+        {
+            "text": "Dragon Scale Energy req : 4 Points Collected : 2 Scales Description : Dragons are the fiercest",
+            "coordinates": [ [1216, 1606], [1415, 1605], [1416, 1738], [1217, 1739] ]
+        },
+        {
+            "text": "and most dangerous monster in the land where Lustford resides . Their scales are nigh impenetrable , which makes them all the more valuable in potions and in alchemy . If you beg , I'm sure they'll give you one ... You probably won't get eaten .",
+            "coordinates": [ [1007, 1743], [1420, 1744], [1420, 1908], [1007, 1907] ]
+        },
+        {
+            "text": "\" You dare interrupt my slumber ! What ? You want some of my scales ? ... Fine , I'll give you some , but only because you don't seem worth the effort to fight \" -A Dragon",
+            "coordinates": [ [1011, 1936], [1425, 1937], [1425, 2006], [1011, 2005] ]
+        },
+        {
+            "text": "Houtengeki",
+            "coordinates": [ [1002, 2055], [1101, 2054], [1101, 2070], [1002, 2071] ]
+        },
+        {
+            "text": "Seeds from a Dryad Energy req : 3 Points Collected : 3 Dryad Seeds Description : Dryads are spirits that live in forest and woods . They care deeply for",
+            "coordinates": [ [1214, 2067], [1419, 2066], [1420, 2249], [1215, 2250] ]
+        },
+        {
+            "text": "nature and everything within it . Dryad seeds are very potent seeds that are said to be able to sprout an entire forest . If you help the dryad to grow more plants , they'll happily give you seeds .",
+            "coordinates": [ [1007, 2256], [1424, 2255], [1424, 2368], [1007, 2369] ]
+        },
+        {
+            "text": "\" Ah , so you search for my seeds , do you ? Well , I'm sure I can give you some , but in return , I'll need some of your own seed , If you understand what I mean- \" -A Dryad",
+            "coordinates": [ [1012, 2398], [1423, 2398], [1423, 2467], [1012, 2467] ]
+        },
+        {
+            "text": "After scavenging around the Lustford woods for plenty of hours , you came back to your store with all your spoils . Now you checked and saw you had only an hour or so left until ( hopefully ) many customers started pouring into your new potion shop . You rolled your sleeves up , set up the cauldrons and cleaned your flasks , and began your favourite part . Alchemy !",
+            "coordinates": [ [102, 2601], [1387, 2601], [1387, 2677], [102, 2677] ]
+        },
+        {
+            "text": "( This is the section where you'll be making the potion . Using the ingredients you found in the previous sections , that you \" scavenged for \" , you'll be able to create whatever potions you want , as long as you use the correct ingredients . These potions can then be sold to customers for Gold , or other things . You're also able to \" Enhance \" potions by adding some Fairy Dust into the mix . These enhanced versions of the potions can be sold for more Gold . This is an- other section you do every time after a day . Everytime you \" Wake up \" , you'll go Scavenging , then you'll do Alchemy in preparation for Customers . )",
+            "coordinates": [ [141, 2713], [1358, 2713], [1358, 2822], [141, 2822] ]
+        },
+        {
+            "text": "Nithros",
+            "coordinates": [ [78, 2879], [143, 2880], [143, 2895], [78, 2894] ]
+        },
+        {
+            "text": "Health Potion",
+            "coordinates": [ [452, 2887], [585, 2887], [585, 2903], [452, 2903] ]
+        },
+        {
+            "text": "AZOTHS BREATH",
+            "coordinates": [ [123, 3047], [183, 3046], [183, 3055], [123, 3056] ]
+        },
+        {
+            "text": "A simple Health potion . One of the staples of many alchemy stores , for good reasons too . Health Potions are both easy to make , and incredibly useful in tough situations . For any Potions store , this is practically a requirement .",
+            "coordinates": [ [305, 2922], [724, 2923], [724, 3039], [305, 3038] ]
+        },
+        {
+            "text": "Requirements : - Birdfolk Egg - x1 - Minotaur Milk - 50ml",
+            "coordinates": [ [305, 3050], [504, 3051], [504, 3116], [305, 3115] ]
+        },
+        {
+            "text": "Enhancement :",
+            "coordinates": [ [529, 3052], [650, 3052], [650, 3067], [529, 3067] ]
+        },
+        {
+            "text": "- 10g of Fairy Dust",
+            "coordinates": [ [538, 3075], [688, 3073], [688, 3092], [538, 3094] ]
+        },
+        {
+            "text": "Baj Singh",
+            "coordinates": [ [78, 3163], [157, 3163], [157, 3180], [78, 3180] ]
+        },
+        {
+            "text": "Frank Barbera",
+            "coordinates": [ [79, 3446], [200, 3446], [200, 3460], [79, 3460] ]
+        },
+        {
+            "text": "Baj Singh",
+            "coordinates": [ [78, 3726], [157, 3725], [157, 3744], [78, 3745] ]
+        },
+        {
+            "text": "Dennis Welling",
+            "coordinates": [ [78, 4006], [208, 4009], [208, 4028], [78, 4025] ]
+        },
+        {
+            "text": "Speed Potion",
+            "coordinates": [ [455, 3169], [581, 3168], [581, 3188], [455, 3189] ]
+        },
+        {
+            "text": "Speed potions are another useful tool for any aspiring adventurer . While it was first intended to be used for its speed giving ability , It turns out that speed potions are also a great lube . It definitely spices things up in the bedroom .",
+            "coordinates": [ [305, 3204], [726, 3203], [726, 3319], [305, 3320] ]
+        },
+        {
+            "text": "Requirements :",
+            "coordinates": [ [306, 3334], [429, 3333], [429, 3350], [306, 3351] ]
+        },
+        {
+            "text": "Enhancement :",
+            "coordinates": [ [529, 3334], [651, 3334], [651, 3349], [529, 3349] ]
+        },
+        {
+            "text": "- Succubus Fluids - 20ml - 15g of Fairy Dust Minotaur Milk - 50ml",
+            "coordinates": [ [319, 3354], [686, 3353], [686, 3396], [319, 3397] ]
+        },
+        {
+            "text": "Libido Potion",
+            "coordinates": [ [454, 3450], [583, 3451], [583, 3470], [454, 3469] ]
+        },
+        {
+            "text": "Libido potions are some of the most bought potions , especially in Lustford . These potions increase the user's libido by orders of magnitudes . Even a succubus would struggle to keep up with anyone who's on this .",
+            "coordinates": [ [306, 3486], [721, 3484], [722, 3599], [307, 3601] ]
+        },
+        {
+            "text": "Requirements :",
+            "coordinates": [ [307, 3617], [430, 3617], [430, 3634], [307, 3634] ]
+        },
+        {
+            "text": "Enhancement :",
+            "coordinates": [ [529, 3616], [651, 3616], [651, 3630], [529, 3630] ]
+        },
+        {
+            "text": "- Succubus Fluids - 20ml - 10g of Fairy Dust - Lustford Water - 100ml",
+            "coordinates": [ [317, 3637], [689, 3639], [689, 3680], [317, 3678] ]
+        },
+        {
+            "text": "Growth Potion",
+            "coordinates": [ [448, 3733], [588, 3732], [588, 3749], [448, 3750] ]
+        },
+        {
+            "text": "Growth potions extract the capabilities of a Dryad seed into a potion . A single drop will cause plants to sprout from whatever the drop touched . This potion has a bonus side effect , which makes any part of a user's body the potion touches bigger .",
+            "coordinates": [ [305, 3769], [732, 3768], [732, 3884], [305, 3885] ]
+        },
+        {
+            "text": "Requirements : - Dryad Seeds - XI - Lustford Water - 100ml",
+            "coordinates": [ [305, 3900], [516, 3899], [516, 3962], [305, 3963] ]
+        },
+        {
+            "text": "Enhancement : -10g of Fairy Dust",
+            "coordinates": [ [529, 3897], [688, 3897], [688, 3942], [529, 3942] ]
+        },
+        {
+            "text": "Durability Potion",
+            "coordinates": [ [435, 4016], [601, 4014], [601, 4036], [435, 4038] ]
+        },
+        {
+            "text": "A Durability potion makes the user of the potion more durable . It makes the skin and bones of the user nigh impenetrable . Though this may be true , your internal organs are still soft . This is good for a sword fight , not so good for concussions . Enhancement :",
+            "coordinates": [ [304, 4051], [728, 4051], [728, 4195], [304, 4195] ]
+        },
+        {
+            "text": "Requirements : Dragon Scales - x1",
+            "coordinates": [ [306, 4180], [474, 4178], [474, 4220], [306, 4222] ]
+        },
+        {
+            "text": "- 15g of Fairy Dust",
+            "coordinates": [ [538, 4205], [686, 4202], [686, 4221], [538, 4224] ]
+        },
+        {
+            "text": "- Slimegirl Goo - 100mL",
+            "coordinates": [ [313, 4228], [507, 4226], [507, 4244], [313, 4246] ]
+        },
+        {
+            "text": "Baj Singh",
+            "coordinates": [ [78, 4293], [157, 4293], [157, 4310], [78, 4310] ]
+        },
+        {
+            "text": "Elemental Control Potion Elemental Control potions do as the name implies . They give the user of the potion control over one of the four main elements . Whether it be to manipulate , or conjure the element , the user will have full control over it . Requirements :",
+            "coordinates": [ [304, 4299], [730, 4299], [730, 4480], [304, 4480] ]
+        },
+        {
+            "text": "- Elemental Essence - x1",
+            "coordinates": [ [316, 4486], [512, 4486], [512, 4501], [316, 4501] ]
+        },
+        {
+            "text": "Enhancement : - 15g of Fairy Dust",
+            "coordinates": [ [528, 4463], [686, 4462], [686, 4504], [528, 4505] ]
+        },
+        {
+            "text": "- Lustford Water - 100ml",
+            "coordinates": [ [313, 4508], [514, 4509], [514, 4526], [313, 4525] ]
+        },
+        {
+            "text": "Éva Kárpáti",
+            "coordinates": [ [771, 2877], [869, 2880], [868, 2900], [770, 2897] ]
+        },
+        {
+            "text": "Knight of Cydonia",
+            "coordinates": [ [772, 3162], [922, 3161], [922, 3180], [772, 3181] ]
+        },
+        {
+            "text": "Jesse L",
+            "coordinates": [ [770, 3447], [826, 3446], [826, 3461], [770, 3462] ]
+        },
+        {
+            "text": "Clarence Lowe",
+            "coordinates": [ [771, 3726], [893, 3727], [893, 3743], [771, 3742] ]
+        },
+        {
+            "text": "Gleb Tagirov",
+            "coordinates": [ [770, 4008], [877, 4011], [877, 4029], [770, 4026] ]
+        },
+        {
+            "text": "Baj Singh",
+            "coordinates": [ [771, 4293], [850, 4294], [850, 4313], [771, 4312] ]
+        },
+        {
+            "text": "0",
+            "coordinates": [ [837, 4435], [865, 4436], [864, 4461], [836, 4460] ]
+        },
+        {
+            "text": "Strength Potion",
+            "coordinates": [ [1133, 2888], [1286, 2885], [1286, 2904], [1133, 2907] ]
+        },
+        {
+            "text": "Strength potions are another potion that can be found in many stores around Lustford . Strength potions , made from the scales of one of the strongest creatures , can make battling or even just menial labour , as easy as it can be .",
+            "coordinates": [ [997, 2920], [1418, 2919], [1418, 3037], [997, 3038] ]
+        },
+        {
+            "text": "Requirements : - Dragon Scales - x1 - Minotaur Milk - 50ml",
+            "coordinates": [ [998, 3052], [1196, 3051], [1196, 3115], [998, 3116] ]
+        },
+        {
+            "text": "Enhancement :",
+            "coordinates": [ [1221, 3052], [1344, 3052], [1344, 3066], [1221, 3066] ]
+        },
+        {
+            "text": "- 15g of Fairy Dust",
+            "coordinates": [ [1231, 3076], [1379, 3075], [1379, 3093], [1231, 3094] ]
+        },
+        {
+            "text": "Flight Potion",
+            "coordinates": [ [1149, 3169], [1273, 3166], [1273, 3186], [1150, 3189] ]
+        },
+        {
+            "text": "Flight potions , when drunk , gives the user temporary levitation capabilities , for about an hour or two . These potions can be a life saver in certain situations . It doesn't give perfect control , but most of the time , a little levitation is all that's needed .",
+            "coordinates": [ [999, 3204], [1424, 3204], [1424, 3318], [999, 3318] ]
+        },
+        {
+            "text": "Requirements : - Birdfolk Egg - x1 - Lustford Water - 100ml",
+            "coordinates": [ [999, 3332], [1213, 3333], [1213, 3397], [999, 3396] ]
+        },
+        {
+            "text": "Enhancement : - 15g of Fairy Dust",
+            "coordinates": [ [1223, 3334], [1380, 3333], [1380, 3376], [1223, 3377] ]
+        },
+        {
+            "text": "Luck Potion",
+            "coordinates": [ [1154, 3452], [1268, 3453], [1268, 3469], [1154, 3468] ]
+        },
+        {
+            "text": "After drinking a Luck potion , the user will experience a period of heightened luck . This can last from anything from a couple hours to days . Considering these potions were made with Succubi Fluids , most of the situations will end lewdly . Enhancement : Requirements : Succubus Fluids - 20ml -10g of Fairy Dust Dryad Seeds- 1 Seed",
+            "coordinates": [ [998, 3487], [1423, 3486], [1424, 3681], [999, 3682] ]
+        },
+        {
+            "text": "Poison Potion",
+            "coordinates": [ [1145, 3732], [1278, 3731], [1278, 3749], [1145, 3750] ]
+        },
+        {
+            "text": "This potion does the exact opposite of the Growth Potion . A Poison potion will kill anything the liquid comes in contact with . We're not sure if there are any side effects , mainly because whoever touches the potion , dies .",
+            "coordinates": [ [998, 3768], [1422, 3767], [1422, 3883], [998, 3884] ]
+        },
+        {
+            "text": "Requirements : - Dryad Seeds - XI - Slimegirl Goo - 100mL",
+            "coordinates": [ [998, 3899], [1204, 3898], [1204, 3965], [998, 3966] ]
+        },
+        {
+            "text": "Enhancement : - 10g of Fairy Dust",
+            "coordinates": [ [1222, 3899], [1381, 3898], [1381, 3940], [1222, 3941] ]
+        },
+        {
+            "text": "Flexibility Potion",
+            "coordinates": [ [1128, 4015], [1294, 4013], [1294, 4034], [1128, 4036] ]
+        },
+        {
+            "text": "After drinking this potion , you will become a skilled contortionist . Flexibility potions will allow your body to stretch further than normal , and give your joint a wider range of motion . Very useful for miners who get stuck in cramped spaces .",
+            "coordinates": [ [996, 4050], [1414, 4051], [1414, 4168], [996, 4167] ]
+        },
+        {
+            "text": "Requirements : - Succubus Fluids - 20ml - Slimegirl Goo - 100mL",
+            "coordinates": [ [998, 4181], [1210, 4180], [1210, 4246], [998, 4247] ]
+        },
+        {
+            "text": "Enhancement :",
+            "coordinates": [ [1222, 4181], [1343, 4181], [1343, 4195], [1222, 4195] ]
+        },
+        {
+            "text": "-10g of Fairy Dust",
+            "coordinates": [ [1232, 4205], [1380, 4203], [1380, 4221], [1232, 4223] ]
+        },
+        {
+            "text": "Elemental Resistance Potion While the Elemental Control potion gives users control over elements , it doesn't give resistance . This potion allows users to be completely immune to whatever one element the user drinks up . They can survive anything from a desert to a tundra Requirements : Enhancement : -15g of Fairy Dust",
+            "coordinates": [ [997, 4299], [1411, 4299], [1411, 4506], [997, 4506] ]
+        },
+        {
+            "text": "- Elemental Essence - x1 - Slimegirl Goo - 100mL",
+            "coordinates": [ [1005, 4485], [1202, 4485], [1202, 4529], [1005, 4529] ]
+        }
+    ]
+}
