@@ -43,13 +43,19 @@ Tag selection requirements (mandatory adherence to these counts):
 • Setting: Select 0-3 tags
 • Genre: Select 0-3 tags
 • Kinks: Select 0-7 tags
-• Custom: Select 5-15 tags (Use existing tags wherever possible)
+• Custom: Select 5-10 tags (Use existing tags wherever possible, focusing on unique mechanics, major themes, or standout features, avoiding minor details or one-off mentions)
 
 Each tag should be on a separate line
 For each tag in the tags array, add a short comment in the format // <explanation> explaining which category the tag belongs to and explaining why this tag was chosen based on the game content.
 Ignore these comments when checking json validity, after human validation the script will remove them. 
 
 If the game has specific themes, aesthetics, mechanics, or content not covered by standard tags, please add appropriate custom tags to highlight these features. Do not create new tags to describe unique items, characters, or areas. Be sure to create a tag if the game represents some popular fandom and it is a major part of the story, i.e. the game is a fanfic.
+
+never specify repetitive tags. 
+There should be no more than 5 unique tags per game.
+The total number of tags should not exceed 30 pieces
+
+If a CSV hint specifies an author with a high probability ( above 70%) and this name is not present in the 'Available Authors' list, you are permitted to add the new author name in the 'author' field.
 
 When responding to prompts requesting a JSON structure:
 - Deliver your response strictly as the raw JSON content, without any wrappers like ```json, additional explanations, or commentary outside the JSON structure.

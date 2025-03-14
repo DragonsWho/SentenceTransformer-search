@@ -247,26 +247,37 @@ class GameUploaderStatic:
             return None
 
     def load_and_enrich_game_data(self, json_path, game_folder):
-        """Загружает JSON и добавляет пути к изображениям из папки."""
+        """Loads JSON and enriches it with paths to images from the folder."""
         logger.info(f"Loading and enriching game data from {json_path} with images from {game_folder}")
         try:
             with open(json_path, 'r', encoding='utf-8') as f:
                 game_data = json.load(f)
 
-            # Устанавливаем тип игры как "img"
+            # Set game type as "img"
             game_data['img_or_link'] = 'img'
 
-            # Определяем пути к изображениям
+            # Define paths
             folder_path = Path(game_folder)
+            screenshots_folder = folder_path / "screenshots"
+            screenshot_path = screenshots_folder / "screenshot.webp"
+
+            # Check for screenshot as cover image
+            if not screenshot_path.exists():
+                raise FileNotFoundError(f"Screenshot not found at: {screenshot_path}")
+            game_data['image'] = str(screenshot_path)
+
+            # Find images in the main folder for game pages
             image_extensions = ('.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif', '.svg')
-            images = sorted([f for f in folder_path.iterdir() if f.suffix.lower() in image_extensions])
+            images = sorted([
+                f for f in folder_path.iterdir() 
+                if f.suffix.lower() in image_extensions and f.is_file()
+            ])
 
             if not images:
                 raise ValueError(f"No images found in folder: {game_folder}")
 
-            # Первое изображение как обложка, остальные как страницы
-            game_data['image'] = str(images[0])
-            game_data['cyoa_pages'] = [str(img) for img in images]  # Все изображения как страницы
+            # Use all images from the main folder as pages
+            game_data['cyoa_pages'] = [str(img) for img in images]
 
             logger.info(f"Enriched game data with image: {game_data['image']}, pages: {len(game_data['cyoa_pages'])}")
             return game_data
@@ -287,15 +298,29 @@ class GameUploaderStatic:
                 raise FileNotFoundError(f"Cover image not found: {image_path}")
             mime_type = EXTENSION_TO_MIME.get(image_path.suffix.lower(), mimetypes.guess_type(str(image_path))[0])
             if mime_type not in ALLOWED_IMAGE_MIME_TYPES:
-                raise ValueError(f"Unsupported image format: {mime_type}")
+                raise ValueError(f"Unsupported image format for cover: {mime_type}")
 
             # Проверяем страницы
             if 'cyoa_pages' not in game_data or not game_data['cyoa_pages']:
                 raise ValueError("No CYOA pages provided for static game")
+            
+            page_files = []
             for page_path in game_data['cyoa_pages']:
                 page_path_obj = Path(page_path)
                 if not page_path_obj.exists():
-                    raise FileNotFoundError(f"Game page not found: {page_path}")
+                    logger.error(f"Game page not found: {page_path}")
+                    continue
+                page_mime_type = EXTENSION_TO_MIME.get(page_path_obj.suffix.lower(), mimetypes.guess_type(str(page_path_obj))[0])
+                if page_mime_type not in ALLOWED_IMAGE_MIME_TYPES:
+                    logger.warning(f"Skipping page {page_path} due to unsupported format: {page_mime_type}")
+                    continue
+                if page_path_obj.stat().st_size > 524288000:
+                    logger.warning(f"Skipping page {page_path} due to size exceeding 500MB: {page_path_obj.stat().st_size}")
+                    continue
+                page_files.append((page_path_obj, page_mime_type))
+
+            if not page_files:
+                raise ValueError("No valid CYOA pages available after filtering")
 
             # Обрабатываем теги
             tag_ids = []
@@ -326,28 +351,35 @@ class GameUploaderStatic:
                 form_data.append(('authors', author_id))
 
             # Подготавливаем файлы для загрузки
-            files = {}
-            with open(image_path, 'rb') as cover_image_file:
-                files['image'] = ('blob', cover_image_file, mime_type)
-                for i, page_path in enumerate(game_data['cyoa_pages']):
-                    page_path_obj = Path(page_path)
-                    page_mime_type = EXTENSION_TO_MIME.get(page_path_obj.suffix.lower(), mimetypes.guess_type(str(page_path_obj))[0])
-                    if page_mime_type not in ALLOWED_IMAGE_MIME_TYPES:
-                        logger.warning(f"Unsupported format for page {page_path}: {page_mime_type}")
-                        continue
-                    with open(page_path_obj, 'rb') as page_file:
-                        files[f'cyoa_pages[{i}]'] = (f'page_{i}', page_file, page_mime_type)
+            files = [
+                ('image', ('cover_image', open(image_path, 'rb'), mime_type))
+            ]
 
-                # Отправляем запрос
-                response = requests.post(
-                    f'{self.base_url}/collections/games/records',
-                    headers=headers,
-                    data=form_data,
-                    files=files
+            # Добавляем все страницы с ключом 'cyoa_pages'
+            for i, (page_path_obj, page_mime_type) in enumerate(page_files):
+                files.append(
+                    ('cyoa_pages', (page_path_obj.name, open(page_path_obj, 'rb'), page_mime_type))
                 )
-                response.raise_for_status()
-                game_record = response.json()
-                logger.info(f"Game created successfully: {game_record['id']}")
+                logger.info(f"Preparing to upload page {i+1}/{len(page_files)}: {page_path_obj.name}")
+
+            # Отправляем запрос
+            logger.info(f"Sending POST request with {len(page_files)} CYOA pages")
+            response = requests.post(
+                f'{self.base_url}/collections/games/records',
+                headers=headers,
+                data=form_data,
+                files=files
+            )
+            response.raise_for_status()
+            game_record = response.json()
+            logger.info(f"Game created successfully: {game_record['id']}")
+            logger.debug(f"Server response: {json.dumps(game_record, indent=2)}")
+
+            # Проверяем, загружены ли страницы
+            if 'cyoa_pages' not in game_record or not game_record['cyoa_pages']:
+                logger.warning("CYOA pages appear to be missing in the server response")
+            elif len(game_record['cyoa_pages']) != len(page_files):
+                logger.warning(f"Expected {len(page_files)} CYOA pages, but got {len(game_record['cyoa_pages'])} in response")
 
             # Связываем авторов с игрой
             for author_id in author_ids:
@@ -358,6 +390,11 @@ class GameUploaderStatic:
         except Exception as e:
             logger.error(f"Failed to create game '{game_data['title']}': {str(e)}", exc_info=True)
             raise
+        finally:
+            # Закрываем файлы в случае ошибки или успеха
+            for key, value in files:
+                if isinstance(value, tuple) and len(value) >= 2 and hasattr(value[1], 'close'):
+                    value[1].close()
 
     def link_game_to_author(self, game_id, author_id):
         logger.info(f"Linking game {game_id} to author {author_id}")

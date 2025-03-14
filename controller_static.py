@@ -1,3 +1,5 @@
+# controller_static.py
+
 import os
 import sys
 import datetime
@@ -33,7 +35,7 @@ def run_script(script_name, args=None):
         if args:
             command.extend(args if isinstance(args, list) else [args])
         
-        logger.info(f"Выполняется команда: {' '.join(command)}")
+        logger.info(f"Running command: {' '.join(command)}")
         process = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,
@@ -49,7 +51,7 @@ def run_script(script_name, args=None):
             logger.error(f"Error: {error}")
             return False, output, error
         
-        logger.info(f"Script {script_name} успешно выполнен. Output: {output}")
+        logger.info(f"Script {script_name} completed successfully. Output: {output}")
         return True, output, error
     
     except Exception as e:
@@ -75,6 +77,10 @@ def check_prerequisites():
         logger.error("Prompt file not found: prompts/Grok_ocr_to_md.md")
         return False
     
+    if not os.path.exists("GameUploader_static.py"):
+        logger.error("Required script not found: GameUploader_static.py")
+        return False
+    
     return True
 
 def load_prompt(prompt_path):
@@ -85,7 +91,6 @@ def load_prompt(prompt_path):
         return f.read()
 
 def calculate_center(coordinates):
-    """Вычисляет центральную точку из четырех углов"""
     x_coords = [coord[0] for coord in coordinates]
     y_coords = [coord[1] for coord in coordinates]
     center_x = sum(x_coords) / 4
@@ -93,7 +98,6 @@ def calculate_center(coordinates):
     return [int(center_x), int(center_y)]
 
 def optimize_ocr_json(ocr_data):
-    """Оптимизирует JSON для API: заменяет координаты на центр и убирает отступы"""
     optimized_data = {
         "image_path": ocr_data["image_path"],
         "text_blocks": []
@@ -104,7 +108,7 @@ def optimize_ocr_json(ocr_data):
             "center": calculate_center(block["coordinates"])
         }
         optimized_data["text_blocks"].append(optimized_block)
-    return json.dumps(optimized_data, ensure_ascii=False)  # Сжатый формат без отступов
+    return json.dumps(optimized_data, ensure_ascii=False)
 
 def process_image_folder(folder_path, output_dir="markdown/static"):
     folder_path = Path(folder_path).resolve()
@@ -120,14 +124,12 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
     os.makedirs(ocr_md_dir, exist_ok=True)
     os.makedirs(summaries_dir, exist_ok=True)
     
-    # Инициализируем GrokAPI
     try:
         grok_api = GrokAPI(reuse_window=True, anonymous_chat=True)
     except Exception as e:
         logger.error(f"Failed to initialize Grok API: {str(e)}")
         return False
     
-    # Загружаем промпты
     ocr_prompt_path = "prompts/Grok_ocr_to_md.md"
     sent_search_prompt_path = "prompts/Grok_for_sent_search.md"
     catalog_prompt_path = "prompts/Grok_description_for_catalog.md"
@@ -139,17 +141,16 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
         logger.error(f"Error loading prompts: {str(e)}")
         return False
     
-    # Step 1: Проверяем изображения и наличие OCR данных
-    image_extensions = (".jpg", ".jpeg", ".png", ".bmp")
+    image_extensions = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
     images = [f for f in folder_path.iterdir() if f.suffix.lower() in image_extensions]
     if not images:
         logger.warning(f"No images found in folder: {folder_path}")
         return False
     
-    images = sorted(images)  # Сортируем для консистентности
+    images = sorted(images)
     logger.info(f"Found {len(images)} images in folder: {folder_path}")
     
-    # Проверка ocr_raw
+    # Проверка наличия OCR raw файлов
     ocr_raw_files = {f.stem: f for f in ocr_raw_dir.iterdir() if f.suffix == ".json"}
     expected_ocr_raw = {img.stem: f"{img.stem}_ocr.json" for img in images}
     ocr_raw_complete = all(
@@ -171,10 +172,6 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
                 if not success:
                     logger.error(f"OCR failed for {image_path}: {error}")
                     continue
-            else:
-                logger.info(f"Using existing OCR file for {image_path}: {ocr_output_file}")
-            
-            # Загружаем сырые данные OCR
             try:
                 with open(ocr_output_file, "r", encoding="utf-8") as f:
                     ocr_data = json.load(f)
@@ -185,7 +182,7 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
                 logger.error(f"Error loading OCR JSON {ocr_output_file}: {str(e)}")
                 continue
     else:
-        logger.info(f"All OCR raw files exist and are valid in {ocr_raw_dir}")
+        logger.info(f"All OCR raw files exist and are valid in {ocr_raw_dir}. Skipping OCR generation.")
         for image_path in images:
             ocr_output_file = ocr_raw_dir / f"{image_path.stem}_ocr.json"
             try:
@@ -202,7 +199,7 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
         logger.error(f"No text blocks extracted for folder: {folder_path}")
         return False
     
-    # Step 2: Проверка ocr_markdown_pages
+    # Проверка наличия OCR Markdown файлов
     ocr_md_files = {f.stem: f for f in ocr_md_dir.iterdir() if f.suffix == ".md"}
     expected_ocr_md = {img.stem: f"{img.stem}.md" for img in images}
     ocr_md_complete = all(
@@ -225,50 +222,39 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
                     logger.error(f"Error loading OCR JSON for Markdown generation {ocr_output_file}: {str(e)}")
                     continue
                 
-                # Оптимизируем JSON для API
                 optimized_json = optimize_ocr_json(ocr_data)
-                
-                # Формируем запрос для Grok API (OCR to MD)
                 full_prompt = f"{ocr_prompt}\n\n=== OCR JSON ===\n{optimized_json}"
                 logger.info(f"Sending optimized prompt to Grok API for {image_path.name}")
                 
-                # Отправляем запрос в Grok API
                 try:
                     response = grok_api.ask(full_prompt, timeout=120)
                     if response.startswith("Error:"):
                         logger.error(f"Grok API failed for {image_path.name}: {response}")
                         continue
-                except Exception as e:
-                    logger.error(f"Exception during Grok API call for {image_path.name}: {str(e)}")
-                    continue
-                
-                # Сохраняем результат в ocr_markdown_pages
-                try:
                     with open(md_output_file, "w", encoding="utf-8") as f:
                         f.write(response)
                     logger.info(f"Markdown from Grok API saved to {md_output_file}")
                 except Exception as e:
-                    logger.error(f"Error saving Markdown for {image_path.name}: {str(e)}")
+                    logger.error(f"Exception during Grok API call for {image_path.name}: {str(e)}")
                     continue
             else:
                 logger.info(f"Using existing Markdown file for {image_path}: {md_output_file}")
     else:
-        logger.info(f"All OCR Markdown files exist and are valid in {ocr_md_dir}")
+        logger.info(f"All OCR Markdown files exist and are valid in {ocr_md_dir}. Skipping Markdown generation.")
     
-    # Step 3: Convert raw OCR to Markdown (общий файл)
+    # Сохранение объединенного Markdown из OCR raw
     os.makedirs(output_dir, exist_ok=True)
     md_path = os.path.join(output_dir, f"{game_name}.md")
-    md_content = [f"Game Folder: {folder_path}\n\nPossible title: {game_name.replace('_', ' ')}\n"]
+    if not os.path.exists(md_path) or os.path.getsize(md_path) == 0:
+        md_content = [f"Game Folder: {folder_path}\n\nPossible title: {game_name.replace('_', ' ')}\n"]
+        for block in combined_text_blocks:
+            md_content.append(f"### From {block['source_image']}\n{block['text']}\n")
+        with open(md_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(md_content))
+        logger.info(f"Raw OCR Markdown saved to {md_path}")
+    else:
+        logger.info(f"Raw OCR Markdown already exists at {md_path}. Skipping generation.")
     
-    for block in combined_text_blocks:
-        md_content.append(f"### From {block['source_image']}\n{block['text']}\n")
-    
-    with open(md_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(md_content))
-    
-    logger.info(f"Raw OCR Markdown saved to {md_path}")
-    
-    # Step 4: Combine all enhanced Markdown files and generate summaries
     md_files = [f for f in ocr_md_dir.iterdir() if f.suffix == ".md"]
     if not md_files:
         logger.error(f"No enhanced Markdown files found in {ocr_md_dir}")
@@ -279,39 +265,61 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
         with open(md_file, "r", encoding="utf-8") as f:
             combined_md_content += f"\n\n=== {md_file.name} ===\n{f.read()}"
     
-    # Запрос для поисковика (sent_search)
-    sent_search_full_prompt = f"{sent_search_prompt}\n\n=== Combined Enhanced Game Text ===\n{combined_md_content}"
-    logger.info(f"Sending sent_search prompt to Grok API for {game_name}")
-    try:
-        sent_search_response = grok_api.ask(sent_search_full_prompt, timeout=120)
-        if sent_search_response.startswith("Error:"):
-            logger.error(f"Grok API failed for sent_search on {game_name}: {sent_search_response}")
-        else:
-            sent_search_output_path = summaries_dir / f"{game_name}_sent_search.md"
-            with open(sent_search_output_path, "w", encoding="utf-8") as f:
-                f.write(sent_search_response)
-            logger.info(f"Sent_search summary saved to {sent_search_output_path}")
-    except Exception as e:
-        logger.error(f"Exception during sent_search Grok API call for {game_name}: {str(e)}")
+    # Проверка наличия файлов в summaries
+    sent_search_output_path = summaries_dir / f"{game_name}_sent_search.md"
+    catalog_output_path = summaries_dir / f"{game_name}_catalog.json"
+    summaries_complete = (
+        os.path.exists(sent_search_output_path) and os.path.getsize(sent_search_output_path) > 0 and
+        os.path.exists(catalog_output_path) and os.path.getsize(catalog_output_path) > 0
+    )
     
-    # Запрос для каталога (catalog)
-    catalog_full_prompt = f"{catalog_prompt}\n\n=== Combined Enhanced Game Text ===\n{combined_md_content}"
-    logger.info(f"Sending catalog prompt to Grok API for {game_name}")
-    try:
-        catalog_response = grok_api.ask(catalog_full_prompt, timeout=120)
-        if catalog_response.startswith("Error:"):
-            logger.error(f"Grok API failed for catalog on {game_name}: {catalog_response}")
+    if not summaries_complete:
+        logger.info(f"Summaries incomplete or missing in {summaries_dir}")
+        # Генерация sent_search
+        if not os.path.exists(sent_search_output_path) or os.path.getsize(sent_search_output_path) == 0:
+            sent_search_full_prompt = f"{sent_search_prompt}\n\n=== Combined Enhanced Game Text ===\n{combined_md_content}"
+            logger.info(f"Sending sent_search prompt to Grok API for {game_name}")
+            try:
+                sent_search_response = grok_api.ask(sent_search_full_prompt, timeout=120)
+                if sent_search_response.startswith("Error:"):
+                    logger.error(f"Grok API failed for sent_search on {game_name}: {sent_search_response}")
+                else:
+                    with open(sent_search_output_path, "w", encoding="utf-8") as f:
+                        f.write(sent_search_response)
+                    logger.info(f"Sent_search summary saved to {sent_search_output_path}")
+            except Exception as e:
+                logger.error(f"Exception during sent_search Grok API call for {game_name}: {str(e)}")
         else:
-            catalog_output_path = summaries_dir / f"{game_name}_catalog.json"
-            with open(catalog_output_path, "w", encoding="utf-8") as f:
-                f.write(catalog_response)
-            logger.info(f"Catalog JSON saved to {catalog_output_path}")
-    except Exception as e:
-        logger.error(f"Exception during catalog Grok API call for {game_name}: {str(e)}")
+            logger.info(f"Sent_search summary already exists at {sent_search_output_path}. Skipping generation.")
+        
+        # Генерация catalog
+        if not os.path.exists(catalog_output_path) or os.path.getsize(catalog_output_path) == 0:
+            catalog_full_prompt = f"{catalog_prompt}\n\n=== Combined Enhanced Game Text ===\n{combined_md_content}"
+            logger.info(f"Sending catalog prompt to Grok API for {game_name}")
+            try:
+                catalog_response = grok_api.ask(catalog_full_prompt, timeout=120)
+                if catalog_response.startswith("Error:"):
+                    logger.error(f"Grok API failed for catalog on {game_name}: {catalog_response}")
+                else:
+                    with open(catalog_output_path, "w", encoding="utf-8") as f:
+                        f.write(catalog_response)
+                    logger.info(f"Catalog JSON saved to {catalog_output_path}")
+            except Exception as e:
+                logger.error(f"Exception during catalog Grok API call for {game_name}: {str(e)}")
+        else:
+            logger.info(f"Catalog JSON already exists at {catalog_output_path}. Skipping generation.")
+    else:
+        logger.info(f"All summary files exist and are valid in {summaries_dir}. Skipping summary generation.")
     
-    logger.info(f"Raw OCR data saved in {ocr_raw_dir}")
-    logger.info(f"Grok-processed Markdown saved in {ocr_md_dir}")
-    logger.info(f"Summaries saved in {summaries_dir}")
+    # Отправка на сервер независимо от наличия summaries
+    logger.info(f"Uploading game {game_name} using GameUploader_static.py")
+    success, output, error = run_script("GameUploader_static.py", [str(catalog_output_path), str(folder_path)])
+    if success:
+        logger.info(f"Successfully uploaded game {game_name}: {output}")
+    else:
+        logger.error(f"Failed to upload game {game_name}: {error}")
+    
+    logger.info(f"Processed folder: {folder_path}")
     return True
 
 def main():
@@ -335,7 +343,6 @@ def main():
         else:
             failed_folders.append(folder)
     
-    # Generate report
     timestamp = datetime.datetime.now().strftime('[%Y-%m-%d %H:%M:%S]')
     report = [
         f"\n{timestamp} Static Processing Summary:",

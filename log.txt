@@ -493,3 +493,200 @@
   Failed to process: 0
   Successfully processed folders:
     - cyoa_static/alchemical potions
+
+[2025-03-09 19:56:48] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 0
+  Failed to process: 1
+  Failed folders:
+    - cyoa_static/alchemical potions
+
+[2025-03-09 19:58:03] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 0
+  Failed to process: 1
+  Failed folders:
+    - cyoa_static/alchemical_potions
+
+[2025-03-09 20:01:23] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical_potions
+
+[2025-03-09 20:10:15] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical_potions
+
+[2025-03-09 20:13:10] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical_potions
+
+[2025-03-09 20:17:26] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical_potions
+
+[2025-03-09 20:24:34] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical_potions
+
+[2025-03-10 00:58:59] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical_potions
+
+[2025-03-10 01:26:21] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical_potions
+
+[2025-03-10 01:30:03] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/alchemical_potions
+
+[2025-03-10 20:46:00] Processing summary:
+  Total URLs processed: 5
+  Successfully processed: 5
+  Newly processed: 4
+  Skipped (already in catalog): 1
+  Failed to process: 0
+  Visual analysis failures: 0
+  Skipped URLs (already in catalog):
+    - https://short-cyoa.neocities.org
+  Newly processed URLs:
+    - https://icyoau.neocities.org/cyoa/escape-from-monster-girl-paradise/
+    - https://perfectgirl-cwoa.neocities.org/
+    - https://onepieceinteractivecyoa.neocities.org/
+    - https://godling-of-aliot.neocities.org/Healslut_V0.1/
+
+[2025-03-10 22:53:04] Processing summary:
+  Total URLs processed: 3
+  Successfully processed: 3
+  Newly processed: 3
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://zatrok.neocities.org/PokemonMysteryDungeon/
+    - https://stardustzx.neocities.org/Sonic%20Universe/
+    - https://om1cr0n.neocities.org/dragonballs/
+
+[2025-03-12 21:51:45] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://aquagirl01.neocities.org/striporum/
+
+[2025-03-13 00:23:42] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://aquagirl2001.neocities.org/cyoas/dcnsfw/
+
+[2025-03-13 00:28:14] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://boop-soop.neocities.org/CYOAS/RepurposedHeros/
+
+[2025-03-13 00:56:37] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://duburalytas.neocities.org/
+
+[2025-03-13 01:01:23] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://build-a-kingdom.neocities.org/CYOAs/SupersUnleashed/
+
+[2025-03-13 22:07:25] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://timestop-2.neocities.org/Time%20Stop/
+
+[2025-03-13 22:09:54] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://nonamondnar.neocities.org/
+
+[2025-03-13 22:23:49] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://wormlewdmod.neocities.org/isekai/
+
+[2025-03-13 22:27:36] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://scrappyafterglow.neocities.org/
+
+[2025-03-13 22:33:56] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://recrudescence.neocities.org/
