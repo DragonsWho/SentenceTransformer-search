@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 from components.grok3_api import GrokAPI
 
+import re  # Добавляем импорт модуля re
+
 def setup_logging():
     os.makedirs("logs", exist_ok=True)
     date_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -110,6 +112,71 @@ def optimize_ocr_json(ocr_data):
         optimized_data["text_blocks"].append(optimized_block)
     return json.dumps(optimized_data, ensure_ascii=False)
 
+def clean_json_comments(json_text):
+    """Удаляет комментарии из JSON строки, проверяет запятые и удаляет строки с iframe_url."""
+    # Обработка строк построчно
+    processed_lines = []
+    skip_next_comma = False
+    
+    lines = json_text.split('\n')
+    for i, line in enumerate(lines):
+        # Проверка на iframe_url - пропускаем такие строки полностью
+        if "iframe_url" in line:
+            skip_next_comma = True
+            continue
+        
+        # Если предыдущая строка содержала iframe_url и текущая строка содержит только запятую
+        if skip_next_comma and line.strip() == ",":
+            skip_next_comma = False
+            continue
+        else:
+            skip_next_comma = False
+            
+        # Удаление комментариев после // (но не в URL!)
+        comment_pos = -1
+        if "//" in line:
+            # Проверяем, что // не часть URL
+            url_pattern = r'https?:\/\/'
+            url_matches = list(re.finditer(url_pattern, line))
+            if url_matches:
+                # Если есть URL, ищем // только после последнего URL
+                last_url_end = url_matches[-1].end()
+                comment_pos = line.find("//", last_url_end)
+            else:
+                comment_pos = line.find("//")
+        
+        if comment_pos >= 0:
+            line = line[:comment_pos]
+        
+        processed_lines.append(line)
+    
+    text_without_comments = '\n'.join(processed_lines)
+    
+    # Удаление запятых после последних элементов в объектах и массивах
+    try:
+        # Сначала попробуем прочитать JSON как есть
+        json_obj = json.loads(text_without_comments)
+        return json.dumps(json_obj, ensure_ascii=False, indent=2)
+    except json.JSONDecodeError as e:
+        logger.warning(f"JSON parse error: {e}")
+        
+        # Если это ошибка из-за запятой в последнем элементе, попробуем исправить
+        if "Expecting property name enclosed in double quotes" in str(e) or "Expecting ',' delimiter" in str(e):
+            # Более сложное исправление может потребоваться в зависимости от ошибок
+            # Это простая версия, которая работает в большинстве случаев
+            text = text_without_comments
+            text = re.sub(r',(\s*})', r'\1', text)  # Удаляем запятую перед закрывающей }
+            text = re.sub(r',(\s*\])', r'\1', text)  # Удаляем запятую перед закрывающей ]
+            
+            try:
+                json_obj = json.loads(text)
+                return json.dumps(json_obj, ensure_ascii=False, indent=2)
+            except json.JSONDecodeError as e2:
+                logger.error(f"Failed to fix JSON: {e2}")
+                return text_without_comments  # Возвращаем версию только без комментариев
+        else:
+            return text_without_comments
+
 def process_image_folder(folder_path, output_dir="markdown/static"):
     folder_path = Path(folder_path).resolve()
     if not folder_path.exists() or not folder_path.is_dir():
@@ -150,28 +217,58 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
     images = sorted(images)
     logger.info(f"Found {len(images)} images in folder: {folder_path}")
     
-    # Проверка наличия OCR raw файлов
-    ocr_raw_files = {f.stem: f for f in ocr_raw_dir.iterdir() if f.suffix == ".json"}
-    expected_ocr_raw = {img.stem: f"{img.stem}_ocr.json" for img in images}
-    ocr_raw_complete = all(
-        name in ocr_raw_files and os.path.getsize(ocr_raw_files[name]) > 0 
-        for name in expected_ocr_raw
-    )
-    
+    # Проверка наличия OCR raw файлов - исправленная версия
     combined_text_blocks = []
+    all_ocr_files_valid = True
     
-    if not ocr_raw_complete:
+    for image_path in images:
+        ocr_output_file = ocr_raw_dir / f"{image_path.stem}_ocr.json"
+        
+        # Проверяем существование файла, его размер и возможность чтения JSON
+        is_valid = (
+            ocr_output_file.exists() and 
+            ocr_output_file.stat().st_size > 0
+        )
+        
+        if is_valid:
+            try:
+                with open(ocr_output_file, "r", encoding="utf-8") as f:
+                    ocr_data = json.load(f)
+                if not isinstance(ocr_data, dict) or "text_blocks" not in ocr_data:
+                    is_valid = False
+                    logger.warning(f"OCR file {ocr_output_file} has invalid structure")
+            except Exception as e:
+                is_valid = False
+                logger.warning(f"Could not read OCR JSON from {ocr_output_file}: {str(e)}")
+        
+        if not is_valid:
+            all_ocr_files_valid = False
+    
+    # OCR процесс
+    if not all_ocr_files_valid:
         logger.info(f"OCR raw data incomplete or missing for some images in {folder_path}")
         for i, image_path in enumerate(images, 1):
             ocr_output_file = ocr_raw_dir / f"{image_path.stem}_ocr.json"
-            if (image_path.stem not in ocr_raw_files or 
-                not os.path.exists(ocr_output_file) or 
-                os.path.getsize(ocr_output_file) == 0):
+            
+            # Повторная проверка для конкретного файла
+            is_valid = False
+            if ocr_output_file.exists() and ocr_output_file.stat().st_size > 0:
+                try:
+                    with open(ocr_output_file, "r", encoding="utf-8") as f:
+                        ocr_data = json.load(f)
+                    if isinstance(ocr_data, dict) and "text_blocks" in ocr_data:
+                        is_valid = True
+                except Exception:
+                    is_valid = False
+            
+            if not is_valid:
                 logger.info(f"Running OCR on image {i}/{len(images)}: {image_path}")
                 success, output, error = run_script("components/ocr/ocr.py", [str(image_path), str(ocr_output_file)])
                 if not success:
                     logger.error(f"OCR failed for {image_path}: {error}")
                     continue
+            
+            # Загрузка OCR данных
             try:
                 with open(ocr_output_file, "r", encoding="utf-8") as f:
                     ocr_data = json.load(f)
@@ -199,21 +296,30 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
         logger.error(f"No text blocks extracted for folder: {folder_path}")
         return False
     
-    # Проверка наличия OCR Markdown файлов
-    ocr_md_files = {f.stem: f for f in ocr_md_dir.iterdir() if f.suffix == ".md"}
-    expected_ocr_md = {img.stem: f"{img.stem}.md" for img in images}
-    ocr_md_complete = all(
-        name in ocr_md_files and os.path.getsize(ocr_md_files[name]) > 0 
-        for name in expected_ocr_md
-    )
+    # Проверка наличия OCR Markdown файлов - исправленная версия
+    all_md_files_valid = True
     
-    if not ocr_md_complete:
+    for image_path in images:
+        md_output_file = ocr_md_dir / f"{image_path.stem}.md"
+        
+        is_valid = (
+            md_output_file.exists() and 
+            md_output_file.stat().st_size > 0
+        )
+        
+        if not is_valid:
+            all_md_files_valid = False
+            break
+    
+    if not all_md_files_valid:
         logger.info(f"OCR Markdown files incomplete or missing in {folder_path}")
         for i, image_path in enumerate(images, 1):
             md_output_file = ocr_md_dir / f"{image_path.stem}.md"
-            if (image_path.stem not in ocr_md_files or 
-                not os.path.exists(md_output_file) or 
-                os.path.getsize(md_output_file) == 0):
+            
+            # Повторная проверка для конкретного файла
+            is_valid = md_output_file.exists() and md_output_file.stat().st_size > 0
+            
+            if not is_valid:
                 ocr_output_file = ocr_raw_dir / f"{image_path.stem}_ocr.json"
                 try:
                     with open(ocr_output_file, "r", encoding="utf-8") as f:
@@ -245,7 +351,11 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
     # Сохранение объединенного Markdown из OCR raw
     os.makedirs(output_dir, exist_ok=True)
     md_path = os.path.join(output_dir, f"{game_name}.md")
-    if not os.path.exists(md_path) or os.path.getsize(md_path) == 0:
+    
+    # Проверка файла объединенного Markdown
+    md_file_is_valid = Path(md_path).exists() and Path(md_path).stat().st_size > 0
+    
+    if not md_file_is_valid:
         md_content = [f"Game Folder: {folder_path}\n\nPossible title: {game_name.replace('_', ' ')}\n"]
         for block in combined_text_blocks:
             md_content.append(f"### From {block['source_image']}\n{block['text']}\n")
@@ -265,18 +375,32 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
         with open(md_file, "r", encoding="utf-8") as f:
             combined_md_content += f"\n\n=== {md_file.name} ===\n{f.read()}"
     
-    # Проверка наличия файлов в summaries
+    # Проверка наличия файлов в summaries - исправленная версия
     sent_search_output_path = summaries_dir / f"{game_name}_sent_search.md"
     catalog_output_path = summaries_dir / f"{game_name}_catalog.json"
-    summaries_complete = (
-        os.path.exists(sent_search_output_path) and os.path.getsize(sent_search_output_path) > 0 and
-        os.path.exists(catalog_output_path) and os.path.getsize(catalog_output_path) > 0
-    )
+    catalog_with_comments_path = summaries_dir / f"{game_name}_catalog_with_comments.json"
+    
+    sent_search_is_valid = sent_search_output_path.exists() and sent_search_output_path.stat().st_size > 0
+    catalog_is_valid = catalog_output_path.exists() and catalog_output_path.stat().st_size > 0
+    
+    # Проверка валидного JSON в catalog файле
+    if catalog_is_valid:
+        try:
+            with open(catalog_output_path, "r", encoding="utf-8") as f:
+                catalog_data = json.load(f)
+            if not isinstance(catalog_data, dict):
+                catalog_is_valid = False
+                logger.warning(f"Catalog file {catalog_output_path} has invalid structure")
+        except Exception as e:
+            catalog_is_valid = False
+            logger.warning(f"Could not read catalog JSON from {catalog_output_path}: {str(e)}")
+    
+    summaries_complete = sent_search_is_valid and catalog_is_valid
     
     if not summaries_complete:
         logger.info(f"Summaries incomplete or missing in {summaries_dir}")
         # Генерация sent_search
-        if not os.path.exists(sent_search_output_path) or os.path.getsize(sent_search_output_path) == 0:
+        if not sent_search_is_valid:
             sent_search_full_prompt = f"{sent_search_prompt}\n\n=== Combined Enhanced Game Text ===\n{combined_md_content}"
             logger.info(f"Sending sent_search prompt to Grok API for {game_name}")
             try:
@@ -293,7 +417,7 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
             logger.info(f"Sent_search summary already exists at {sent_search_output_path}. Skipping generation.")
         
         # Генерация catalog
-        if not os.path.exists(catalog_output_path) or os.path.getsize(catalog_output_path) == 0:
+        if not catalog_is_valid:
             catalog_full_prompt = f"{catalog_prompt}\n\n=== Combined Enhanced Game Text ===\n{combined_md_content}"
             logger.info(f"Sending catalog prompt to Grok API for {game_name}")
             try:
@@ -301,9 +425,27 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
                 if catalog_response.startswith("Error:"):
                     logger.error(f"Grok API failed for catalog on {game_name}: {catalog_response}")
                 else:
-                    with open(catalog_output_path, "w", encoding="utf-8") as f:
+                    # Сохраняем оригинальный ответ с комментариями
+                    with open(catalog_with_comments_path, "w", encoding="utf-8") as f:
                         f.write(catalog_response)
-                    logger.info(f"Catalog JSON saved to {catalog_output_path}")
+                    logger.info(f"Catalog JSON with comments saved to {catalog_with_comments_path}")
+                    
+                    # Очищаем JSON от комментариев
+                    cleaned_json = clean_json_comments(catalog_response)
+                    
+                    # Проверка, является ли очищенный ответ валидным JSON
+                    try:
+                        json.loads(cleaned_json)
+                        with open(catalog_output_path, "w", encoding="utf-8") as f:
+                            f.write(cleaned_json)
+                        logger.info(f"Cleaned catalog JSON saved to {catalog_output_path}")
+                    except json.JSONDecodeError as e:
+                        logger.error(f"Failed to clean JSON: {e}")
+                        logger.error(f"Original response: {catalog_response[:100]}...")
+                        # Сохраняем результат несмотря на ошибку, чтобы можно было вручную исправить
+                        with open(catalog_output_path, "w", encoding="utf-8") as f:
+                            f.write(cleaned_json)
+                        logger.warning(f"Saved potentially invalid JSON to {catalog_output_path} for manual fixing")
             except Exception as e:
                 logger.error(f"Exception during catalog Grok API call for {game_name}: {str(e)}")
         else:
@@ -311,13 +453,26 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
     else:
         logger.info(f"All summary files exist and are valid in {summaries_dir}. Skipping summary generation.")
     
-    # Отправка на сервер независимо от наличия summaries
-    logger.info(f"Uploading game {game_name} using GameUploader_static.py")
-    success, output, error = run_script("GameUploader_static.py", [str(catalog_output_path), str(folder_path)])
-    if success:
-        logger.info(f"Successfully uploaded game {game_name}: {output}")
+    # Проверяем еще раз после потенциального создания файлов
+    catalog_is_valid = catalog_output_path.exists()
+    if catalog_is_valid:
+        try:
+            with open(catalog_output_path, "r", encoding="utf-8") as f:
+                json.load(f)
+            catalog_is_valid = True
+        except Exception:
+            catalog_is_valid = False
+    
+    # Отправка на сервер только если есть валидный catalog.json
+    if catalog_is_valid:
+        logger.info(f"Uploading game {game_name} using GameUploader_static.py")
+        success, output, error = run_script("GameUploader_static.py", [str(catalog_output_path), str(folder_path)])
+        if success:
+            logger.info(f"Successfully uploaded game {game_name}: {output}")
+        else:
+            logger.error(f"Failed to upload game {game_name}: {error}")
     else:
-        logger.error(f"Failed to upload game {game_name}: {error}")
+        logger.error(f"Cannot upload game {game_name}: catalog.json is invalid or missing")
     
     logger.info(f"Processed folder: {folder_path}")
     return True
