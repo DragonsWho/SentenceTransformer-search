@@ -8,6 +8,7 @@ import logging
 import json
 from pathlib import Path
 from components.grok3_api import GrokAPI
+from static_images_processing import process_images_in_folder
 
 import re  # Добавляем импорт модуля re
 
@@ -184,6 +185,11 @@ def process_image_folder(folder_path, output_dir="markdown/static"):
         return False
     
     game_name = folder_path.name
+     
+    logger.info(f"Processing images in folder: {folder_path}")
+    images_processed = process_images_in_folder(folder_path)
+    if not images_processed:
+        logger.warning(f"Image processing may have failed for {folder_path}") 
     ocr_raw_dir = folder_path / "ocr_raw"
     ocr_md_dir = folder_path / "ocr_markdown_pages"
     summaries_dir = folder_path / "summaries"

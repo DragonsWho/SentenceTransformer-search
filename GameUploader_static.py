@@ -260,11 +260,20 @@ class GameUploaderStatic:
             folder_path = Path(game_folder)
             screenshots_folder = folder_path / "screenshots"
             screenshot_path = screenshots_folder / "screenshot.webp"
+            screenshot_preview_path = screenshots_folder / "screenshot_preview.webp"
+            preview_folder = folder_path / "preview"
 
             # Check for screenshot as cover image
             if not screenshot_path.exists():
                 raise FileNotFoundError(f"Screenshot not found at: {screenshot_path}")
             game_data['image'] = str(screenshot_path)
+            
+            # Check for screenshot preview
+            if screenshot_preview_path.exists():
+                game_data['image_preview'] = str(screenshot_preview_path)
+                logger.info(f"Found screenshot preview: {screenshot_preview_path}")
+            else:
+                logger.warning(f"Screenshot preview not found at: {screenshot_preview_path}")
 
             # Find images in the main folder for game pages
             image_extensions = ('.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif', '.svg')
@@ -278,6 +287,21 @@ class GameUploaderStatic:
 
             # Use all images from the main folder as pages
             game_data['cyoa_pages'] = [str(img) for img in images]
+            
+            # Find preview images
+            if preview_folder.exists() and preview_folder.is_dir():
+                preview_images = sorted([
+                    f for f in preview_folder.iterdir() 
+                    if f.suffix.lower() in image_extensions and f.is_file()
+                ])
+                
+                if preview_images:
+                    game_data['cyoa_pages_preview'] = [str(img) for img in preview_images]
+                    logger.info(f"Found {len(preview_images)} preview images for pages")
+                else:
+                    logger.warning(f"No preview images found in folder: {preview_folder}")
+            else:
+                logger.warning(f"Preview folder not found at: {preview_folder}")
 
             logger.info(f"Enriched game data with image: {game_data['image']}, pages: {len(game_data['cyoa_pages'])}")
             return game_data
@@ -300,6 +324,18 @@ class GameUploaderStatic:
             if mime_type not in ALLOWED_IMAGE_MIME_TYPES:
                 raise ValueError(f"Unsupported image format for cover: {mime_type}")
 
+            # Проверяем превью обложки
+            image_preview = None
+            if 'image_preview' in game_data and game_data['image_preview']:
+                image_preview_path = Path(game_data['image_preview'])
+                if image_preview_path.exists():
+                    image_preview_mime_type = EXTENSION_TO_MIME.get(
+                        image_preview_path.suffix.lower(), 
+                        mimetypes.guess_type(str(image_preview_path))[0]
+                    )
+                    image_preview = (image_preview_path, image_preview_mime_type)
+                    logger.info(f"Using image preview: {image_preview_path}")
+
             # Проверяем страницы
             if 'cyoa_pages' not in game_data or not game_data['cyoa_pages']:
                 raise ValueError("No CYOA pages provided for static game")
@@ -321,6 +357,23 @@ class GameUploaderStatic:
 
             if not page_files:
                 raise ValueError("No valid CYOA pages available after filtering")
+
+            # Проверяем превью страниц
+            page_preview_files = []
+            if 'cyoa_pages_preview' in game_data and game_data['cyoa_pages_preview']:
+                for preview_path in game_data['cyoa_pages_preview']:
+                    preview_path_obj = Path(preview_path)
+                    if not preview_path_obj.exists():
+                        logger.warning(f"Page preview not found: {preview_path}")
+                        continue
+                    preview_mime_type = EXTENSION_TO_MIME.get(
+                        preview_path_obj.suffix.lower(), 
+                        mimetypes.guess_type(str(preview_path_obj))[0]
+                    )
+                    page_preview_files.append((preview_path_obj, preview_mime_type))
+                
+                if page_preview_files:
+                    logger.info(f"Using {len(page_preview_files)} page previews")
 
             # Обрабатываем теги
             tag_ids = []
@@ -354,6 +407,13 @@ class GameUploaderStatic:
             files = [
                 ('image', ('cover_image', open(image_path, 'rb'), mime_type))
             ]
+            
+            # Добавляем превью обложки, если есть
+            if image_preview:
+                files.append((
+                    'image_preview', 
+                    (image_preview[0].name, open(image_preview[0], 'rb'), image_preview[1])
+                ))
 
             # Добавляем все страницы с ключом 'cyoa_pages'
             for i, (page_path_obj, page_mime_type) in enumerate(page_files):
@@ -361,9 +421,16 @@ class GameUploaderStatic:
                     ('cyoa_pages', (page_path_obj.name, open(page_path_obj, 'rb'), page_mime_type))
                 )
                 logger.info(f"Preparing to upload page {i+1}/{len(page_files)}: {page_path_obj.name}")
+                
+            # Добавляем все превью страниц с ключом 'cyoa_pages_preview'
+            for i, (preview_path_obj, preview_mime_type) in enumerate(page_preview_files):
+                files.append(
+                    ('cyoa_pages_preview', (preview_path_obj.name, open(preview_path_obj, 'rb'), preview_mime_type))
+                )
+                logger.info(f"Preparing to upload page preview {i+1}/{len(page_preview_files)}: {preview_path_obj.name}")
 
             # Отправляем запрос
-            logger.info(f"Sending POST request with {len(page_files)} CYOA pages")
+            logger.info(f"Sending POST request with {len(page_files)} CYOA pages and {len(page_preview_files)} page previews")
             response = requests.post(
                 f'{self.base_url}/collections/games/records',
                 headers=headers,
@@ -380,6 +447,12 @@ class GameUploaderStatic:
                 logger.warning("CYOA pages appear to be missing in the server response")
             elif len(game_record['cyoa_pages']) != len(page_files):
                 logger.warning(f"Expected {len(page_files)} CYOA pages, but got {len(game_record['cyoa_pages'])} in response")
+                
+            # Проверяем, загружены ли превью страниц
+            if page_preview_files and ('cyoa_pages_preview' not in game_record or not game_record['cyoa_pages_preview']):
+                logger.warning("CYOA page previews appear to be missing in the server response")
+            elif page_preview_files and len(game_record['cyoa_pages_preview']) != len(page_preview_files):
+                logger.warning(f"Expected {len(page_preview_files)} CYOA page previews, but got {len(game_record['cyoa_pages_preview'])} in response")
 
             # Связываем авторов с игрой
             for author_id in author_ids:
