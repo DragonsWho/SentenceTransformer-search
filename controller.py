@@ -8,13 +8,16 @@ import traceback
 import asyncio
 import concurrent.futures
 import random
-import json  # Добавлен импорт json
+import json
 from components.traffic_analyzer import TrafficAnalyzer
 from components.js_json_extractor import extract_js_json
 from components.crawler import crawl_url, json_to_md
 from components.game_checker import GameChecker
 from components.project_downloader import crawl_and_download, create_session
 from urllib.parse import urlparse
+import base64
+from io import BytesIO
+from PIL import Image
 
 def setup_logging():
     os.makedirs("logs", exist_ok=True)
@@ -154,6 +157,57 @@ def normalize_url(url):
         url = url[:-len('/index.html')]
     return f"{url}/project.json"
 
+async def create_screenshot(base_url, project_name, screenshot_semaphore, force_screenshots=False, max_retries=3):
+    async with screenshot_semaphore:
+        webp_path = f"screenshots/{project_name}.webp"
+        base64_path = f"screenshots/{project_name}_base64.txt"
+        
+        if not force_screenshots and os.path.exists(webp_path):
+            file_size = os.path.getsize(webp_path)
+            if file_size > 0:
+                logger.info(f"Using existing screenshot: {webp_path}")
+                if os.path.exists(base64_path):
+                    logger.info(f"Using existing base64: {base64_path}")
+                    return True, "Existing screenshot and base64 used", ""
+                # Если base64 нет, создаем его из существующего скриншота
+            else:
+                logger.warning(f"Found empty screenshot file: {webp_path}, regenerating")
+        
+        logger.info(f"Generating new screenshot for {base_url}")
+        success, output, error = await run_script_async("get_screenshoot_puppy.js", base_url, max_retries=max_retries)
+        
+        if success and os.path.exists(webp_path):
+            logger.info(f"Screenshot successfully created: {webp_path}")
+            try:
+                with Image.open(webp_path) as img:
+                    target_width = 100
+                    target_height = 133
+                    source_aspect = img.width / img.height
+                    
+                    if source_aspect > target_width / target_height:
+                        scale_height = int(target_width / source_aspect)
+                        scale_width = target_width
+                    else:
+                        scale_width = int(target_height * source_aspect)
+                        scale_height = target_height
+                    
+                    resized_img = img.resize((scale_width, scale_height), Image.Resampling.LANCZOS)
+                    buffer = BytesIO()
+                    resized_img.save(buffer, format="WEBP", quality=40, lossless=False)
+                    webp_bytes = buffer.getvalue()
+                    base64_string = f"data:image/webp;base64,{base64.b64encode(webp_bytes).decode('utf-8')}"
+                    
+                    with open(base64_path, 'w', encoding='utf-8') as f:
+                        f.write(base64_string)
+                    logger.info(f"Base64 version created and saved: {base64_path}")
+            except Exception as e:
+                logger.error(f"Failed to create base64 version for {webp_path}: {str(e)}")
+                return True, output, f"Generated screenshot but failed to create base64: {str(e)}"
+            return True, output, ""
+        else:
+            logger.error(f"Screenshot generation failed for {base_url}: {error}")
+            return success, output, error
+
 async def main_async(force_screenshots=False):
     MAX_CONCURRENT_SCREENSHOTS = 5
     MAX_RETRIES = 3
@@ -176,10 +230,7 @@ async def main_async(force_screenshots=False):
     skipped_urls = []
     newly_processed_urls = []
     
-    # Создаем сессию для скачивания
     download_session = create_session()
-    
-    # Путь для сохранения скачанных игр
     downloaded_games_dir = "downloaded_games"
     os.makedirs(downloaded_games_dir, exist_ok=True)
     
@@ -193,37 +244,15 @@ async def main_async(force_screenshots=False):
     
     screenshot_semaphore = asyncio.Semaphore(MAX_CONCURRENT_SCREENSHOTS)
     
-    async def create_screenshot(base_url, project_name):
-        async with screenshot_semaphore:
-            webp_path = f"screenshots/{project_name}.webp"
-            
-            if not force_screenshots and os.path.exists(webp_path):
-                file_size = os.path.getsize(webp_path)
-                if file_size > 0:
-                    logger.info(f"Using existing screenshot: {webp_path}")
-                    return True, "Existing screenshot used", ""
-                else:
-                    logger.warning(f"Found empty screenshot file: {webp_path}, regenerating")
-            
-            logger.info(f"Generating new screenshot for {base_url}")
-            success, output, error = await run_script_async("get_screenshoot_puppy.js", base_url, max_retries=MAX_RETRIES)
-            if success and os.path.exists(webp_path):
-                logger.info(f"Screenshot successfully created: {webp_path}")
-            else:
-                logger.error(f"Screenshot generation failed: {error}")
-            return success, output, error
-    
     for index, url in enumerate(urls, 1):
         logger.info(f"Processing URL {index}/{len(urls)}: {url}")
         
-        # Получаем имя домена и игры для структуры папок
         parsed_url = urlparse(url)
         domain = parsed_url.netloc
         path_parts = parsed_url.path.strip('/').split('/')
         game_name = path_parts[-1] if path_parts else ''
         download_path = os.path.join(downloaded_games_dir, f"{domain}/{game_name}")
         
-        # Скачиваем игру целиком независимо от того, есть она в каталоге или нет 
         logger.info(f"Downloading game to {download_path}")
         completed, downloaded, failed = crawl_and_download(
             url,
@@ -233,7 +262,6 @@ async def main_async(force_screenshots=False):
         )
         logger.info(f"Download result: Processed {completed} files, Downloaded {downloaded}, Failed {failed}")
             
-        # Проверяем наличие игры в каталоге после скачивания
         if game_checker.game_exists(url):
             logger.info(f"Skipping URL {url} as it already exists in the catalog")
             skipped_urls.append(url)
@@ -246,7 +274,6 @@ async def main_async(force_screenshots=False):
             md_file = f"{project_name}.md"
             md_path = f"markdown/{md_file}"
             
-            # Проверяем наличие локального project.json
             local_json_path = os.path.join(download_path, "project.json")
             if os.path.exists(local_json_path):
                 logger.info(f"Using local project.json from {local_json_path}")
@@ -259,7 +286,6 @@ async def main_async(force_screenshots=False):
                     game_url = url
                     f.write(f"Game URL: {game_url}\n\nPossible title: {game_title}\n\n{md_content}")
             else:
-                # Если локального JSON нет (хотя он должен быть после скачивания)
                 logger.warning(f"Local project.json not found at {local_json_path}, falling back to network methods")
                 if crawl_url(project_json_url):
                     logger.info(f"Text extracted via crawl_url for {url}")
@@ -293,7 +319,7 @@ async def main_async(force_screenshots=False):
             
             base_url = normalize_url(url).replace('/project.json', '/')
             
-            success, output, error = await create_screenshot(base_url, project_name)
+            success, output, error = await create_screenshot(base_url, project_name, screenshot_semaphore, force_screenshots, MAX_RETRIES)
             webp_path = f"screenshots/{project_name}.webp"
             if not success:
                 logger.error(f"Screenshot processing failed for {base_url}: {error}")
@@ -327,10 +353,8 @@ async def main_async(force_screenshots=False):
             logger.error(f"Unhandled exception processing URL {url}: {str(e)}")
             failed_urls.append(url)
     
-    # Закрываем сессию скачивания
     download_session.close()
     
-    # Запуск prepare_and_upload.py только если есть новые обработанные URL
     if newly_processed_urls:
         test_mode = '--test' in sys.argv
         logger.info(f"Running prepare_and_upload.py in {'test' if test_mode else 'live'} mode")
@@ -347,7 +371,6 @@ async def main_async(force_screenshots=False):
     else:
         logger.info("No new URLs processed. Skipping prepare_and_upload.py execution.")
     
-    # Генерация отчёта
     logger.info("Generating final report")
     timestamp = datetime.datetime.now().strftime('[%Y-%m-%d %H:%M:%S]')
     

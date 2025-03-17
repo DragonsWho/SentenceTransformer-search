@@ -301,7 +301,6 @@ class GameUploader:
                     else:
                         logger.warning(f"Failed to get or create tag '{tag_name}'")
 
-            # Получаем список ID авторов
             author_ids = []
             if 'author' in game_data:
                 author_ids = self.author_manager.get_or_create_authors(game_data['author'])
@@ -313,11 +312,14 @@ class GameUploader:
                 ('img_or_link', game_data['img_or_link']),
                 ('uploader', game_data['uploader']),
             ]
+            # Добавляем image_base64, если присутствует
+            if 'image_base64' in game_data:
+                form_data.append(('image_base64', game_data['image_base64']))
+
             if game_data['img_or_link'] == 'link' and game_data.get('iframe_url'):
                 form_data.append(('iframe_url', game_data['iframe_url']))
             for tag_id in tag_ids:
                 form_data.append(('tags', tag_id))
-            # Добавляем всех авторов в form_data
             for author_id in author_ids:
                 form_data.append(('authors', author_id))
 
@@ -351,7 +353,6 @@ class GameUploader:
                 game_record = response.json()
                 logger.info(f"Game created successfully: {game_record['id']}")
 
-            # Связываем авторов с игрой (на случай, если API не обработал authors в form_data)
             for author_id in author_ids:
                 time.sleep(self.request_delay)
                 self.link_game_to_author(game_record['id'], author_id)
