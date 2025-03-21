@@ -844,3 +844,13 @@
   Failed to process: 0
   Successfully processed folders:
     - cyoa_static/futa_dimension
+
+[2025-03-22 00:16:25] Processing summary:
+  Total URLs processed: 1
+  Successfully processed: 1
+  Newly processed: 1
+  Skipped (already in catalog): 0
+  Failed to process: 0
+  Visual analysis failures: 0
+  Newly processed URLs:
+    - https://isekai-project.neocities.org/
