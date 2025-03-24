@@ -1,5 +1,3 @@
-# prepare_and_upload.py
-
 import os
 import shutil
 import subprocess
@@ -61,14 +59,14 @@ def strip_markdown_wrappers(json_text):
     """Strip Markdown code block wrappers (e.g., ```json and ```) from JSON text."""
     lines = json_text.splitlines()
     cleaned_lines = []
-    
+
     # Skip lines that are part of Markdown code block markers
     for line in lines:
         stripped_line = line.strip()
         if stripped_line == "```json" or stripped_line == "```":
             continue
         cleaned_lines.append(line)
-    
+
     return '\n'.join(cleaned_lines)
 
 def validate_and_clean_json(json_path):
@@ -76,12 +74,12 @@ def validate_and_clean_json(json_path):
     try:
         with open(json_path, 'r', encoding='utf-8') as f:
             original_content = f.read()
-        
+
         # First strip Markdown wrappers
         content_no_markdown = strip_markdown_wrappers(original_content)
         # Then remove comments
         cleaned_content = remove_json_comments(content_no_markdown)
-        
+
         # Validate the cleaned content
         try:
             json.loads(cleaned_content)
@@ -90,14 +88,30 @@ def validate_and_clean_json(json_path):
             logger.error(f"Invalid JSON in {json_path} after cleaning: {e}")
             logger.debug(f"Cleaned content:\n{cleaned_content}")
             return None, None
-        
+
         return original_content, cleaned_content
     except Exception as e:
         logger.error(f"Error processing JSON {json_path}: {e}")
         return None, None
 
+def load_base64_image(project_name):
+    """Load base64 image string from file if it exists."""
+    base64_path = os.path.join(SCREENSHOTS_DIR, f"{project_name}_base64.txt")
+    if os.path.exists(base64_path):
+        try:
+            with open(base64_path, 'r', encoding='utf-8') as f:
+                base64_string = f.read().strip()
+            logger.info(f"Loaded base64 image from: {base64_path}")
+            return base64_string
+        except Exception as e:
+            logger.error(f"Error loading base64 image {base64_path}: {e}")
+            return None
+    else:
+        logger.warning(f"Base64 image not found: {base64_path}")
+        return None
+
 def prepare_game_files(test_mode=False):
-    """Copy JSON and screenshot to New_Games for each game, skipping invalid files."""
+    """Copy JSON, screenshot, and base64 to New_Games for each game, skipping invalid files."""
     if not os.path.exists(CATALOG_JSON_DIR):
         logger.error(f"Directory not found: {CATALOG_JSON_DIR}")
         return False
@@ -124,9 +138,18 @@ def prepare_game_files(test_mode=False):
                 logger.warning(f"Skipping {json_file} due to invalid JSON after cleaning")
                 continue
 
+            # Load JSON data to modify it
+            game_data = json.loads(cleaned_json)
+            
+            # Add base64 image if available
+            base64_image = load_base64_image(project_name)
+            if base64_image:
+                game_data['image_base64'] = base64_image
+
+            # Save modified JSON
             with open(json_dest, 'w', encoding='utf-8') as f:
-                f.write(cleaned_json)
-            logger.info(f"Copied cleaned JSON: {json_file} to {NEW_GAMES_DIR}")
+                json.dump(game_data, f, ensure_ascii=False, indent=2)
+            logger.info(f"Copied cleaned and modified JSON: {json_file} to {NEW_GAMES_DIR}")
 
             with open(json_with_comments_dest, 'w', encoding='utf-8') as f:
                 f.write(original_json)
@@ -212,7 +235,7 @@ def main():
             logger.error("GameUploader failed. Aborting.")
             sys.exit(1)
         logger.info("Game uploading completed successfully")
-        
+
         move_comments_files_to_processed()
         cleanup_catalog_json()
     else:

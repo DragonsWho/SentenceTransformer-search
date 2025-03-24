@@ -11,6 +11,7 @@ import sys
 import shutil
 import time
 import logging
+import base64
 
 load_dotenv()
 
@@ -313,6 +314,12 @@ class GameUploader:
                 ('img_or_link', game_data['img_or_link']),
                 ('uploader', game_data['uploader']),
             ]
+
+            # Добавляем image_base64, если присутствует
+            if 'image_base64' in game_data:
+                logger.info(f"Using image_base64 for {game_data['title']}")
+                form_data.append(('image_base64', game_data['image_base64']))
+
             if game_data['img_or_link'] == 'link' and game_data.get('iframe_url'):
                 form_data.append(('iframe_url', game_data['iframe_url']))
             for tag_id in tag_ids:
