@@ -920,3 +920,10 @@
   Visual analysis failures: 0
   Newly processed URLs:
     - https://purplebanana.neocities.org/Sluttv/
+
+[2025-03-26 17:20:15] Static Processing Summary:
+  Total folders processed: 1
+  Successfully processed: 1
+  Failed to process: 0
+  Successfully processed folders:
+    - cyoa_static/oblivious
