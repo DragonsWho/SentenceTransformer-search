@@ -58,3 +58,67 @@ sfw тэг
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Using ChromaDB for CYOA Game Search
+
+to use BAAI/bge-m3 add -M3 flag
+
+## 1. How to Use New Functions in vector_search
+
+### Basic Setup
+```bash
+# Install required packages
+pip install chromadb openai python-dotenv
+
+# Make sure you have DeepInfra API key in .env file
+# DEEPINFRA_API_KEY=your_api_key_here
+```
+
+### Initialize Database
+```bash
+# Process all markdown files in summaries/ directory and create vector database
+python vector_search.py --init
+```
+
+### Update Database with a New Game
+```bash
+# Add or update a single game file
+python vector_search.py --update path/to/game_summary.md https://game-url.com
+```
+
+### Search for Similar Games
+```bash
+# Search for games matching your description
+python vector_search.py --search "cyberpunk game with implants and rebellion"
+
+# For more complex queries with quotes, use single quotes outside
+python vector_search.py --search 'game about "mind control" in a fantasy setting'
+```
+
+### Example Search Output
+```
+Search Results:
+
+1. Cyber Dystopia CYOA (Similarity: 0.87)
+   URL: https://example.com/cyber_dystopia
+   Preview: In this cyberpunk adventure, you navigate a world dominated by mega-corporations. Choose your implants wisely as they determine your abilities in the coming rebellion...
+
+2. Neo Tokyo 2050 (Similarity: 0.75)
+   URL: https://example.com/neo_tokyo
+   Preview: A futuristic CYOA where you can augment your body with various cybernetic enhancements. The story follows the underground resistance...
+``` 

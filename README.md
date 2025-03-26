@@ -1,182 +1,97 @@
-for replace screenshots use:    python image_replacer.py "Cyoa title from catalog"
+# SentenceTransformer-search Project
+
+## Overview
+A comprehensive system for collecting, processing, and searching text games (CYOA) with semantic capabilities.
+
+## Key Features
+- Automated game downloading and processing
+- AI-powered summarization and cataloging
+- Visual analysis of game screenshots
+- Semantic search capabilities
+- Comprehensive logging and error handling
+
+## Main Components
+
+### Core Scripts
+- **controller.py** - Main orchestrator that manages:
+  - Game downloading (via project_downloader.py)
+  - Content extraction (via crawler/js_json_extractor/traffic_analyzer)
+  - Screenshot generation (get_screenshoot_puppy.js)
+  - Summary generation (summarize.py)
+  - Catalog updates (prepare_and_upload.py)
+
+- **summarize.py** - Generates structured descriptions:
+  - Two modes: `sent_search` (searchable summaries) and `catalog` (JSON entries)
+  - Integrates visual analysis from screenshots
+  - Uses CSV metadata for enhanced descriptions
+
+- **project_downloader.py** - Handles game downloads:
+  - Concurrent downloads with ETag-based caching
+  - Resource discovery and metadata tracking
+  - Session management for efficient downloads
+
+### Supporting Components
+- **game_checker.py** - Manages game catalog
+- **traffic_analyzer.py** - Network traffic analysis
+- **js_json_extractor.py** - Extracts JSON from JavaScript
+- **crawler.py** - Basic web crawler
+- **vision_query.py** - Image analysis
+
+## Usage
+
+### Basic Processing
+
+1. Add the link in links.txt - it's better to add one game at a time
+
+2. Type
+```bash 
+python controller.py
+```
+3. Check the tags manually on the Moderator Panel
 
 
+### Screenshot Replacement
 
-
-# Project: Semantic Search System for Text Games
-
-## Description
-The project is a system for automatic collection, processing, and search of information about text games. Main stages of work:
-1. Collecting JSON files from links
-2. Converting JSON to Markdown
-3. Creating structured game descriptions
-4. Building a database for semantic search
-5. Searching the database using transformers
-
-## File Functions
-
-### Main Scripts
-  
-- **app.py** - Flask web interface for search and results display:
-  - Handles GET and POST requests
-  - Uses search.py to perform semantic search
-  - Displays results through index.html template
-
-- **search.py** - Semantic search engine:
-  - Uses BAAI/bge-large-en-v1.5 model via Hugging Face API
-  - Converts queries to 1024-dimensional embeddings
-  - Calculates cosine similarity with the database
-  - Returns top-K results with similarity score
-  - Supports vector normalization for improved accuracy
-
-- **crawl.py** - Link and data processing:
-  - Loads JSON data by URL
-  - Converts JSON to structured Markdown:
-    - Extracts headers and text from objects
-    - Saves results to markdown/ with project name
-    - Adds game title at the beginning of the file
-  - Handles errors and returns None on failures
-
-- **controller.py** - Main control script:
-  - Orchestrates the entire processing workflow:
-    1. Reading URLs from links.txt
-    2. Processing through crawl.py
-    3. Using js_json_extractor.py and traffic_analyzer.py as backup mechanisms for extracting text from games
-    4. Generating descriptions through summarize.py
-    5. Creating screenshots via get_screenshoot_puppy.js
-    6. Analyzing visual style through vision_query.py
-    7. Logging results in log.txt
-  - Supports URL normalization
-  - Handles errors and tracks failed URLs
-  - Adds visual descriptions to summary files
-
-- **vector_search.py** - Database creation:
-  - Generates embeddings for texts
-  - Saves database to search_data.json
-  vector_search.py supports two modes:
---init: Creates new database from all summaries
---update: Adds new entries from controller.py
-
-- **summarize.py** - Creating game descriptions:
-  - Sends text to LLM for compression
-  - Generates structured descriptions
-  - Saves results to summaries/
-
-- **detect_repetition.py** - Analysis of summaries:
-  - Detection of repeating word sequences
-  - Identifying LLM hallucinations
-
-- **get_screenshoot_puppy.js** - Browser automation:
-  - Creates screenshots of web pages
-  - Saves in PNG and WebP formats
-  - Saves results to screenshots/
-
-- **vision_query.py** - Image analysis:
-  - Generates descriptions of games' visual style
-  - Uses Gemini API
-  - Adds descriptions to summary files
-
-- **traffic_analyzer.py** - Network traffic analysis:
-  - Automatic detection of game data files
-  - Analyzes traffic during page loading
-  - Captures and processes JSON files
-  - Backup mechanism for cases when crawl.py fails
-
-### Supporting Files
-- **links.txt** - List of URLs for processing
-- **search_data.json** - Search database (embeddings and metadata)
-- **templates/index.html** - Web interface template
-- **api_status.log** - API status log
-
-## Project Status
-- crawl.py: correctly processes links
-- summarize.py: successfully creates descriptions using LLM
-- vector_search.py: correctly creates the database
-- search.py: works correctly, performs search
-- Web interface: fully functional
-  - Supports semantic search
-  - Displays results with similarity score
-  - Handles search errors
-  - Supports result formatting
-
-## Running the Search Engine
-1. Make sure all dependencies are installed
-npm install
-pip install -r requirements.txt
-
-2. Generate the database:
-   ```bash
-   python vector_search.py
-   ```
-3. Run the web server:
-   ```bash
-   python app.py
-   ```
-4. Open http://localhost:5000 in your browser
-5. Enter a search query and view results
-
-## Notes
-- Do not open search_data.json file - it's too large
-- Files in markdown and summaries folders should also not be opened due to their size
-- The search_data.json database contains embeddings and metadata for search
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Using ChromaDB for CYOA Game Search
-
-to use BAAI/bge-m3 add -M3 flag
-
-## 1. How to Use New Functions in vector_search
-
-### Basic Setup
 ```bash
-# Install required packages
-pip install chromadb openai python-dotenv
+python image_replacer.py "Cyoa title from catalog"
+```
+ 
 
-# Make sure you have DeepInfra API key in .env file
-# DEEPINFRA_API_KEY=your_api_key_here
+## File Structure
+```
+.
+├── controller.py               # Main controller
+├── components/
+│   ├── game_checker.py         # Catalog management
+│   ├── project_downloader.py   # Game downloader
+│   ├── traffic_analyzer.py     # Network analysis
+│   ├── js_json_extractor.py    # JSON extraction
+│   ├── crawler.py              # Web crawler
+│   └── grok3_api.py            # AI summarization API
+├── summarize.py                # Summary generator
+├── prepare_and_upload.py       # Catalog uploader
+├── get_screenshoot_puppy.js    # Screenshot generator
+├── links.txt                   # Input URLs
+├── games.csv                   # Game metadata
+├── logs/                       # Log files
+├── markdown/                   # Extracted game text
+├── summaries/                  # Generated summaries
+├── screenshots/                # Game screenshots
+└── downloaded_games/           # Downloaded game files
 ```
 
-### Initialize Database
-```bash
-# Process all markdown files in summaries/ directory and create vector database
-python vector_search.py --init
-```
+## Requirements
+- Python 3.8+
+- Node.js (for screenshot generation)
+- Required Python packages (see requirements.txt)
+- API credentials in .env file
 
-### Update Database with a New Game
-```bash
-# Add or update a single game file
-python vector_search.py --update path/to/game_summary.md https://game-url.com
-```
-
-### Search for Similar Games
-```bash
-# Search for games matching your description
-python vector_search.py --search "cyberpunk game with implants and rebellion"
-
-# For more complex queries with quotes, use single quotes outside
-python vector_search.py --search 'game about "mind control" in a fantasy setting'
-```
-
-### Example Search Output
-```
-Search Results:
-
-1. Cyber Dystopia CYOA (Similarity: 0.87)
-   URL: https://example.com/cyber_dystopia
-   Preview: In this cyberpunk adventure, you navigate a world dominated by mega-corporations. Choose your implants wisely as they determine your abilities in the coming rebellion...
-
-2. Neo Tokyo 2050 (Similarity: 0.75)
-   URL: https://example.com/neo_tokyo
-   Preview: A futuristic CYOA where you can augment your body with various cybernetic enhancements. The story follows the underground resistance...
-``` 
+## Workflow
+1. Controller reads URLs from links.txt
+2. For each URL:
+   - Downloads game files
+   - Checks catalog for existing entries
+   - Extracts text content
+   - Generates screenshots
+   - Creates summaries
+3. Uploads new games to catalog 
